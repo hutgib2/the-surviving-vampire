@@ -1,5 +1,5 @@
 from game.settings import *
-from game.weapons import Gun, PiercingGun, Shotgun, Machinegun, Lasergun, Sideshotgun, Knife, Flamegun
+from game.weapons import Gun, PiercingGun, Shotgun, Machinegun, Lasergun, Sideshotgun, Sword, Flamegun
 # from game.homescreen import save_high_score
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
@@ -131,7 +131,7 @@ class Player(pygame.sprite.Sprite):
 
     def mine_timer(self):
         if self.powerup_activated == 'mine' and self.can_drop_mine:
-            Mine(self.game.mine_surf, self.rect.center, self.game.all_sprites, self.game)
+            Mine(mine_surf, self.rect.center, self.game.all_sprites, self.game)
             self.minedrop_time = pygame.time.get_ticks()
             self.can_drop_mine = False
         elif pygame.time.get_ticks() - self.minedrop_time >= self.minedrop_cooldown:
@@ -156,7 +156,7 @@ class Player(pygame.sprite.Sprite):
             if powerup.type == 'slowaura':
                 if self.aura != None:
                     self.aura.kill()
-                self.aura = Aura(self.game.all_sprites, self.game.aura_surf, self)
+                self.aura = Aura(self.game.all_sprites, aura_surf, self)
                 return
             if powerup.type == 'timestop':
                 continue
@@ -167,17 +167,17 @@ class Player(pygame.sprite.Sprite):
             if powerup.type == 'pierce':
                 self.gun = PiercingGun(self.gun_surf, self, self.game.all_sprites, self.game)
             elif powerup.type == 'machinegun':
-                self.gun = Machinegun(self.game.machinegun_surf, self, self.game.all_sprites, self.game)
+                self.gun = Machinegun(machinegun_surf, self, self.game.all_sprites, self.game)
             elif powerup.type == 'laser':
-                self.gun = Lasergun(self.game.lasergun_surf, self, self.game.all_sprites, self.game)
+                self.gun = Lasergun(lasergun_surf, self, self.game.all_sprites, self.game)
             elif powerup.type == 'shotgun':
-                self.gun = Shotgun(self.game.shotgun_surf, self, self.game.all_sprites, self.game)
+                self.gun = Shotgun(shotgun_surf, self, self.game.all_sprites, self.game)
             elif powerup.type == 'sideshot':
                 self.gun = Sideshotgun(self.gun_surf, self, self.game.all_sprites, self.game)
             elif powerup.type == 'sword':
-                self.gun = Sword(self.game.sword_surf, self, self.game.all_sprites, self.game)
+                self.gun = Sword(sword_surf, self, self.game.all_sprites, self.game)
             elif powerup.type == 'flamegun':
-                self.gun = Flamegun(self.game.flamegun_surf, self, self.game.all_sprites, self.game)
+                self.gun = Flamegun(flamegun_surf, self, self.game.all_sprites, self.game)
 
     def explosion_collisions(self):
         collision_sprites = pygame.sprite.groupcollide(self.game.explosion_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)

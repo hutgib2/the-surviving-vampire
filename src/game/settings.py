@@ -18,7 +18,7 @@ lasergun_surf = pygame.transform.flip(lasergun_surf, True, False)
 laser_surf = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'powerups', 'laserbeam.png')), (WINDOW_WIDTH, 75)).convert_alpha()
 shotgun_surf = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'powerups', 'shotgun.png')), (150, 40)).convert_alpha()
 gun_surf = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'gun', 'gun.png')), (100, 54)).convert_alpha()
-knife_surf = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'powerups', 'knife.png')), (150, 50)).convert_alpha()
+sword_surf = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'powerups', 'sword.png')), (160, 55)).convert_alpha()
 superspeed_surf = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'powerups', 'superspeed.png')), (81, 81)).convert_alpha()
 shield_surf = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'powerups', 'shield.png')), (81, 81)).convert_alpha()
 slow_surf = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'powerups', 'snail.png')), (96, 96)).convert_alpha()
@@ -36,7 +36,7 @@ POWERUP_SURFS = {
 					'laser':lasergun_surf, 
 					'shotgun':shotgun_surf, 
 					'sideshot':gun_surf, 
-					'knife':knife_surf, 
+					'sword':sword_surf, 
 					'superspeed':superspeed_surf,
 					'shield':shield_surf,
 					'slowaura': slow_surf,
@@ -69,7 +69,7 @@ for folder_path, _, file_names in walk(join('assets', 'images', 'powerups', 'exp
 		explosion_frames.append(surf)
 
 ANIMATIONS = {
-	enemy: enemy_frames,
-	flame: flame_frames,
-	explosion: explosion_frames,
+	'enemy': enemy_frames,
+	'flame': flame_frames,
+	'explosion': explosion_frames,
 }

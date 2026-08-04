@@ -37,7 +37,7 @@ class Gun(pygame.sprite.Sprite):
         if pygame.mouse.get_pressed()[0] and self.can_shoot:
             self.game.shoot_sound.play()
             pos = self.rect.center + self.player_direction * 50
-            Bullet(self.game.bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
+            Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
     
@@ -91,9 +91,9 @@ class Shotgun(Gun):
         if pygame.mouse.get_pressed()[0] and self.can_shoot:
             self.game.shoot_sound.play()
             pos = self.rect.center + self.player_direction * 64
-            Bullet(self.game.bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(self.game.bullet_surf, pos, self.player_direction.rotate(45), (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(self.game.bullet_surf, pos, self.player_direction.rotate(-45), (self.game.all_sprites, self.game.bullet_sprites))
+            Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
+            Bullet(bullet_surf, pos, self.player_direction.rotate(45), (self.game.all_sprites, self.game.bullet_sprites))
+            Bullet(bullet_surf, pos, self.player_direction.rotate(-45), (self.game.all_sprites, self.game.bullet_sprites))
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
 
@@ -102,10 +102,10 @@ class Sideshotgun(Gun):
         if pygame.mouse.get_pressed()[0] and self.can_shoot:
             self.game.shoot_sound.play()
             pos = self.rect.center + self.player_direction * 64
-            Bullet(self.game.bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(self.game.bullet_surf, pos, self.player_direction.rotate(90), (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(self.game.bullet_surf, pos, self.player_direction.rotate(-90), (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(self.game.bullet_surf, pos, self.player_direction.rotate(180), (self.game.all_sprites, self.game.bullet_sprites))
+            Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
+            Bullet(bullet_surf, pos, self.player_direction.rotate(90), (self.game.all_sprites, self.game.bullet_sprites))
+            Bullet(bullet_surf, pos, self.player_direction.rotate(-90), (self.game.all_sprites, self.game.bullet_sprites))
+            Bullet(bullet_surf, pos, self.player_direction.rotate(180), (self.game.all_sprites, self.game.bullet_sprites))
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
 
@@ -124,7 +124,7 @@ class Lasergun(Gun):
                 self.game.impact_sound.play()
                 if type(bullet) == Bullet:
                     bullet.kill()
-                    Laser(self.game.laser_surf, enemy.rect.center, bullet.direction, (self.game.all_sprites, self.game.bullet_sprites))
+                    Laser(laser_surf, enemy.rect.center, bullet.direction, (self.game.all_sprites, self.game.bullet_sprites))
                 if type(enemy) == Boss:
                     if type(bullet) == Laser:
                         bullet.kill()

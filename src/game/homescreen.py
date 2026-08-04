@@ -14,7 +14,7 @@ def save_high_score(current_score):
 
 class HomeScreen:
     def __init__(self):
-        self.home_screen_image = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'home.png')), (WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.home_screen_image = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'home_screen.png')), (WINDOW_WIDTH, WINDOW_HEIGHT))
         self.game_over_screen = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'game_over.png')), (WINDOW_WIDTH, WINDOW_HEIGHT))
         # self.high_score = load_high_score()
         self.running = True

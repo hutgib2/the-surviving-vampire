@@ -55,7 +55,7 @@ class Mine(pygame.sprite.Sprite):
         self.image = surf
         self.game = game
         self.rect = self.image.get_frect(center = pos)
-        self.explosion_frames = self.game.explosion_frames
+        self.explosion_frames = ANIMATIONS['explosion']
         self.spawn_time = pygame.time.get_ticks()
         self.lifetime = 10000
 
