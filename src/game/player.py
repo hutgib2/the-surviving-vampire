@@ -175,7 +175,7 @@ class Player(pygame.sprite.Sprite):
             elif powerup.type == 'sideshot':
                 self.gun = Sideshotgun(self.gun_surf, self, self.game.all_sprites, self.game)
             elif powerup.type == 'sword':
-                self.gun = Sword(sword_surf, self, self.game.all_sprites, self.game)
+                self.gun = Sword(pygame.transform.smoothscale(sword_surf, (1490/3, 328/3)), self, self.game.all_sprites, self.game)
             elif powerup.type == 'flamegun':
                 self.gun = Flamegun(flamegun_surf, self, self.game.all_sprites, self.game)
 

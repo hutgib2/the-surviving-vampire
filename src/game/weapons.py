@@ -138,7 +138,7 @@ class Lasergun(Gun):
 class Sword(Gun):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
-        self.distance = 300
+        self.distance = 250
 
     def Sword_collision(self):
         collision_sprites = pygame.sprite.spritecollide(self, self.game.enemy_sprites, False, pygame.sprite.collide_mask)

@@ -166,7 +166,7 @@ class Boss(pygame.sprite.Sprite):
     def shoot(self):
         if self.can_shoot and self.can_attack:
             self.game.shoot_sound.play()
-            Orb(self.game.orb_surf, self.rect.center, (pygame.math.Vector2(self.player.rect.center) - (pygame.math.Vector2(self.rect.center))).normalize(), (self.game.all_sprites, self.game.enemy_sprites))
+            Orb(orb_surf, self.rect.center, (pygame.math.Vector2(self.player.rect.center) - (pygame.math.Vector2(self.rect.center))).normalize(), (self.game.all_sprites, self.game.enemy_sprites))
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
     

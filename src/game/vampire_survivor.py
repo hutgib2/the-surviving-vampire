@@ -30,7 +30,8 @@ class Game:
         #events
         # need to stop enemy event when time_stop powerup activated
         self.enemy_event_timer = Timer(400, lambda:Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(ANIMATIONS['enemy'].items())), self.player, self.collision_sprites, self), repeat=True, autostart=True)
-        self.powerup_event_timer = Timer(15000, lambda:Powerup(self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1)), choice(list(POWERUP_SURFS.items())), (self.all_sprites, self.powerup_sprites), self.player), repeat=True, autostart=True)
+        # self.powerup_event_timer = Timer(15000, lambda:Powerup(self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1)), choice(list(POWERUP_SURFS.items())), (self.all_sprites, self.powerup_sprites), self.player), repeat=True, autostart=True)
+        self.powerup_event_timer = Timer(15000, lambda:Powerup(self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1)), ('sword', sword_surf), (self.all_sprites, self.powerup_sprites), self.player), repeat=True, autostart=True)
         self.boss_event_timer = Timer(60000, lambda:Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self), repeat=True, autostart=True)
         self.enemy_spawn_positions = []
         self.powerup_spawn_positions = []
@@ -40,9 +41,9 @@ class Game:
         self.shoot_sound.set_volume(0.2)
         self.impact_sound = pygame.mixer.Sound(join('assets', 'audio', 'new_impact.ogg'))
         self.impact_sound.set_volume(0.3)
-        self.music = pygame.mixer.Sound(join('assets', 'audio', 'my_first_mashup.ogg'))
-        self.music.set_volume(0.55)
-        self.music.play(loops = 0)
+        # self.music = pygame.mixer.Sound(join('assets', 'audio', 'my_first_mashup.ogg'))
+        # self.music.set_volume(0.55)
+        # self.music.play(loops = 0)
 
         self.load_map()
 
@@ -89,7 +90,7 @@ class Game:
             self.all_sprites.update(dt)
             game_over = self.player.enemy_collision()
             if game_over:
-                self.music.stop()
+                # self.music.stop()
                 return True
             self.all_sprites.draw(self.player.rect.center)
             self.display_score()

@@ -22,7 +22,7 @@ class Laser(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(surf, self.angle)
         self.rect = self.image.get_frect(center = pos)
         self.spawn_time = pygame.time.get_ticks()
-        self.lifetime = 2
+        self.lifetime = 1
         self.direction = pygame.math.Vector2(0,0)
     
     def update(self, dt):
