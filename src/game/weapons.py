@@ -168,7 +168,7 @@ class Flamegun(Gun):
                 self.game.impact_sound.play()
                 if type(bullet) == Bullet:
                     bullet.kill()
-                    Flame(self.game.flame_frames, enemy.rect.center, (self.game.all_sprites, self.game.bullet_sprites))
+                    Flame(ANIMATIONS['flame'], enemy.rect.center, (self.game.all_sprites, self.game.bullet_sprites))
                 if type(enemy) == Boss:
                     if type(bullet) == Flame:
                         bullet.kill()
