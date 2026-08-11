@@ -9,7 +9,6 @@ import pygame
 from game.homescreen import HomeScreen
 
 async def main():
-    print('CREATING HOMESCREEN')
     homescreen = HomeScreen()
     await homescreen.run()
     
