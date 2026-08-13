@@ -28,8 +28,8 @@ class Game:
         self.explosion_sprites = pygame.sprite.Group()
         
         #events
-        # need to stop enemy event when time_stop powerup activated
-        self.enemy_event_timer = Timer(400, lambda:Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(ANIMATIONS['enemy'].items())), self.player, self.collision_sprites, self), repeat=True, autostart=True)
+        # TODO: need to stop enemy event when time_stop powerup activated ??
+        self.enemy_event_timer = Timer(400, lambda:Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(enemy_frames.items())), self.player, self.collision_sprites, self), repeat=True, autostart=True)
         self.powerup_event_timer = Timer(15000, lambda:Powerup(self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1)), choice(list(POWERUP_SURFS.items())), (self.all_sprites, self.powerup_sprites), self.player), repeat=True, autostart=True)
         # self.powerup_event_timer = Timer(15000, lambda:Powerup(self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1)), ('sword', sword_surf), (self.all_sprites, self.powerup_sprites), self.player), repeat=True, autostart=True)
         self.boss_event_timer = Timer(60000, lambda:Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self), repeat=True, autostart=True)

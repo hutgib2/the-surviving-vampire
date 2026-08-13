@@ -2,6 +2,7 @@ import asyncio
 import pygame 
 from os.path import join 
 from os import walk
+from game.support import folder_importer_list, load_movement_frames
 
 pygame.init()
 screen = pygame.display.set_mode((2560, 1440))
@@ -32,46 +33,26 @@ bullet_surf = pygame.transform.scale(pygame.image.load(join('assets', 'images', 
 orb_surf = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'enemies', 'orb.png')), (52, 52)).convert_alpha()
 
 POWERUP_SURFS = {
-				'life':life_surf, 
-				'pierce':pierce_surf, 
-				'machinegun':machinegun_surf, 
-				'laser':lasergun_surf, 
-				'shotgun':shotgun_surf, 
-				'sideshot':gun_surf, 
-				'sword':sword_surf, 
-				'superspeed':superspeed_surf,
-				'shield':shield_surf,
-				'slowaura': slow_surf,
-				'timestop': timestop_surf,
-				'flamegun': flamegun_surf,
-				'mine': mine_surf
-			}
-
-enemy_frames = {}
-for folder in list(walk(join('assets', 'images', 'enemies')))[0][1]:
-	for folder_path, _, file_names in walk(join('assets', 'images', 'enemies', folder)):
-		enemy_frames[folder] = []
-		for file_name in sorted(file_names, key = lambda name: int(name.split('.')[0])):
-			full_path = join(folder_path, file_name)
-			surf = pygame.image.load(full_path).convert_alpha()
-			enemy_frames[folder].append(surf)
-
-flame_frames = []
-for folder_path, _, file_names in walk(join('assets', 'images', 'powerups', 'flame')):
-	for file_name in sorted(file_names, key = lambda name: int(name.split('.')[0])):
-		full_path = join(folder_path, file_name)
-		surf = pygame.transform.scale(pygame.image.load(full_path), (100, 100)).convert_alpha()
-		flame_frames.append(surf)
-
-explosion_frames = []
-for folder_path, _, file_names in walk(join('assets', 'images', 'powerups', 'explosion')):
-	for file_name in sorted(file_names, key = lambda name: int(name.split('.')[0])):
-		full_path = join(folder_path, file_name)
-		surf = pygame.transform.scale(pygame.image.load(full_path), (100, 100)).convert_alpha()
-		explosion_frames.append(surf)
-
-ANIMATIONS = {
-	'enemy': enemy_frames,
-	'flame': flame_frames,
-	'explosion': explosion_frames,
+	# 'life':life_surf, 
+	# 'pierce':pierce_surf, 
+	# 'machinegun':machinegun_surf, 
+	# 'laser':lasergun_surf, 
+	# 'shotgun':shotgun_surf, 
+	# 'sideshot':gun_surf, 
+	# 'sword':sword_surf, 
+	# 'superspeed':superspeed_surf,
+	# 'shield':shield_surf,
+	# 'slowaura': slow_surf,
+	# 'timestop': timestop_surf,
+	'flamegun': flamegun_surf,
+	# 'mine': mine_surf
 }
+
+enemy_frames = {
+	'bat': load_movement_frames('assets', 'images', 'enemies', 'bat', scale_factor=3)
+	# 'skeleton': load_movement_frames('assets', 'images', 'skeleton'),
+}
+
+flame_frames = folder_importer_list('assets', 'images', 'powerups', 'flame', scale_factor=0.75)
+explosion_frames = folder_importer_list('assets', 'images', 'powerups', 'explosion')
+

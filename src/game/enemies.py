@@ -1,6 +1,13 @@
 from game.settings import *
 from game.projectiles import Orb
 
+# TASK:
+# We need to change the way we animate the enemy movement
+# We need to copy how the player moves, so we render images in the direction of movement
+# Look how the player movement works, and change this class to work in the same way
+
+# TIP: Dont change the move() only the animate()
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, pos, framedata, player, collision_sprites, game):
         super().__init__(game.all_sprites, game.enemy_sprites)
@@ -8,8 +15,9 @@ class Enemy(pygame.sprite.Sprite):
         self.player = player
         self.type = framedata[0]
         self.frames = framedata[1]
+        self.state = 'down'
         self.frame_index = 0
-        self.image = self.frames[self.frame_index]
+        self.image = self.frames['down'][0]
         self.animation_speed = 6
 
         self.rect = self.image.get_frect(center = pos)
@@ -21,8 +29,12 @@ class Enemy(pygame.sprite.Sprite):
         self.death_duration = 250
 
     def animate(self, dt):
-        self.frame_index += self.animation_speed * dt
-        self.image = self.frames[int(self.frame_index) % len(self.frames)]
+        statex = 'right' if self.direction.x > 0 else 'left'
+        statey = 'down' if self.direction.y > 0 else 'up'
+        self.state = statex if abs(self.direction.x) > abs(self.direction.y) else statey
+        
+        self.frame_index = self.frame_index + self.animation_speed * dt if self.direction else 0
+        self.image = self.frames[self.state][int(self.frame_index) % len(self.frames[self.state])]
 
     def move(self, dt):
         player_pos = pygame.Vector2(self.player.rect.center)
@@ -67,7 +79,7 @@ class Enemy(pygame.sprite.Sprite):
     def destroy(self, hit_player):
         self.game.enemy_sprites.remove(self)
         self.death_time = pygame.time.get_ticks()
-        self.image = pygame.mask.from_surface(self.frames[0]).to_surface()
+        self.image = pygame.mask.from_surface(self.image).to_surface()
         self.image.set_colorkey('black')
         if hit_player:
             self.set_mask_to_red()
@@ -130,9 +142,10 @@ class Boss(pygame.sprite.Sprite):
                         self.attack_frames[state].append(surf)
 
     def loop_frames(self, frames, dt):
-        self.statex = 'right' if self.direction.x > 0 else 'left'
-        self.statey = 'down' if self.direction.y > 0 else 'up'
-        self.state = self.statex if abs(self.direction.x) > abs(self.direction.y) else self.statey
+        statex = 'right' if self.direction.x > 0 else 'left'
+        statey = 'down' if self.direction.y > 0 else 'up'
+        self.state = statex if abs(self.direction.x) > abs(self.direction.y) else statey
+        
         self.frame_index = self.frame_index + self.animation_speed * dt if self.direction else 0
         self.image = frames[self.state][int(self.frame_index) % len(frames[self.state])] 
 

@@ -3,7 +3,7 @@ from game.weapons import Gun, PiercingGun, Shotgun, Machinegun, Lasergun, Sidesh
 # from game.homescreen import save_high_score
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
-
+from game.support import *
 
 PLAYER_SPEED = 350
 ANIMATION_SPEED = 6
@@ -21,19 +21,23 @@ class Aura(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, collision_sprites, gun_surf, game):
         super().__init__(groups)
-        self.load_images()
-        self.image = pygame.image.load(join('assets', 'images', 'player', 'down', '0.png')).convert_alpha()
+        self.frames = load_movement_frames('assets', 'images', 'player')
+        self.image = self.frames['down'][0]
+        self.animation_speed = ANIMATION_SPEED
+        self.state = 'down'
+        self.frame_index = 0
+        
+        self.game = game
         self.gun_surf = gun_surf
         self.rect = self.image.get_frect(center = pos)
         self.direction = pygame.math.Vector2()
         self.speed = PLAYER_SPEED
-        self.animation_speed = ANIMATION_SPEED
         self.collision_sprites = collision_sprites
         self.hitbox_rect = self.rect.inflate(-60, -90)
-        self.state, self.frame_index = 'right', 0
         self.lives = 3
-        self.game = game
         self.gun = Gun(self.gun_surf, self, self.game.all_sprites, self.game)
+
+        # powerup
         self.powerup_activated = None
         self.powerup_cooldown = 5000
         self.powerup_activation_time = 0
@@ -62,16 +66,6 @@ class Player(pygame.sprite.Sprite):
                         self.hitbox_rect.bottom = sprite.rect.top
                     if self.direction.y < 0:
                         self.hitbox_rect.top = sprite.rect.bottom
-    
-    def load_images(self):
-        self.frames = {'left': [], 'right': [], 'up': [], 'down': []}
-        for state in self.frames.keys():    # frames.keys() => ('left', 'right', 'up', 'down')
-            for folder_path, sub_folders, file_names in walk(join('assets', 'images', 'player', state)):
-                if file_names:
-                    for file_name in sorted(file_names, key= lambda name: int(name.split('.')[0])):
-                        full_path = join(folder_path, file_name)
-                        surf = pygame.image.load(full_path).convert_alpha()
-                        self.frames[state].append(surf)
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -87,6 +81,7 @@ class Player(pygame.sprite.Sprite):
             self.state = 'down' if self.direction.y > 0 else 'up'
         self.frame_index = self.frame_index + self.animation_speed * dt if self.direction else 0
         self.image = self.frames[self.state][int(self.frame_index) % len(self.frames[self.state])]
+        
         if self.powerup_activated == 'shield':
             self.image.set_alpha(130)
         else:
