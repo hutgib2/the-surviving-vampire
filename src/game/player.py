@@ -1,35 +1,49 @@
 from game.settings import *
-from game.weapons import Gun, PiercingGun, Shotgun, Machinegun, Lasergun, Sideshotgun, Sword, Flamegun
+from game.weapons import (
+    Gun,
+    PiercingGun,
+    Shotgun,
+    Machinegun,
+    Lasergun,
+    Sideshotgun,
+    Sword,
+    Flamegun,
+)
+
 # from game.homescreen import save_high_score
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
-from game.support import *
+from utils.file_importer import load_image_states
 
 PLAYER_SPEED = 350
 ANIMATION_SPEED = 6
+
+
 class Aura(pygame.sprite.Sprite):
     def __init__(self, groups, surf, player):
         super().__init__(groups)
         self.image = surf
         self.image.set_alpha(120)
-        self.rect = self.image.get_frect(center = player.rect.center)
+        self.rect = self.image.get_frect(center=player.rect.center)
         self.player = player
         self.radius = 400
+
     def update(self, _):
         self.rect.center = self.player.rect.center
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, collision_sprites, gun_surf, game):
         super().__init__(groups)
-        self.frames = load_movement_frames('assets', 'images', 'player')
-        self.image = self.frames['down'][0]
+        self.frames = load_image_states("assets", "images", "player")
+        self.image = self.frames["down"][0]
         self.animation_speed = ANIMATION_SPEED
-        self.state = 'down'
+        self.state = "down"
         self.frame_index = 0
-        
+
         self.game = game
         self.gun_surf = gun_surf
-        self.rect = self.image.get_frect(center = pos)
+        self.rect = self.image.get_frect(center=pos)
         self.direction = pygame.math.Vector2()
         self.speed = PLAYER_SPEED
         self.collision_sprites = collision_sprites
@@ -48,20 +62,20 @@ class Player(pygame.sprite.Sprite):
 
     def move(self, dt):
         self.hitbox_rect.x += self.direction.x * self.speed * dt
-        self.object_collision('horizontal')
+        self.object_collision("horizontal")
         self.hitbox_rect.y += self.direction.y * self.speed * dt
-        self.object_collision('vertical')
+        self.object_collision("vertical")
         self.rect.center = self.hitbox_rect.center
 
     def object_collision(self, direction):
         for sprite in self.collision_sprites:
             if sprite.rect.colliderect(self.hitbox_rect):
-                if direction == 'horizontal':
+                if direction == "horizontal":
                     if self.direction.x > 0:
                         self.hitbox_rect.right = sprite.rect.left
                     if self.direction.x < 0:
                         self.hitbox_rect.left = sprite.rect.right
-                if direction == 'vertical':
+                if direction == "vertical":
                     if self.direction.y > 0:
                         self.hitbox_rect.bottom = sprite.rect.top
                     if self.direction.y < 0:
@@ -69,28 +83,38 @@ class Player(pygame.sprite.Sprite):
 
     def input(self):
         keys = pygame.key.get_pressed()
-        self.direction.x = int(keys[pygame.K_RIGHT] or keys[pygame.K_d]) - int(keys[pygame.K_LEFT] or keys[pygame.K_a])
-        self.direction.y = int(keys[pygame.K_DOWN] or keys[pygame.K_s]) - int(keys[pygame.K_UP] or keys[pygame.K_w])
+        self.direction.x = int(keys[pygame.K_RIGHT] or keys[pygame.K_d]) - int(
+            keys[pygame.K_LEFT] or keys[pygame.K_a]
+        )
+        self.direction.y = int(keys[pygame.K_DOWN] or keys[pygame.K_s]) - int(
+            keys[pygame.K_UP] or keys[pygame.K_w]
+        )
         if self.direction:
             self.direction = self.direction.normalize()
-    
+
     def animate(self, dt):
         if self.direction.x != 0:
-            self.state = 'right' if self.direction.x > 0 else 'left'
+            self.state = "right" if self.direction.x > 0 else "left"
         if self.direction.y != 0:
-            self.state = 'down' if self.direction.y > 0 else 'up'
-        self.frame_index = self.frame_index + self.animation_speed * dt if self.direction else 0
-        self.image = self.frames[self.state][int(self.frame_index) % len(self.frames[self.state])]
-        
-        if self.powerup_activated == 'shield':
+            self.state = "down" if self.direction.y > 0 else "up"
+        self.frame_index = (
+            self.frame_index + self.animation_speed * dt if self.direction else 0
+        )
+        self.image = self.frames[self.state][
+            int(self.frame_index) % len(self.frames[self.state])
+        ]
+
+        if self.powerup_activated == "shield":
             self.image.set_alpha(130)
         else:
             self.image.set_alpha(255)
 
     def enemy_collision(self):
-        collision_sprites = pygame.sprite.spritecollide(self, self.game.enemy_sprites, False, pygame.sprite.collide_mask)
+        collision_sprites = pygame.sprite.spritecollide(
+            self, self.game.enemy_sprites, False, pygame.sprite.collide_mask
+        )
         for enemy in collision_sprites:
-            if self.powerup_activated != 'shield':
+            if self.powerup_activated != "shield":
                 if type(enemy) == Orb:
                     enemy.kill()
                 elif type(enemy) == Boss:
@@ -101,31 +125,33 @@ class Player(pygame.sprite.Sprite):
                 self.lives -= 1
                 if self.lives < 1:
                     # if self.game.kill_count > self.game.high_score:
-                        # save_high_score(self.game.kill_count)
+                    # save_high_score(self.game.kill_count)
                     return True
         return False
-    
+
     def powerup_timer(self):
         if self.powerup_activated != None:
             current_time = pygame.time.get_ticks()
             if current_time - self.powerup_activation_time >= self.powerup_cooldown:
-                if self.powerup_activated == 'superspeed':
+                if self.powerup_activated == "superspeed":
                     self.speed = PLAYER_SPEED
                     self.animation_speed = ANIMATION_SPEED
-                elif self.powerup_activated == 'slowaura':
+                elif self.powerup_activated == "slowaura":
                     self.aura.kill()
                     self.aura = None
-                elif self.powerup_activated == 'timestop':
+                elif self.powerup_activated == "timestop":
                     pass
-                elif self.powerup_activated == 'mine':
+                elif self.powerup_activated == "mine":
                     pass
                 else:
                     self.gun.kill()
-                    self.gun = Gun(self.gun_surf, self, self.game.all_sprites, self.game)
+                    self.gun = Gun(
+                        self.gun_surf, self, self.game.all_sprites, self.game
+                    )
                 self.powerup_activated = None
 
     def mine_timer(self):
-        if self.powerup_activated == 'mine' and self.can_drop_mine:
+        if self.powerup_activated == "mine" and self.can_drop_mine:
             Mine(mine_surf, self.rect.center, self.game.all_sprites, self.game)
             self.minedrop_time = pygame.time.get_ticks()
             self.can_drop_mine = False
@@ -133,49 +159,72 @@ class Player(pygame.sprite.Sprite):
             self.can_drop_mine = True
 
     def powerup_collision(self):
-        powerup_collisions = pygame.sprite.spritecollide(self, self.game.powerup_sprites, True, pygame.sprite.collide_mask)
+        powerup_collisions = pygame.sprite.spritecollide(
+            self, self.game.powerup_sprites, True, pygame.sprite.collide_mask
+        )
         for powerup in powerup_collisions:
             self.game.powerup_spawn_positions.append(powerup.rect.center)
-            if powerup.type == 'life':
+            if powerup.type == "life":
                 if self.lives < 3:
                     self.lives += 1
                 continue
             self.powerup_activation_time = pygame.time.get_ticks()
             self.powerup_activated = powerup.type
-            if powerup.type == 'superspeed':
+            if powerup.type == "superspeed":
                 self.speed = PLAYER_SPEED * 3
                 self.animation_speed = ANIMATION_SPEED * 3
                 continue
-            if powerup.type == 'shield':
+            if powerup.type == "shield":
                 return
-            if powerup.type == 'slowaura':
+            if powerup.type == "slowaura":
                 if self.aura != None:
                     self.aura.kill()
                 self.aura = Aura(self.game.all_sprites, aura_surf, self)
                 return
-            if powerup.type == 'timestop':
+            if powerup.type == "timestop":
                 continue
-            if powerup.type == 'mine':
+            if powerup.type == "mine":
                 self.can_drop_mine = True
                 continue
             self.gun.kill()
-            if powerup.type == 'pierce':
-                self.gun = PiercingGun(self.gun_surf, self, self.game.all_sprites, self.game)
-            elif powerup.type == 'machinegun':
-                self.gun = Machinegun(machinegun_surf, self, self.game.all_sprites, self.game)
-            elif powerup.type == 'laser':
-                self.gun = Lasergun(lasergun_surf, self, self.game.all_sprites, self.game)
-            elif powerup.type == 'shotgun':
+            if powerup.type == "pierce":
+                self.gun = PiercingGun(
+                    self.gun_surf, self, self.game.all_sprites, self.game
+                )
+            elif powerup.type == "machinegun":
+                self.gun = Machinegun(
+                    machinegun_surf, self, self.game.all_sprites, self.game
+                )
+            elif powerup.type == "laser":
+                self.gun = Lasergun(
+                    lasergun_surf, self, self.game.all_sprites, self.game
+                )
+            elif powerup.type == "shotgun":
                 self.gun = Shotgun(shotgun_surf, self, self.game.all_sprites, self.game)
-            elif powerup.type == 'sideshot':
-                self.gun = Sideshotgun(self.gun_surf, self, self.game.all_sprites, self.game)
-            elif powerup.type == 'sword':
-                self.gun = Sword(pygame.transform.smoothscale(sword_surf, (1490/3, 328/3)), self, self.game.all_sprites, self.game)
-            elif powerup.type == 'flamegun':
-                self.gun = Flamegun(flamegun_surf, self, self.game.all_sprites, self.game)
+            elif powerup.type == "sideshot":
+                self.gun = Sideshotgun(
+                    self.gun_surf, self, self.game.all_sprites, self.game
+                )
+            elif powerup.type == "sword":
+                self.gun = Sword(
+                    pygame.transform.smoothscale(sword_surf, (1490 / 3, 328 / 3)),
+                    self,
+                    self.game.all_sprites,
+                    self.game,
+                )
+            elif powerup.type == "flamegun":
+                self.gun = Flamegun(
+                    flamegun_surf, self, self.game.all_sprites, self.game
+                )
 
     def explosion_collisions(self):
-        collision_sprites = pygame.sprite.groupcollide(self.game.explosion_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
+        collision_sprites = pygame.sprite.groupcollide(
+            self.game.explosion_sprites,
+            self.game.enemy_sprites,
+            False,
+            False,
+            pygame.sprite.collide_mask,
+        )
         for explosion, enemies in collision_sprites.items():
             for enemy in enemies:
                 if type(enemy) == Orb:

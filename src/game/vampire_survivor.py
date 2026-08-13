@@ -1,12 +1,12 @@
+from utils.async_clock import AsyncClock
+from utils.timer import Timer
+from random import randint, choice
 from game.settings import *  # import everything from settings.py
 from game.player import Player
 from game.sprites import *
 from game.groups import AllSprites
 from game.enemies import Enemy, Boss
 from game.homescreen import *
-from game.timer import Timer
-from game.async_clock import AsyncClock
-from random import randint, choice
 from pytmx.util_pygame import load_pygame
 
 class Game:
