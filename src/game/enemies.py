@@ -1,12 +1,14 @@
 from game.settings import *
 from game.projectiles import Orb
-
 # TASK:
-# We need to change the way we animate the enemy movement
-# We need to copy how the player moves, so we render images in the direction of movement
-# Look how the player movement works, and change this class to work in the same way
+# find out how to set the dead image to the correct direction
+# 0: down
+# 1: right
+# 2: up
+# 3: left
 
-# TIP: Dont change the move() only the animate()
+# you need to find the function where we control what happens when they die
+# then change the image to the correct one
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, pos, framedata, player, collision_sprites, game):
@@ -18,7 +20,7 @@ class Enemy(pygame.sprite.Sprite):
         self.state = 'down'
         self.frame_index = 0
         self.image = self.frames['down'][0]
-        self.animation_speed = 6
+        self.animation_speed = 12
 
         self.rect = self.image.get_frect(center = pos)
         self.hitbox_rect = self.rect.inflate(-20, -40)
@@ -26,7 +28,7 @@ class Enemy(pygame.sprite.Sprite):
         self.direction = pygame.Vector2()
         self.speed = 250
         self.death_time = 0
-        self.death_duration = 250
+        self.death_duration = 500
 
     def animate(self, dt):
         statex = 'right' if self.direction.x > 0 else 'left'
@@ -79,10 +81,19 @@ class Enemy(pygame.sprite.Sprite):
     def destroy(self, hit_player):
         self.game.enemy_sprites.remove(self)
         self.death_time = pygame.time.get_ticks()
-        self.image = pygame.mask.from_surface(self.image).to_surface()
-        self.image.set_colorkey('black')
-        if hit_player:
-            self.set_mask_to_red()
+        if self.state == 'down':
+            self.image = self.frames['dead'][0]
+        elif self.state == 'right':
+            self.image = self.frames['dead'][1]
+        elif self.state == 'up':
+            self.image = self.frames['dead'][2]
+        elif self.state == 'left':
+            self.image = self.frames['dead'][3]
+
+        # self.image = pygame.mask.from_surface(self.image).to_surface()
+        # self.image.set_colorkey('black')
+        # if hit_player:
+        #     self.set_mask_to_red()
 
     def death_timer(self):
         if pygame.time.get_ticks() - self.death_time >= self.death_duration:

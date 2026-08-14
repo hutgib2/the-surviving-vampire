@@ -1,4 +1,4 @@
-from game.settings import *
+import pygame
 
 class Timer:
     def __init__(self, duration, func = None, repeat = None, autostart = False):

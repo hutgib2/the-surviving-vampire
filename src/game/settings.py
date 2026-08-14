@@ -69,24 +69,24 @@ orb_surf = pygame.transform.scale(
 ).convert_alpha()
 
 POWERUP_SURFS = {
-    # 'life':life_surf,
-    # 'pierce':pierce_surf,
-    # 'machinegun':machinegun_surf,
-    # 'laser':lasergun_surf,
-    # 'shotgun':shotgun_surf,
-    # 'sideshot':gun_surf,
-    # 'sword':sword_surf,
-    # 'superspeed':superspeed_surf,
-    # 'shield':shield_surf,
-    # 'slowaura': slow_surf,
-    # 'timestop': timestop_surf,
+    'life':life_surf,
+    'pierce':pierce_surf,
+    'machinegun':machinegun_surf,
+    'laser':lasergun_surf,
+    'shotgun':shotgun_surf,
+    'sideshot':gun_surf,
+    'sword':sword_surf,
+    'superspeed':superspeed_surf,
+    'shield':shield_surf,
+    'slowaura': slow_surf,
+    'timestop': timestop_surf,
     "flamegun": flamegun_surf,
-    # 'mine': mine_surf
+    'mine': mine_surf
 }
 
 enemy_frames = {
-    "bat": load_image_states("assets", "images", "enemies", "bat", scale=3)
-    # 'skeleton': load_image_states('assets', 'images', 'skeleton'),
+    "bat": load_image_states("assets", "images", "enemies", "bat", scale=3),
+    "skeleton": load_image_states("assets", "images", "enemies", "skeleton", scale=2)
 }
 
 flame_frames = load_images("assets", "images", "powerups", "flame", scale=0.75)
