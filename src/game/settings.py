@@ -19,7 +19,7 @@ pierce_surf = load_image("assets", "images", "powerups", "pierce.png", scale=1)
 
 machinegun_surf = load_image("assets", "images", "powerups", "machinegun.png", scale=1/4)
 
-lasergun_surf = load_image("assets", "images", "powerups", "lasergun.png", scale=1/4)
+lasergun_surf = load_image("assets", "images", "powerups", "lasergun.png", scale=1/6)
 
 lasergun_surf = pygame.transform.flip(lasergun_surf, True, False)
 
@@ -35,13 +35,13 @@ sword_surf = load_image("assets", "images", "powerups", "sword.png", scale=1/6)
 
 superspeed_surf = load_image("assets", "images", "powerups", "superspeed.png", scale=1/4)
 
-shield_surf = load_image("assets", "images", "powerups", "shield.png", scale=1/16)
+shield_surf = load_image("assets", "images", "powerups", "shield.png", scale=1/32)
 
 slow_surf = load_image("assets", "images", "powerups", "snail.png", scale=1/5)
 
 aura_surf = load_image("assets", "images", "powerups", "aura.png", scale=1)
 
-timestop_surf = load_image("assets", "images", "powerups", "clock.png", scale=1/10)
+timestop_surf = load_image("assets", "images", "powerups", "clock.png", scale=1/12)
 
 flamegun_surf = load_image("assets", "images", "powerups", "flamegun.png", scale=1/4)
 
@@ -49,9 +49,7 @@ mine_surf = load_image("assets", "images", "powerups", "mine.png", scale=1)
 
 bullet_surf = load_image("assets", "images", "gun", "bullet.png", scale=1/4)
 
-orb_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "enemies", "orb.png")), (52, 52)
-).convert_alpha()
+orb_surf = load_image("assets", "images", "enemies", "orb.png", scale=1.5)
 
 POWERUP_SURFS = {
     'life':life_surf,

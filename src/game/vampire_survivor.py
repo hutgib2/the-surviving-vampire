@@ -32,7 +32,7 @@ class Game:
         self.enemy_event_timer = Timer(400, lambda:Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(enemy_frames.items())), self.player, self.collision_sprites, self), repeat=True, autostart=True)
         self.powerup_event_timer = Timer(15000, lambda:Powerup(self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1)), choice(list(POWERUP_SURFS.items())), (self.all_sprites, self.powerup_sprites), self.player), repeat=True, autostart=True)
         # self.powerup_event_timer = Timer(15000, lambda:Powerup(self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1)), ('sword', sword_surf), (self.all_sprites, self.powerup_sprites), self.player), repeat=True, autostart=True)
-        self.boss_event_timer = Timer(60000, lambda:Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self), repeat=True, autostart=True)
+        self.boss_event_timer = Timer(10000, lambda:Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self), repeat=True, autostart=True)
         self.enemy_spawn_positions = []
         self.powerup_spawn_positions = []
         
@@ -78,8 +78,14 @@ class Game:
 
     def display_lives(self):
         for i in range(self.player.lives):
-            self.life_rect = life_surf.get_frect(topleft = (10 + (i * 85), 10))
-            screen.blit(life_surf, self.life_rect)
+            life_rect = life_surf.get_frect(topleft = (10 + (i * 85), 10))
+            screen.blit(life_surf, life_rect)
+    
+    # TEST ONLY: Draw all powerup images statically on left of screen so we can see the sizes
+    def display_all_powerups(self):
+        for i, powerup_surf in enumerate(POWERUP_SURFS.values()):
+            powerup_rect = powerup_surf.get_frect(topleft = (10, 100 + (i * 85)))
+            screen.blit(powerup_surf, powerup_rect)
         
     async def run(self):
         while self.running:
@@ -95,6 +101,7 @@ class Game:
             self.all_sprites.draw(self.player.rect.center)
             self.display_score()
             self.display_lives()
+            # self.display_all_powerups()
             self.enemy_event_timer.update()
             self.powerup_event_timer.update()
             self.boss_event_timer.update()
