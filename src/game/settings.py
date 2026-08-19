@@ -2,7 +2,7 @@ import asyncio
 import pygame
 from os.path import join
 from os import walk
-from utils.file_importer import load_images, load_image_states
+from utils.file_importer import load_images, load_image_states, load_image
 
 pygame.init()
 screen = pygame.display.set_mode((2560, 1440))
@@ -13,57 +13,42 @@ TILE_SIZE = 64
 
 # ----------------------------------- SURFS ---------------------------------- #
 
-life_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "life.png")), (75, 75)
-).convert_alpha()
-pierce_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "pierce.png")), (75, 75)
-).convert_alpha()
-machinegun_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "machinegun.png")), (125, 60)
-).convert_alpha()
-lasergun_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "lasergun.png")), (100, 75)
-).convert_alpha()
+life_surf = load_image("assets", "images", "powerups", "life.png", scale=1/4)
+
+pierce_surf = load_image("assets", "images", "powerups", "pierce.png", scale=1)
+
+machinegun_surf = load_image("assets", "images", "powerups", "machinegun.png", scale=1/4)
+
+lasergun_surf = load_image("assets", "images", "powerups", "lasergun.png", scale=1/4)
+
 lasergun_surf = pygame.transform.flip(lasergun_surf, True, False)
+
 laser_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "laserbeam.png")),
-    (WINDOW_WIDTH, 2),
+    pygame.image.load(join("assets", "images", "powerups", "laserbeam.png")), (WINDOW_WIDTH, 2),
 ).convert_alpha()
-shotgun_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "shotgun.png")), (150, 40)
-).convert_alpha()
-gun_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "gun", "gun.png")), (100, 54)
-).convert_alpha()
-sword_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "sword.png")),
-    (1490 / 6, 328 / 6),
-).convert_alpha()
-superspeed_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "superspeed.png")), (81, 81)
-).convert_alpha()
-shield_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "shield.png")), (81, 81)
-).convert_alpha()
-slow_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "snail.png")), (96, 96)
-).convert_alpha()
-aura_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "aura.png")), (800, 800)
-).convert_alpha()
-timestop_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "clock.png")), (83, 99)
-).convert_alpha()
-flamegun_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "flamegun.png")), (100, 75)
-).convert_alpha()
-mine_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "powerups", "mine.png")), (92, 42)
-).convert_alpha()
-bullet_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "gun", "bullet.png")), (25, 25)
-).convert_alpha()
+
+shotgun_surf = load_image("assets", "images", "powerups", "shotgun.png", scale=1/5)
+
+gun_surf = load_image("assets", "images", "gun", "gun.png", scale=2.5)
+
+sword_surf = load_image("assets", "images", "powerups", "sword.png", scale=1/6)
+
+superspeed_surf = load_image("assets", "images", "powerups", "superspeed.png", scale=1/4)
+
+shield_surf = load_image("assets", "images", "powerups", "shield.png", scale=1/16)
+
+slow_surf = load_image("assets", "images", "powerups", "snail.png", scale=1/5)
+
+aura_surf = load_image("assets", "images", "powerups", "aura.png", scale=1)
+
+timestop_surf = load_image("assets", "images", "powerups", "clock.png", scale=1/10)
+
+flamegun_surf = load_image("assets", "images", "powerups", "flamegun.png", scale=1/4)
+
+mine_surf = load_image("assets", "images", "powerups", "mine.png", scale=1)
+
+bullet_surf = load_image("assets", "images", "gun", "bullet.png", scale=1/4)
+
 orb_surf = pygame.transform.scale(
     pygame.image.load(join("assets", "images", "enemies", "orb.png")), (52, 52)
 ).convert_alpha()

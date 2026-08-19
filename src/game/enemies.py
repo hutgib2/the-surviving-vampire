@@ -158,7 +158,7 @@ class Boss(pygame.sprite.Sprite):
         self.state = statex if abs(self.direction.x) > abs(self.direction.y) else statey
         
         self.frame_index = self.frame_index + self.animation_speed * dt if self.direction else 0
-        self.image = frames[self.state][int(self.frame_index) % len(frames[self.state])] 
+        self.image = frames[self.state][int(self.frame_index) % len(frames[self.state])]
 
     def animate(self, dt):
         if self.can_attack:

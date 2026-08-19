@@ -88,10 +88,10 @@ class Game:
                 if event.type == pygame.QUIT:
                     return False
             self.all_sprites.update(dt)
-            game_over = self.player.enemy_collision()
-            if game_over:
+            if self.player.is_dead:
                 # self.music.stop()
                 return True
+            
             self.all_sprites.draw(self.player.rect.center)
             self.display_score()
             self.display_lives()
