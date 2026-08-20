@@ -1,7 +1,6 @@
 import asyncio
 import pygame
 from os.path import join
-from os import walk
 from utils.file_importer import load_images, load_image_states, load_image
 
 pygame.init()
@@ -74,3 +73,4 @@ enemy_frames = {
 
 flame_frames = load_images("assets", "images", "powerups", "flame", scale=0.75)
 explosion_frames = load_images("assets", "images", "powerups", "explosion")
+shoot_frames = load_images("assets", "images", "gun", "shoot", scale=2.5)

@@ -137,8 +137,8 @@ class Player(pygame.sprite.Sprite):
     def set_animation_state(self, state):
         if self.animation_state == "dead" or state == self.animation_state:
             return
-        print(f'current state: {self.animation_state}')
-        print(f'state: {state}')
+        # print(f'current state: {self.animation_state}')
+        # print(f'state: {state}')
         self.animation_state = state
         self.frame_index = 0
         self.animation_finished = False
