@@ -14,9 +14,9 @@ TILE_SIZE = 64
 
 life_surf = load_image("assets", "images", "powerups", "life.png", scale=1/4)
 
-pierce_surf = load_image("assets", "images", "powerups", "pierce.png", scale=1)
+machinegun_surf = load_image("assets", "images", "machinegun", "0.png", scale=3)
 
-machinegun_surf = load_image("assets", "images", "powerups", "machinegun.png", scale=1/4)
+rifle_surf = load_image("assets", "images", "rifle", "0.png", scale=3)
 
 lasergun_surf = load_image("assets", "images", "powerups", "lasergun.png", scale=1/6)
 
@@ -26,7 +26,7 @@ laser_surf = pygame.transform.scale(
     pygame.image.load(join("assets", "images", "powerups", "laserbeam.png")), (WINDOW_WIDTH, 2),
 ).convert_alpha()
 
-shotgun_surf = load_image("assets", "images", "powerups", "shotgun.png", scale=1/5)
+shotgun_surf = load_image("assets", "images", "shotgun", "0.png", scale=3)
 
 gun_surf = load_image("assets", "images", "gun", "gun.png", scale=2.5)
 
@@ -44,7 +44,7 @@ timestop_surf = load_image("assets", "images", "powerups", "clock.png", scale=1/
 
 flamegun_surf = load_image("assets", "images", "powerups", "flamegun.png", scale=1/4)
 
-mine_surf = load_image("assets", "images", "powerups", "mine.png", scale=1)
+mine_surf = load_image("assets", "images", "powerups", "mine.png", scale=3/4)
 
 bullet_surf = load_image("assets", "images", "gun", "bullet.png", scale=1/4)
 
@@ -52,7 +52,7 @@ orb_surf = load_image("assets", "images", "enemies", "orb.png", scale=1.5)
 
 POWERUP_SURFS = {
     'life':life_surf,
-    'pierce':pierce_surf,
+    'rifle':rifle_surf,
     'machinegun':machinegun_surf,
     'laser':lasergun_surf,
     'shotgun':shotgun_surf,
@@ -66,11 +66,21 @@ POWERUP_SURFS = {
     'mine': mine_surf
 }
 
+# -------------------------------- ANIMATIONS -------------------------------- #
+
 enemy_frames = {
     "bat": load_image_states("assets", "images", "enemies", "bat", scale=3),
     "skeleton": load_image_states("assets", "images", "enemies", "skeleton", scale=2)
 }
 
+boss_frames = {
+    'walk': load_image_states("assets", "images", "boss", "walk", scale=4),
+    'attack': load_image_states("assets", "images", "boss", "attack", scale=4)
+}
+
 flame_frames = load_images("assets", "images", "powerups", "flame", scale=0.75)
 explosion_frames = load_images("assets", "images", "powerups", "explosion")
-shoot_frames = load_images("assets", "images", "gun", "shoot", scale=2.5)
+pistol_frames = load_images("assets", "images", "gun", "shoot", scale=2.5)
+machinegun_frames = load_images("assets", "images", "machinegun", scale=3)
+shotgun_frames = load_images("assets", "images", "shotgun", scale=3)
+rifle_frames = load_images("assets", "images", "rifle", scale=3)

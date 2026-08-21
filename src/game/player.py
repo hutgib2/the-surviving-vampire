@@ -1,7 +1,7 @@
 from game.settings import *
 from game.weapons import (
-    Gun,
-    PiercingGun,
+    Pistol,
+    Rifle,
     Shotgun,
     Machinegun,
     Lasergun,
@@ -31,7 +31,7 @@ class Aura(pygame.sprite.Sprite):
         self.rect.center = self.player.rect.center
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, collision_sprites, gun_surf, game):
+    def __init__(self, pos, groups, collision_sprites, pistol_surf, game):
         super().__init__(groups)
         self.idle_frames = load_image_states("assets", "images", "vampire", "idle", scale=4)
         self.walk_frames = load_image_states("assets", "images", "vampire", "walk", scale=4)
@@ -49,7 +49,6 @@ class Player(pygame.sprite.Sprite):
         # self.hurt_duration = 500
 
         self.game = game
-        self.gun_surf = gun_surf
         self.rect = self.image.get_frect(center=pos)
         self.move_direction = pygame.math.Vector2()
         self.speed = PLAYER_SPEED
@@ -58,7 +57,11 @@ class Player(pygame.sprite.Sprite):
         self.lives = 3
         self.is_dead = False
         # self.death_time = 0
-        self.gun = Gun(self.gun_surf, self, self.game.all_sprites, self.game)
+        
+        self.gun = Pistol(pistol_surf, self, self.game.all_sprites, self.game)
+        # self.gun = Shotgun(shotgun_surf, self, self.game.all_sprites, self.game)
+        # self.gun = Rifle(rifle_surf, self, self.game.all_sprites, self.game)
+        # self.gun = Machinegun(machinegun_surf, self, self.game.all_sprites, self.game)
 
         # powerup
         self.powerup_activated = None
@@ -137,8 +140,6 @@ class Player(pygame.sprite.Sprite):
     def set_animation_state(self, state):
         if self.animation_state == "dead" or state == self.animation_state:
             return
-        # print(f'current state: {self.animation_state}')
-        # print(f'state: {state}')
         self.animation_state = state
         self.frame_index = 0
         self.animation_finished = False
@@ -195,8 +196,8 @@ class Player(pygame.sprite.Sprite):
                     pass
                 else:
                     self.gun.kill()
-                    self.gun = Gun(
-                        self.gun_surf, self, self.game.all_sprites, self.game
+                    self.gun = Pistol(
+                        gun_surf, self, self.game.all_sprites, self.game
                     )
                 self.powerup_activated = None
 
@@ -237,10 +238,8 @@ class Player(pygame.sprite.Sprite):
                 self.can_drop_mine = True
                 continue
             self.gun.kill()
-            if powerup.type == "pierce":
-                self.gun = PiercingGun(
-                    self.gun_surf, self, self.game.all_sprites, self.game
-                )
+            if powerup.type == "rifle":
+                self.gun = Rifle(rifle_surf, self, self.game.all_sprites, self.game)
             elif powerup.type == "machinegun":
                 self.gun = Machinegun(
                     machinegun_surf, self, self.game.all_sprites, self.game
@@ -256,12 +255,7 @@ class Player(pygame.sprite.Sprite):
                     self.gun_surf, self, self.game.all_sprites, self.game
                 )
             elif powerup.type == "sword":
-                self.gun = Sword(
-                    pygame.transform.smoothscale(sword_surf, (1490 / 3, 328 / 3)),
-                    self,
-                    self.game.all_sprites,
-                    self.game,
-                )
+                self.gun = Sword(sword_surf,self,self.game.all_sprites,self.game)
             elif powerup.type == "flamegun":
                 self.gun = Flamegun(
                     flamegun_surf, self, self.game.all_sprites, self.game

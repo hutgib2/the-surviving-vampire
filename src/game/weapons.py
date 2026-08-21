@@ -3,52 +3,44 @@ from game.projectiles import Bullet, Laser, Orb, Flame
 from game.enemies import Enemy, Boss
 from math import atan2, degrees
 
-''' TASK
-    - we want to add the shoot animation to the Gun,
-    - we have a static gun image which should be displayed when not shooting
-    - we have an animation that we want to run when shooting
-    - after the shoot animation is finished we want to display the static image again
-
-    - reuse a lot of the code from the player animation, but this one doesnt have direction
-    - i.e. there is no 'left' 'up' 'down' 'right' options
-
-    - we will need to rotate each frame for this animation (I WILL HELP WITH THIS AT THE END)
-'''
-class Gun(pygame.sprite.Sprite):
+class Pistol(pygame.sprite.Sprite):
     def __init__(self, surf, player, groups, game):
         super().__init__(groups)
         self.player = player
         self.distance = 120
         self.game = game
         self.player_direction = pygame.Vector2(1, -1)
-        self.original_surf = surf
-        self.image = self.original_surf # what we display after rotation
+        
+        self.static_frame = surf
+        self.image = self.static_frame # what we display after rotation
         self.current_image = self.image # what we set the image to be depending on whether animation is running
         self.rect = self.image.get_frect(center = self.player.rect.center + self.player_direction * self.distance)
+        
         self.can_shoot = True
         self.shoot_time = 0
         self.cooldown = 300
         
         self.frame_index = 0
-        self.animation_speed = 40
-        self.is_shooting = False
+        self.animation_frames = pistol_frames
+        self.animation_speed = self.cooldown / 7.5
+        self.animation_running = False
 
     def run_animation(self, frames, dt):
         self.frame_index += self.animation_speed * dt
 
         # when animation finishes, reset for next time
         if int(self.frame_index) >= len(frames):
-            self.is_shooting = False
+            self.animation_running = False
             self.frame_index = 0
             return
         
         self.current_image = frames[int(self.frame_index)]
         
     def animate(self, dt):
-        if self.is_shooting:
-            self.run_animation(shoot_frames, dt)
+        if self.animation_running:
+            self.run_animation(self.animation_frames, dt)
         else:
-            self.current_image = self.original_surf
+            self.current_image = self.static_frame
 
     def get_direction(self):
         mouse_pos = pygame.Vector2(pygame.mouse.get_pos())
@@ -68,7 +60,7 @@ class Gun(pygame.sprite.Sprite):
 
     def shoot(self):
         if pygame.mouse.get_pressed()[0] and self.can_shoot:
-            self.is_shooting = True
+            self.animation_running = True
             self.game.shoot_sound.play()
             pos = self.rect.center + self.player_direction * 50
             Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
@@ -87,7 +79,7 @@ class Gun(pygame.sprite.Sprite):
             for enemy in enemies:
                 if type(enemy) == Orb:
                     continue
-                self.game.impact_sound.play()
+                # self.game.impact_sound.play()
                 bullet.kill()
                 if type(enemy) == Boss:
                     enemy.lives -= 1
@@ -105,7 +97,12 @@ class Gun(pygame.sprite.Sprite):
         self.shoot()
         self.bullet_collision()
 
-class PiercingGun(Gun):
+class Rifle(Pistol):
+    def __init__(self, surf, player, groups, game):
+        super().__init__(surf, player, groups, game)
+        self.animation_frames = rifle_frames
+        self.animation_speed = self.cooldown / 4
+
     def bullet_collision(self):
         collision_sprites = pygame.sprite.groupcollide(self.game.bullet_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
         for bullet, enemies in collision_sprites.items():
@@ -121,20 +118,29 @@ class PiercingGun(Gun):
                 enemy.destroy(False)
                 self.game.kill_count += 1
 
-class Shotgun(Gun):        
+class Shotgun(Pistol):
+    def __init__(self, surf, player, groups, game):
+        super().__init__(surf, player, groups, game)
+        self.animation_frames = shotgun_frames
+        self.cooldown = 500
+
     def shoot(self):
         if pygame.mouse.get_pressed()[0] and self.can_shoot:
+            self.animation_running = True
             self.game.shoot_sound.play()
             pos = self.rect.center + self.player_direction * 64
             Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(bullet_surf, pos, self.player_direction.rotate(45), (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(bullet_surf, pos, self.player_direction.rotate(-45), (self.game.all_sprites, self.game.bullet_sprites))
+            Bullet(bullet_surf, pos, self.player_direction.rotate(15), (self.game.all_sprites, self.game.bullet_sprites))
+            Bullet(bullet_surf, pos, self.player_direction.rotate(-15), (self.game.all_sprites, self.game.bullet_sprites))
+            Bullet(bullet_surf, pos, self.player_direction.rotate(30), (self.game.all_sprites, self.game.bullet_sprites))
+            Bullet(bullet_surf, pos, self.player_direction.rotate(-30), (self.game.all_sprites, self.game.bullet_sprites))
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
 
-class Sideshotgun(Gun):
+class Sideshotgun(Pistol):
     def shoot(self):
         if pygame.mouse.get_pressed()[0] and self.can_shoot:
+            self.animation_running = True
             self.game.shoot_sound.play()
             pos = self.rect.center + self.player_direction * 64
             Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
@@ -144,12 +150,16 @@ class Sideshotgun(Gun):
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
 
-class Machinegun(Gun):
+class Machinegun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
         self.cooldown = 100
+        self.animation_frames = machinegun_frames
 
-class Lasergun(Gun):
+class Lasergun(Pistol):
+    def __init__(self, surf, player, groups, game):
+        super().__init__(surf, player, groups, game)
+        # self.animation_frames = lasergun_frames
     def bullet_collision(self):
         collision_sprites = pygame.sprite.groupcollide(self.game.bullet_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
         for bullet, enemies in collision_sprites.items():
@@ -169,8 +179,7 @@ class Lasergun(Gun):
                 enemy.destroy(False)
                 self.game.kill_count += 1
 
-
-class Sword(Gun):
+class Sword(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
         self.distance = 250
@@ -193,7 +202,11 @@ class Sword(Gun):
         self.rect = self.image.get_frect(center = self.player.rect.center + self.player_direction * self.distance)
         self.Sword_collision()
 
-class Flamegun(Gun):
+class Flamegun(Pistol):
+    def __init__(self, surf, player, groups, game):
+        super().__init__(surf, player, groups, game)
+        # self.animation_frames = flamegun_frames
+        
     def bullet_collision(self):
         collision_sprites = pygame.sprite.groupcollide(self.game.bullet_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
         for bullet, enemies in collision_sprites.items():

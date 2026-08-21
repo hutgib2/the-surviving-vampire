@@ -1,5 +1,6 @@
 from utils.async_clock import AsyncClock
 from utils.timer import Timer
+from utils.audio_player import AudioPlayer
 from random import randint, choice
 from game.settings import *  # import everything from settings.py
 from game.player import Player
@@ -8,6 +9,11 @@ from game.groups import AllSprites
 from game.enemies import Enemy, Boss
 from game.homescreen import *
 from pytmx.util_pygame import load_pygame
+
+# TODO: test audioplayer ??
+# TODO: fix crash when powerups hit max capacity
+# TODO: organise folder structure and imports
+# TODO: fix death animation
 
 class Game:
     def __init__(self): # Constructor 
@@ -31,16 +37,15 @@ class Game:
         # TODO: need to stop enemy event when time_stop powerup activated ??
         self.enemy_event_timer = Timer(400, lambda:Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(enemy_frames.items())), self.player, self.collision_sprites, self), repeat=True, autostart=True)
         self.powerup_event_timer = Timer(15000, lambda:Powerup(self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1)), choice(list(POWERUP_SURFS.items())), (self.all_sprites, self.powerup_sprites), self.player), repeat=True, autostart=True)
-        # self.powerup_event_timer = Timer(15000, lambda:Powerup(self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1)), ('sword', sword_surf), (self.all_sprites, self.powerup_sprites), self.player), repeat=True, autostart=True)
         self.boss_event_timer = Timer(60000, lambda:Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self), repeat=True, autostart=True)
         self.enemy_spawn_positions = []
         self.powerup_spawn_positions = []
         
         #audio
-        self.shoot_sound = pygame.mixer.Sound(join('assets', 'audio', 'shoot.ogg'))
-        self.shoot_sound.set_volume(0.2)
-        self.impact_sound = pygame.mixer.Sound(join('assets', 'audio', 'new_impact.ogg'))
-        self.impact_sound.set_volume(0.3)
+        self.shoot_sound = AudioPlayer('shoot.ogg')
+        self.shoot_sound.set_volume(0.25)
+        self.impact_sound = AudioPlayer('new_impact.ogg')
+        self.impact_sound.set_volume(0.25)
         # self.music = pygame.mixer.Sound(join('assets', 'audio', 'my_first_mashup.ogg'))
         # self.music.set_volume(0.55)
         # self.music.play(loops = 0)

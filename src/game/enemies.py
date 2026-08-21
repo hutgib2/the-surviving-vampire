@@ -1,5 +1,6 @@
 from game.settings import *
 from game.projectiles import Orb
+
 # TASK:
 # find out how to set the dead image to the correct direction
 # 0: down
@@ -111,47 +112,31 @@ BOSS_SPEED = 250
 class Boss(pygame.sprite.Sprite):
     def __init__(self, pos, player, game):
         super().__init__(game.all_sprites, game.enemy_sprites)
-        self.load_images()
         self.game = game
         self.lives = 25
         self.player = player
         self.type = 'boss'
+        self.position_offset = [0, 1, 0, -1] # TODO: not sure what this is ??
+        
         self.animation_speed = 9
-        self.position_offset = [0, 1, 0, -1]
+        self.walk_frames = boss_frames['walk']
+        self.attack_frames = boss_frames['attack']
+        self.image = self.walk_frames['down'][0]
         self.frame_index = 0
         self.state = 'right'
+        self.rect = self.image.get_frect(center = pos)
+        self.direction = pygame.Vector2()
+        
         self.can_shoot = True
         self.shoot_time = 0
         self.orb_cooldown = 400
         self.attack_cooldown = 3000
         self.attack_time = 0
         self.can_attack = False
-        self.image = self.walk_frames['down'][0]
-        self.rect = self.image.get_frect(center = pos)
-        self.direction = pygame.Vector2()
         self.speed = BOSS_SPEED
         self.death_time = 0
         self.death_duration = 250
     
-    def load_images(self):
-        self.walk_frames = {'left': [], 'right': [], 'up': [], 'down': []}
-        for state in self.walk_frames.keys():    # frames.keys() => ('left', 'right', 'up', 'down')
-            for folder_path, sub_folders, file_names in walk(join('assets', 'images', 'boss', 'walk', state)):
-                if file_names:
-                    for file_name in sorted(file_names, key= lambda name: int(name.split('.')[0])):
-                        full_path = join(folder_path, file_name)
-                        surf = pygame.transform.scale(pygame.image.load(full_path), (320, 320)).convert_alpha()
-                        self.walk_frames[state].append(surf)
-
-        self.attack_frames = {'left': [], 'right': [], 'up': [], 'down': []}
-        for state in self.attack_frames.keys():    # frames.keys() => ('left', 'right', 'up', 'down')
-            for folder_path, sub_folders, file_names in walk(join('assets', 'images', 'boss', 'attack', state)):
-                if file_names:
-                    for file_name in sorted(file_names, key= lambda name: int(name.split('.')[0])):
-                        full_path = join(folder_path, file_name)
-                        surf = pygame.transform.scale(pygame.image.load(full_path), (320, 320)).convert_alpha()
-                        self.attack_frames[state].append(surf)
-
     def loop_frames(self, frames, dt):
         statex = 'right' if self.direction.x > 0 else 'left'
         statey = 'down' if self.direction.y > 0 else 'up'
