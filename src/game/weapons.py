@@ -159,7 +159,8 @@ class Machinegun(Pistol):
 class Lasergun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
-        # self.animation_frames = lasergun_frames
+        self.animation_frames = lasergun_frames
+        
     def bullet_collision(self):
         collision_sprites = pygame.sprite.groupcollide(self.game.bullet_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
         for bullet, enemies in collision_sprites.items():

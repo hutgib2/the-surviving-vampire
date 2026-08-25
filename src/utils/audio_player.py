@@ -36,7 +36,7 @@ class AudioPlayer:
 			# el.load()
 			self.audio = el
 		else:
-			file_path = f"/assets/audio/{self.file_name}"
+			file_path = f"assets/audio/{self.file_name}"
 			self.audio = pygame.mixer.Sound(file_path)
 		return self
 

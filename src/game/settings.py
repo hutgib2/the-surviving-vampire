@@ -20,8 +20,6 @@ rifle_surf = load_image("assets", "images", "rifle", "0.png", scale=3)
 
 lasergun_surf = load_image("assets", "images", "powerups", "lasergun.png", scale=1/6)
 
-lasergun_surf = pygame.transform.flip(lasergun_surf, True, False)
-
 laser_surf = pygame.transform.scale(
     pygame.image.load(join("assets", "images", "powerups", "laserbeam.png")), (WINDOW_WIDTH, 2),
 ).convert_alpha()
@@ -84,3 +82,4 @@ pistol_frames = load_images("assets", "images", "gun", "shoot", scale=2.5)
 machinegun_frames = load_images("assets", "images", "machinegun", scale=3)
 shotgun_frames = load_images("assets", "images", "shotgun", scale=3)
 rifle_frames = load_images("assets", "images", "rifle", scale=3)
+lasergun_frames = load_images("assets", "images", "laser_shoot", scale=1/6)

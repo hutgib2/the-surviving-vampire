@@ -58,7 +58,8 @@ class Player(pygame.sprite.Sprite):
         self.is_dead = False
         # self.death_time = 0
         
-        self.gun = Pistol(pistol_surf, self, self.game.all_sprites, self.game)
+        # self.gun = Pistol(pistol_surf, self, self.game.all_sprites, self.game)
+        self.gun = Lasergun(lasergun_surf, self, self.game.all_sprites, self.game)
         # self.gun = Shotgun(shotgun_surf, self, self.game.all_sprites, self.game)
         # self.gun = Rifle(rifle_surf, self, self.game.all_sprites, self.game)
         # self.gun = Machinegun(machinegun_surf, self, self.game.all_sprites, self.game)
