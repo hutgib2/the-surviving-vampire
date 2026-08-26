@@ -16,7 +16,7 @@ from game.enemies import Boss
 from utils.file_importer import load_image_states
 
 PLAYER_SPEED = 350
-ANIMATION_SPEED = 6
+ANIMATION_SPEED = 8
 
 class Aura(pygame.sprite.Sprite):
     def __init__(self, groups, surf, player):
@@ -58,8 +58,8 @@ class Player(pygame.sprite.Sprite):
         self.is_dead = False
         # self.death_time = 0
         
-        # self.gun = Pistol(pistol_surf, self, self.game.all_sprites, self.game)
-        self.gun = Lasergun(lasergun_surf, self, self.game.all_sprites, self.game)
+        self.gun = Pistol(pistol_surf, self, self.game.all_sprites, self.game)
+        # self.gun = Lasergun(lasergun_surf, self, self.game.all_sprites, self.game)
         # self.gun = Shotgun(shotgun_surf, self, self.game.all_sprites, self.game)
         # self.gun = Rifle(rifle_surf, self, self.game.all_sprites, self.game)
         # self.gun = Machinegun(machinegun_surf, self, self.game.all_sprites, self.game)
