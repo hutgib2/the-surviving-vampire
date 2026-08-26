@@ -1,5 +1,5 @@
 from game.settings import *
-from game.vampire_survivor import Game
+from game.the_surviving_vampire import Game
 
 def load_high_score():
     with open(join('assets', 'data', 'high_score.txt'), 'r') as file:
