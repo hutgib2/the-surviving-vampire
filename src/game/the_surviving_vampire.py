@@ -53,7 +53,7 @@ class Game:
         self.load_map()
 
     def load_map(self):
-        map = load_pygame(join('assets', 'data', 'maps', 'world.tmx'))
+        map = load_pygame(join('assets', 'data', 'maps', 'hell_map.tmx'))
         for x, y, image in map.get_layer_by_name('Ground').tiles():
             Sprite((x * TILE_SIZE, y * TILE_SIZE), image, self.all_sprites)
         for obj in map.get_layer_by_name('Objects'):
@@ -70,7 +70,7 @@ class Game:
 
     def get_spawn_position(self, spawn_positions):
         distance_from_player = 0
-        while distance_from_player < 700:
+        while distance_from_player < 600:
             pos = choice(spawn_positions)
             distance_from_player = pygame.math.Vector2.magnitude(pygame.math.Vector2(pos) - pygame.math.Vector2(self.player.rect.center))
         return pos  

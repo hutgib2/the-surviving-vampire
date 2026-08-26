@@ -4,11 +4,11 @@ from os.path import join
 from utils.file_importer import load_images, load_image_states, load_image
 
 pygame.init()
-screen = pygame.display.set_mode((2560, 1440))
+screen = pygame.display.set_mode((2560, 1080))
 pygame.display.set_caption("Vampire Survivor")
 
 WINDOW_WIDTH, WINDOW_HEIGHT = screen.get_size()
-TILE_SIZE = 64
+TILE_SIZE = 48
 
 # ----------------------------------- SURFS ---------------------------------- #
 
@@ -45,6 +45,10 @@ flamegun_surf = load_image("assets", "images", "powerups", "flamegun.png", scale
 mine_surf = load_image("assets", "images", "powerups", "mine.png", scale=3/4)
 
 bullet_surf = load_image("assets", "images", "gun", "bullet.png", scale=1/4)
+
+laser_bullet_surf = load_image("assets", "images", "gun", "laser_bullet.png", scale=1/4)
+
+flame_bullet_surf = load_image("assets", "images", "gun", "flame_bullet.png", scale=1/4)
 
 orb_surf = load_image("assets", "images", "enemies", "orb.png", scale=1.5)
 

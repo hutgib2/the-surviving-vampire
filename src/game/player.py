@@ -58,8 +58,9 @@ class Player(pygame.sprite.Sprite):
         self.is_dead = False
         # self.death_time = 0
         
-        self.gun = Pistol(pistol_surf, self, self.game.all_sprites, self.game)
+        # self.gun = Pistol(pistol_surf, self, self.game.all_sprites, self.game)
         # self.gun = Lasergun(lasergun_surf, self, self.game.all_sprites, self.game)
+        self.gun = Flamegun(flamegun_surf, self, self.game.all_sprites, self.game)
         # self.gun = Shotgun(shotgun_surf, self, self.game.all_sprites, self.game)
         # self.gun = Rifle(rifle_surf, self, self.game.all_sprites, self.game)
         # self.gun = Machinegun(machinegun_surf, self, self.game.all_sprites, self.game)
@@ -107,18 +108,19 @@ class Player(pygame.sprite.Sprite):
             self.move_direction = self.move_direction.normalize()
 
     def run_animation(self, frames, dt, loop=True):
-        if not (self.move_direction.x == 0 and self.move_direction.y == 0):
+        if self.move_direction:
             statex = 'right' if self.move_direction.x > 0 else 'left'
             statey = 'down' if self.move_direction.y > 0 else 'up'
             self.animation_direction = statex if abs(self.move_direction.x) > abs(self.move_direction.y) else statey
         
         self.frame_index += self.animation_speed * dt
+        current = frames[self.animation_direction]
 
         if loop:
-            index = int(self.frame_index) % len(frames)
+            index = int(self.frame_index) % len(current)
         else:
-            index = min(int(self.frame_index), len(frames) - 1)
-            if int(self.frame_index) >= len(frames):
+            index = min(int(self.frame_index), len(current) - 1)
+            if int(self.frame_index) > len(current) - 1:
                 self.animation_finished = True
 
         self.image = frames[self.animation_direction][index] 
@@ -151,9 +153,7 @@ class Player(pygame.sprite.Sprite):
                 self.is_dead = True
             return
 
-        if self.animation_state == "hurt":  
-            if self.animation_finished:
-                self.set_animation_state("walk" if self.move_direction else "idle")
+        if self.animation_state == "hurt" and not self.animation_finished:
             return 
         
         self.set_animation_state("walk" if self.move_direction else "idle")
@@ -172,12 +172,7 @@ class Player(pygame.sprite.Sprite):
                     enemy.destroy(True)
                 self.game.impact_sound.play()
                 self.lives -= 1
-                if self.lives > 0:
-                    self.set_animation_state("hurt")
-                else:
-                    # if self.game.kill_count > self.game.high_score:
-                    # save_high_score(self.game.kill_count)
-                    self.set_animation_state("dead")
+                self.set_animation_state("hurt" if self.lives > 0 else "dead")
 
         return False
 
@@ -198,7 +193,7 @@ class Player(pygame.sprite.Sprite):
                 else:
                     self.gun.kill()
                     self.gun = Pistol(
-                        gun_surf, self, self.game.all_sprites, self.game
+                        pistol_surf, self, self.game.all_sprites, self.game
                     )
                 self.powerup_activated = None
 
@@ -253,7 +248,7 @@ class Player(pygame.sprite.Sprite):
                 self.gun = Shotgun(shotgun_surf, self, self.game.all_sprites, self.game)
             elif powerup.type == "sideshot":
                 self.gun = Sideshotgun(
-                    self.gun_surf, self, self.game.all_sprites, self.game
+                    pistol_surf, self, self.game.all_sprites, self.game
                 )
             elif powerup.type == "sword":
                 self.gun = Sword(sword_surf,self,self.game.all_sprites,self.game)
@@ -291,7 +286,7 @@ class Player(pygame.sprite.Sprite):
         self.explosion_collisions()
         self.powerup_timer()
         self.mine_timer()
-        self.animate(dt)
         self.update_animation_state()
+        self.animate(dt)
         # self.hurt_timer()
         # self.dead_timer()

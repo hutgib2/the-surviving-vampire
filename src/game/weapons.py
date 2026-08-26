@@ -58,12 +58,15 @@ class Pistol(pygame.sprite.Sprite):
             self.image = pygame.transform.rotozoom(self.current_image, abs(angle), 1)
             self.image = pygame.transform.flip(self.image, False, True)
 
+    def create_bullet(self):
+        pos = self.rect.center + self.player_direction * 50
+        Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
+
     def shoot(self):
         if pygame.mouse.get_pressed()[0] and self.can_shoot:
             self.animation_running = True
             self.game.shoot_sound.play()
-            pos = self.rect.center + self.player_direction * 50
-            Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
+            self.create_bullet()
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
     
@@ -124,31 +127,21 @@ class Shotgun(Pistol):
         self.animation_frames = shotgun_frames
         self.cooldown = 500
 
-    def shoot(self):
-        if pygame.mouse.get_pressed()[0] and self.can_shoot:
-            self.animation_running = True
-            self.game.shoot_sound.play()
-            pos = self.rect.center + self.player_direction * 64
-            Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(bullet_surf, pos, self.player_direction.rotate(15), (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(bullet_surf, pos, self.player_direction.rotate(-15), (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(bullet_surf, pos, self.player_direction.rotate(30), (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(bullet_surf, pos, self.player_direction.rotate(-30), (self.game.all_sprites, self.game.bullet_sprites))
-            self.can_shoot = False
-            self.shoot_time = pygame.time.get_ticks()
+    def create_bullet(self):
+        pos = self.rect.center + self.player_direction * 64
+        Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(bullet_surf, pos, self.player_direction.rotate(15), (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(bullet_surf, pos, self.player_direction.rotate(-15), (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(bullet_surf, pos, self.player_direction.rotate(30), (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(bullet_surf, pos, self.player_direction.rotate(-30), (self.game.all_sprites, self.game.bullet_sprites))
 
 class Sideshotgun(Pistol):
-    def shoot(self):
-        if pygame.mouse.get_pressed()[0] and self.can_shoot:
-            self.animation_running = True
-            self.game.shoot_sound.play()
-            pos = self.rect.center + self.player_direction * 64
-            Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(bullet_surf, pos, self.player_direction.rotate(90), (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(bullet_surf, pos, self.player_direction.rotate(-90), (self.game.all_sprites, self.game.bullet_sprites))
-            Bullet(bullet_surf, pos, self.player_direction.rotate(180), (self.game.all_sprites, self.game.bullet_sprites))
-            self.can_shoot = False
-            self.shoot_time = pygame.time.get_ticks()
+    def create_bullet(self):
+        pos = self.rect.center + self.player_direction * 64
+        Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(bullet_surf, pos, self.player_direction.rotate(90), (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(bullet_surf, pos, self.player_direction.rotate(-90), (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(bullet_surf, pos, self.player_direction.rotate(180), (self.game.all_sprites, self.game.bullet_sprites))
 
 class Machinegun(Pistol):
     def __init__(self, surf, player, groups, game):
@@ -160,6 +153,10 @@ class Lasergun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
         self.animation_frames = lasergun_frames
+
+    def create_bullet(self):
+        pos = self.rect.center + self.player_direction * 50
+        Bullet(laser_bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
         
     def bullet_collision(self):
         collision_sprites = pygame.sprite.groupcollide(self.game.bullet_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
@@ -207,6 +204,10 @@ class Flamegun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
         # self.animation_frames = flamegun_frames
+        
+    def create_bullet(self):
+        pos = self.rect.center + self.player_direction * 50
+        Bullet(flame_bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
         
     def bullet_collision(self):
         collision_sprites = pygame.sprite.groupcollide(self.game.bullet_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
