@@ -10,11 +10,10 @@ from game.enemies import Enemy, Boss
 from game.homescreen import *
 from pytmx.util_pygame import load_pygame
 
-# TODO: test audioplayer ??
-# TODO: fix crash when powerups hit max capacity
+# TODO: use run animation for superspeed
 
 class Game:
-    def __init__(self): # Constructor 
+    def __init__(self):
         self.running = True
         self.clock = AsyncClock(fps=45)
         self.font = pygame.font.Font(join('assets', 'fonts', 'Oxanium-Bold.ttf'), 40)
@@ -33,9 +32,9 @@ class Game:
         
         #events
         # TODO: need to stop enemy event when time_stop powerup activated ??
-        self.enemy_event_timer = Timer(400, lambda:Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(enemy_frames.items())), self.player, self.collision_sprites, self), repeat=True, autostart=True)
-        self.powerup_event_timer = Timer(15000, lambda:Powerup(self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1)), choice(list(POWERUP_SURFS.items())), (self.all_sprites, self.powerup_sprites), self.player), repeat=True, autostart=True)
-        self.boss_event_timer = Timer(60000, lambda:Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self), repeat=True, autostart=True)
+        self.enemy_event_timer = Timer(400, lambda: Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(enemy_frames.items())), self.player, self.collision_sprites, self), repeat=True, autostart=True)
+        self.powerup_event_timer = Timer(15 * 1000, lambda: self.powerup_event(), repeat=True, autostart=True)
+        self.boss_event_timer = Timer(60 * 1000, lambda: Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self), repeat=True, autostart=True)
         self.enemy_spawn_positions = []
         self.powerup_spawn_positions = []
         
@@ -90,6 +89,13 @@ class Game:
             powerup_rect = powerup_surf.get_frect(topleft = (10, 100 + (i * 85)))
             screen.blit(powerup_surf, powerup_rect)
         
+    def powerup_event(self):
+        # create a powerup if there is space left in the powerup_spawn_positions
+        if len(self.powerup_spawn_positions) > 0:
+            pos = self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1))
+            powerup = choice(list(POWERUP_SURFS.items()))
+            Powerup(pos, powerup, (self.all_sprites, self.powerup_sprites), self.player)
+
     async def run(self):
         while self.running:
             dt = await self.clock.tick() / 1000

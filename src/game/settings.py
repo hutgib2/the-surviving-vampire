@@ -33,8 +33,8 @@ flamegun_frames = load_images("assets", "images", "weapons", "flamegun", "shoot"
 
 pistol_static = load_image("assets", "images", "weapons", "pistol", "pistol_static.png", scale=2.5)
 machinegun_static = machinegun_frames[0]
-rifle_static = rifle_frames[0]
 shotgun_static = shotgun_frames[0]
+rifle_static = rifle_frames[0]
 lasergun_static = load_image("assets", "images", "weapons", "lasergun", "lasergun_static.png", scale=1/6)
 flamegun_static = load_image("assets", "images", "weapons", "flamegun", "flamegun_static.png", scale=2)
 sword_surf = load_image("assets", "images", "weapons", "sword.png", scale=1/6)
@@ -44,7 +44,7 @@ sword_surf = load_image("assets", "images", "weapons", "sword.png", scale=1/6)
 bullet_surf = load_image("assets", "images", "projectiles", "bullet.png", scale=1/4)
 laser_bullet_surf = load_image("assets", "images", "projectiles", "laser_bullet.png", scale=1/4)
 flame_bullet_surf = load_image("assets", "images", "projectiles", "flame_bullet.png", scale=1/4)
-orb_surf = load_image("assets", "images", "projectiles", "orb.png", scale=1)
+orb_surf = load_image("assets", "images", "projectiles", "orb.png", scale=2)
 laser_surf = pygame.transform.scale(
     pygame.image.load(join("assets", "images", "projectiles", "laserbeam.png")), (WINDOW_WIDTH, 2)
 ).convert_alpha()
@@ -55,13 +55,13 @@ explosion_frames = load_images("assets", "images", "explosion")
 # --------------------------------- POWERUPS --------------------------------- #
 
 POWERUP_SURFS = {
-    'life':load_image("assets", "images", "powerups", "life.png", scale=1/4),
     'rifle': rifle_static,
     'machinegun': machinegun_static,
     'laser': lasergun_static,
     'shotgun': shotgun_static,
     'sideshot': pistol_static,
     'sword': sword_surf,
+    'life':load_image("assets", "images", "powerups", "life.png", scale=1/4),
     'superspeed': load_image("assets", "images", "powerups", "superspeed.png", scale=1/4),
     'shield': load_image("assets", "images", "powerups", "shield.png", scale=1/32),
     'slowaura': load_image("assets", "images", "powerups", "snail.png", scale=1/5),
