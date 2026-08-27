@@ -12,14 +12,12 @@ from pytmx.util_pygame import load_pygame
 
 # TODO: test audioplayer ??
 # TODO: fix crash when powerups hit max capacity
-# TODO: organise folder structure and imports
-# TODO: fix death animation
 
 class Game:
     def __init__(self): # Constructor 
         self.running = True
         self.clock = AsyncClock(fps=45)
-        self.font = pygame.font.Font(join('assets', 'images', 'Oxanium-Bold.ttf'), 40)
+        self.font = pygame.font.Font(join('assets', 'fonts', 'Oxanium-Bold.ttf'), 40)
         self.kill_count = 0
         # self.high_score = load_high_score()
 
@@ -62,7 +60,7 @@ class Game:
             CollisionSprite((collision.x, collision.y), pygame.Surface((collision.width, collision.height)), self.collision_sprites)
         for marker in map.get_layer_by_name('Entities'):
             if marker.name == 'Player':
-                self.player = Player((marker.x, marker.y), self.all_sprites, self.collision_sprites, gun_surf, self)
+                self.player = Player((marker.x, marker.y), self.all_sprites, self.collision_sprites, pistol_static, self)
             elif marker.name == 'Power up':
                 self.powerup_spawn_positions.append((marker.x, marker.y))
             else:
@@ -83,8 +81,8 @@ class Game:
 
     def display_lives(self):
         for i in range(self.player.lives):
-            life_rect = life_surf.get_frect(topleft = (10 + (i * 85), 10))
-            screen.blit(life_surf, life_rect)
+            life_rect = POWERUP_SURFS['life'].get_frect(topleft = (10 + (i * 85), 10))
+            screen.blit(POWERUP_SURFS['life'], life_rect)
     
     # TEST ONLY: Draw all powerup images statically on left of screen so we can see the sizes
     def display_all_powerups(self):

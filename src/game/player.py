@@ -58,9 +58,9 @@ class Player(pygame.sprite.Sprite):
         self.is_dead = False
         # self.death_time = 0
         
-        # self.gun = Pistol(pistol_surf, self, self.game.all_sprites, self.game)
+        self.gun = Pistol(pistol_surf, self, self.game.all_sprites, self.game)
         # self.gun = Lasergun(lasergun_surf, self, self.game.all_sprites, self.game)
-        self.gun = Flamegun(flamegun_surf, self, self.game.all_sprites, self.game)
+        # self.gun = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
         # self.gun = Shotgun(shotgun_surf, self, self.game.all_sprites, self.game)
         # self.gun = Rifle(rifle_surf, self, self.game.all_sprites, self.game)
         # self.gun = Machinegun(machinegun_surf, self, self.game.all_sprites, self.game)
@@ -235,17 +235,17 @@ class Player(pygame.sprite.Sprite):
                 continue
             self.gun.kill()
             if powerup.type == "rifle":
-                self.gun = Rifle(rifle_surf, self, self.game.all_sprites, self.game)
+                self.gun = Rifle(rifle_static, self, self.game.all_sprites, self.game)
             elif powerup.type == "machinegun":
                 self.gun = Machinegun(
-                    machinegun_surf, self, self.game.all_sprites, self.game
+                    machinegun_static, self, self.game.all_sprites, self.game
                 )
             elif powerup.type == "laser":
                 self.gun = Lasergun(
-                    lasergun_surf, self, self.game.all_sprites, self.game
+                    lasergun_static, self, self.game.all_sprites, self.game
                 )
             elif powerup.type == "shotgun":
-                self.gun = Shotgun(shotgun_surf, self, self.game.all_sprites, self.game)
+                self.gun = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
             elif powerup.type == "sideshot":
                 self.gun = Sideshotgun(
                     pistol_surf, self, self.game.all_sprites, self.game
@@ -254,7 +254,7 @@ class Player(pygame.sprite.Sprite):
                 self.gun = Sword(sword_surf,self,self.game.all_sprites,self.game)
             elif powerup.type == "flamegun":
                 self.gun = Flamegun(
-                    flamegun_surf, self, self.game.all_sprites, self.game
+                    flamegun_static, self, self.game.all_sprites, self.game
                 )
 
     def explosion_collisions(self):

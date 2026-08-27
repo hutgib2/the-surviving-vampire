@@ -14,12 +14,12 @@ def save_high_score(current_score):
 
 class HomeScreen:
     def __init__(self):
-        self.home_screen_image = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'home_screen.png')), (WINDOW_WIDTH, WINDOW_HEIGHT))
-        self.game_over_screen = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'game_over.png')), (WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.home_screen_image = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'screens', 'home_screen.png')), (WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.game_over_screen = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'screens', 'game_over.png')), (WINDOW_WIDTH, WINDOW_HEIGHT))
         # self.high_score = load_high_score()
         self.running = True
         self.background = self.home_screen_image
-        self.font = pygame.font.Font(join('assets', 'images', 'Oxanium-Bold.ttf'), 40)
+        self.font = pygame.font.Font(join('assets', 'fonts', 'Oxanium-Bold.ttf'), 40)
         self.pending_game = None
         
         # Draw homescreen

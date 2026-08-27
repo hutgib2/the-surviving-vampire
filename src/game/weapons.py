@@ -82,7 +82,7 @@ class Pistol(pygame.sprite.Sprite):
             for enemy in enemies:
                 if type(enemy) == Orb:
                     continue
-                # self.game.impact_sound.play()
+                self.game.impact_sound.play()
                 bullet.kill()
                 if type(enemy) == Boss:
                     enemy.lives -= 1
@@ -203,7 +203,7 @@ class Sword(Pistol):
 class Flamegun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
-        # self.animation_frames = flamegun_frames
+        self.animation_frames = flamegun_frames
         
     def create_bullet(self):
         pos = self.rect.center + self.player_direction * 50
