@@ -10,8 +10,6 @@ from game.enemies import Enemy, Boss
 from game.homescreen import *
 from pytmx.util_pygame import load_pygame
 
-# TODO: use run animation for superspeed
-
 class Game:
     def __init__(self):
         self.running = True
@@ -31,10 +29,9 @@ class Game:
         self.explosion_sprites = pygame.sprite.Group()
         
         #events
-        # TODO: need to stop enemy event when time_stop powerup activated ??
-        self.enemy_event_timer = Timer(400, lambda: Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(enemy_frames.items())), self.player, self.collision_sprites, self), repeat=True, autostart=True)
-        self.powerup_event_timer = Timer(1 * 1000, lambda: self.powerup_event(), repeat=True, autostart=True)
-        self.boss_event_timer = Timer(60 * 1000, lambda: Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self), repeat=True, autostart=True)
+        self.enemy_spawn_timer = Timer(400, lambda: self.spawn_enemy(), repeat=True, autostart=True)
+        self.powerup_spawn_timer = Timer(15 * 1000, lambda: self.spawn_powerup(), repeat=True, autostart=True)
+        self.boss_spawn_timer = Timer(60 * 1000, lambda: Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self), repeat=True, autostart=True)
         self.enemy_spawn_positions = []
         self.powerup_spawn_positions = []
         
@@ -89,7 +86,13 @@ class Game:
             powerup_rect = powerup_surf.get_frect(topleft = (10, 100 + (i * 85)))
             screen.blit(powerup_surf, powerup_rect)
         
-    def powerup_event(self):
+    # create a spawn_enemy func that only spawns enemies if timestop not active
+
+    def spawn_enemy(self):
+        if self.player.powerup_activated != "timestop":
+            Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(enemy_frames.items())), self.player, self.collision_sprites, self)
+
+    def spawn_powerup(self):
         # create a powerup if there is space left in the powerup_spawn_positions
         if len(self.powerup_spawn_positions) > 0:
             pos = self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1))
@@ -111,7 +114,7 @@ class Game:
             self.display_score()
             self.display_lives()
             # self.display_all_powerups()
-            self.enemy_event_timer.update()
-            self.powerup_event_timer.update()
-            self.boss_event_timer.update()
+            self.enemy_spawn_timer.update()
+            self.powerup_spawn_timer.update()
+            self.boss_spawn_timer.update()
             pygame.display.update()

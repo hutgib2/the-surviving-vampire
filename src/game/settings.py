@@ -64,8 +64,8 @@ POWERUP_SURFS = {
     'life':load_image("assets", "images", "powerups", "life.png", scale=1/4),
     # 'superspeed': load_image("assets", "images", "powerups", "superspeed.png", scale=1/4),
     # 'shield': load_image("assets", "images", "powerups", "shield.png", scale=1/32),
-    'slowaura': load_image("assets", "images", "powerups", "snail.png", scale=1/5),
-    # 'timestop': load_image("assets", "images", "powerups", "clock.png", scale=1/12),
+    # 'slowaura': load_image("assets", "images", "powerups", "snail.png", scale=1/5),
+    'timestop': load_image("assets", "images", "powerups", "clock.png", scale=1/12),
     # "flamegun": flamegun_static,
     # 'mine': load_image("assets", "images", "powerups", "mine.png", scale=3/4)
 }
