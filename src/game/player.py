@@ -58,12 +58,12 @@ class Player(pygame.sprite.Sprite):
         self.is_dead = False
         # self.death_time = 0
         
-        self.gun = Pistol(pistol_static, self, self.game.all_sprites, self.game)
-        # self.gun = Lasergun(lasergun_surf, self, self.game.all_sprites, self.game)
-        # self.gun = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
-        # self.gun = Shotgun(shotgun_surf, self, self.game.all_sprites, self.game)
-        # self.gun = Rifle(rifle_surf, self, self.game.all_sprites, self.game)
-        # self.gun = Machinegun(machinegun_surf, self, self.game.all_sprites, self.game)
+        self.weapon = Pistol(pistol_static, self, self.game.all_sprites, self.game)
+        # self.weapon = Lasergun(lasergun_surf, self, self.game.all_sprites, self.game)
+        # self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
+        # self.weapon = Shotgun(shotgun_surf, self, self.game.all_sprites, self.game)
+        # self.weapon = Rifle(rifle_surf, self, self.game.all_sprites, self.game)
+        # self.weapon = Machinegun(machinegun_surf, self, self.game.all_sprites, self.game)
 
         # powerup
         self.powerup_activated = None
@@ -167,9 +167,9 @@ class Player(pygame.sprite.Sprite):
         self.set_animation_state("walk" if self.move_direction else "idle")
 
     def enemy_collision(self):
-        collision_sprites = pygame.sprite.spritecollide(
-            self, self.game.enemy_sprites, False, pygame.sprite.collide_mask
-        )
+        if self.lives <= 0:
+            return
+        collision_sprites = pygame.sprite.spritecollide(self, self.game.enemy_sprites, False, pygame.sprite.collide_mask)
         for enemy in collision_sprites:
             if self.powerup_activated != "shield":
                 if type(enemy) == Orb:
@@ -180,44 +180,33 @@ class Player(pygame.sprite.Sprite):
                     enemy.destroy(True)
                 self.game.impact_sound.play()
                 self.lives -= 1
+                if self.lives <= 0:
+                    self.kill()
                 self.set_animation_state("hurt" if self.lives > 0 else "dead")
 
-        return False
-
-    def mine_timer(self):
-        if self.powerup_activated == "mine" and self.can_drop_mine:
-            Mine(POWERUP_SURFS['mine'], self.rect.center, self.game.all_sprites, self.game)
-            self.minedrop_time = pygame.time.get_ticks()
-            self.can_drop_mine = False
-        elif pygame.time.get_ticks() - self.minedrop_time >= self.minedrop_cooldown:
-            self.can_drop_mine = True
-
-    def deactivate_powerup(self):
-        if self.powerup_activated == "superspeed":
-            self.speed = PLAYER_SPEED
-            self.animation_speed = ANIMATION_SPEED
-            self.set_animation_state("walk")
-        elif self.powerup_activated == "slowaura":
-            self.aura.kill()
-            self.aura = None
-        elif self.powerup_activated == "timestop" or self.powerup_activated == "mine":
-            pass
-        else:
-            self.gun.kill()
-            self.gun = Pistol(pistol_static, self, self.game.all_sprites, self.game)
-
-        self.powerup_activated = None
-
-    def powerup_timer(self):
-        if self.powerup_activated != None:
-            current_time = pygame.time.get_ticks()
-            if current_time - self.powerup_activated_at >= self.powerup_cooldown:
-                self.deactivate_powerup()
+    def explosion_collisions(self):
+        collision_sprites = pygame.sprite.groupcollide(
+            self.game.explosion_sprites,
+            self.game.enemy_sprites,
+            False,
+            False,
+            pygame.sprite.collide_mask,
+        )
+        for explosion, enemies in collision_sprites.items():
+            for enemy in enemies:
+                if type(enemy) == Orb:
+                    continue
+                self.game.impact_sound.play()
+                if type(enemy) == Boss:
+                    explosion.kill()
+                    enemy.lives -= 1
+                    if enemy.lives > 0:
+                        continue
+                enemy.destroy(False)
+                self.game.kill_count += 1
 
     def powerup_collision(self):
-        powerup_collisions = pygame.sprite.spritecollide(
-            self, self.game.powerup_sprites, True, pygame.sprite.collide_mask
-        )
+        powerup_collisions = pygame.sprite.spritecollide(self, self.game.powerup_sprites, True, pygame.sprite.collide_mask)
         for powerup in powerup_collisions:
             self.deactivate_powerup()
             self.game.powerup_spawn_positions.append(powerup.rect.center)
@@ -244,50 +233,59 @@ class Player(pygame.sprite.Sprite):
             if powerup.type == "mine":
                 self.can_drop_mine = True
                 continue
-            self.gun.kill()
-            if powerup.type == "rifle":
-                self.gun = Rifle(rifle_static, self, self.game.all_sprites, self.game)
-            elif powerup.type == "machinegun":
-                self.gun = Machinegun(
-                    machinegun_static, self, self.game.all_sprites, self.game
-                )
-            elif powerup.type == "laser":
-                self.gun = Lasergun(
-                    lasergun_static, self, self.game.all_sprites, self.game
-                )
-            elif powerup.type == "shotgun":
-                self.gun = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
-            elif powerup.type == "sideshot":
-                self.gun = Sideshotgun(
-                    pistol_static, self, self.game.all_sprites, self.game
-                )
-            elif powerup.type == "sword":
-                self.gun = Sword(sword_surf,self,self.game.all_sprites,self.game)
-            elif powerup.type == "flamegun":
-                self.gun = Flamegun(
-                    flamegun_static, self, self.game.all_sprites, self.game
-                )
 
-    def explosion_collisions(self):
-        collision_sprites = pygame.sprite.groupcollide(
-            self.game.explosion_sprites,
-            self.game.enemy_sprites,
-            False,
-            False,
-            pygame.sprite.collide_mask,
-        )
-        for explosion, enemies in collision_sprites.items():
-            for enemy in enemies:
-                if type(enemy) == Orb:
-                    continue
-                self.game.impact_sound.play()
-                if type(enemy) == Boss:
-                    explosion.kill()
-                    enemy.lives -= 1
-                    if enemy.lives > 0:
-                        continue
-                enemy.destroy(False)
-                self.game.kill_count += 1
+            # Weapon change
+            self.weapon.kill()
+            if powerup.type == "rifle":
+                self.weapon = Rifle(rifle_static, self, self.game.all_sprites, self.game)
+            elif powerup.type == "machinegun":
+                self.weapon = Machinegun(machinegun_static, self, self.game.all_sprites, self.game)
+            elif powerup.type == "laser":
+                self.weapon = Lasergun(lasergun_static, self, self.game.all_sprites, self.game)
+            elif powerup.type == "shotgun":
+                self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
+            elif powerup.type == "sideshot":
+                self.weapon = Sideshotgun( pistol_static, self, self.game.all_sprites, self.game)
+            elif powerup.type == "sword":
+                self.weapon = Sword(sword_surf,self,self.game.all_sprites,self.game)
+            elif powerup.type == "flamegun":
+                self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
+
+    def deactivate_powerup(self):
+        if self.powerup_activated == "superspeed":
+            self.speed = PLAYER_SPEED
+            self.animation_speed = ANIMATION_SPEED
+            self.set_animation_state("walk")
+        elif self.powerup_activated == "slowaura":
+            self.aura.kill()
+            self.aura = None
+        elif self.powerup_activated == "timestop" or self.powerup_activated == "mine":
+            pass
+        else:
+            self.weapon.kill()
+            self.weapon = Pistol(pistol_static, self, self.game.all_sprites, self.game)
+
+        self.powerup_activated = None
+
+    def powerup_timer(self):
+        if self.powerup_activated != None:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.powerup_activated_at >= self.powerup_cooldown:
+                self.deactivate_powerup()
+
+    def mine_timer(self):
+        if self.powerup_activated == "mine" and self.can_drop_mine:
+            Mine(POWERUP_SURFS['mine'], self.rect.center, self.game.all_sprites, self.game)
+            self.minedrop_time = pygame.time.get_ticks()
+            self.can_drop_mine = False
+        elif pygame.time.get_ticks() - self.minedrop_time >= self.minedrop_cooldown:
+            self.can_drop_mine = True
+
+    def kill(self):
+        self.speed = 0
+        # self.animation_direction = 'down'
+        self.weapon.kill()
+        self.weapon = None
 
     def update(self, dt):
         self.user_input()

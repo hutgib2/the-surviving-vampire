@@ -112,7 +112,7 @@ class Orb(pygame.sprite.Sprite):
         self.direction = direction
         self.speed = 750
         self.type = 'orb'
-    
+
     def update(self, dt):
         self.rect.center += self.direction * self.speed * dt
         if pygame.time.get_ticks() - self.spawn_time >= self.lifetime:

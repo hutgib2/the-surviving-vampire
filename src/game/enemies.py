@@ -1,15 +1,14 @@
 from game.settings import *
 from game.projectiles import Orb
 
-# TASK:
-# find out how to set the dead image to the correct direction
 # 0: down
 # 1: right
 # 2: up
 # 3: left
 
-# you need to find the function where we control what happens when they die
-# then change the image to the correct one
+
+# TASK:
+# we want a function that will stop the enemy from moving
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, pos, framedata, player, collision_sprites, game):

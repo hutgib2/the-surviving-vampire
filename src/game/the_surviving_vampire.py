@@ -39,11 +39,11 @@ class Game:
         self.shoot_sound = AudioPlayer('shoot.ogg')
         self.shoot_sound.set_volume(0.25)
         self.impact_sound = AudioPlayer('new_impact.ogg')
-        self.impact_sound.set_volume(0.25)
+        self.impact_sound.set_volume(0.2)
         # self.music = pygame.mixer.Sound(join('assets', 'audio', 'my_first_mashup.ogg'))
         # self.music.set_volume(0.55)
         # self.music.play(loops = 0)
-
+        
         self.load_map()
 
     def load_map(self):
@@ -85,8 +85,6 @@ class Game:
         for i, powerup_surf in enumerate(POWERUP_SURFS.values()):
             powerup_rect = powerup_surf.get_frect(topleft = (10, 100 + (i * 85)))
             screen.blit(powerup_surf, powerup_rect)
-        
-    # create a spawn_enemy func that only spawns enemies if timestop not active
 
     def spawn_enemy(self):
         if self.player.powerup_activated != "timestop":
@@ -113,7 +111,6 @@ class Game:
             self.all_sprites.draw(self.player.rect.center)
             self.display_score()
             self.display_lives()
-            # self.display_all_powerups()
             self.enemy_spawn_timer.update()
             self.powerup_spawn_timer.update()
             self.boss_spawn_timer.update()
