@@ -22,10 +22,9 @@ class Aura(pygame.sprite.Sprite):
     def __init__(self, groups, surf, player):
         super().__init__(groups)
         self.image = surf
-        self.image.set_alpha(120)
         self.rect = self.image.get_frect(center=player.rect.center)
         self.player = player
-        self.radius = 400
+        self.radius = 800
 
     def update(self, _):
         self.rect.center = self.player.rect.center
@@ -37,6 +36,7 @@ class Player(pygame.sprite.Sprite):
         self.walk_frames = load_image_states("assets", "images", "vampire", "walk", scale=4)
         self.hurt_frames = load_image_states("assets", "images", "vampire", "hurt", scale=4)
         self.dead_frames = load_image_states("assets", "images", "vampire", "dead", scale=4)
+        self.fly_frames = load_image_states("assets", "images", "vampire", "fly", scale=4)
         self.image = self.walk_frames["down"][0]
 
         self.animation_state = "idle" # "idle" | "walk" | "hurt" | "dead"
@@ -68,7 +68,7 @@ class Player(pygame.sprite.Sprite):
         # powerup
         self.powerup_activated = None
         self.powerup_cooldown = 5000
-        self.powerup_activation_time = 0
+        self.powerup_activated_at = 0
         self.aura = None
         self.minedrop_time = 0
         self.minedrop_cooldown = 500
@@ -134,6 +134,8 @@ class Player(pygame.sprite.Sprite):
             self.run_animation(self.idle_frames, dt)
         elif self.animation_state == "walk":
             self.run_animation(self.walk_frames, dt)
+        elif self.animation_state == "fly":
+            self.run_animation(self.fly_frames, dt)
 
         if self.powerup_activated == "shield":
             self.image.set_alpha(130)
@@ -153,7 +155,13 @@ class Player(pygame.sprite.Sprite):
                 self.is_dead = True
             return
 
-        if self.animation_state == "hurt" and not self.animation_finished:
+        if self.animation_state == "hurt":
+            if not self.animation_finished:
+                return
+            if self.powerup_activated == "superspeed":
+                self.set_animation_state("fly")
+
+        if self.animation_state == "fly" and not self.animation_finished:
             return 
         
         self.set_animation_state("walk" if self.move_direction else "idle")
@@ -188,6 +196,7 @@ class Player(pygame.sprite.Sprite):
         if self.powerup_activated == "superspeed":
             self.speed = PLAYER_SPEED
             self.animation_speed = ANIMATION_SPEED
+            self.set_animation_state("walk")
         elif self.powerup_activated == "slowaura":
             self.aura.kill()
             self.aura = None
@@ -202,7 +211,7 @@ class Player(pygame.sprite.Sprite):
     def powerup_timer(self):
         if self.powerup_activated != None:
             current_time = pygame.time.get_ticks()
-            if current_time - self.powerup_activation_time >= self.powerup_cooldown:
+            if current_time - self.powerup_activated_at >= self.powerup_cooldown:
                 self.deactivate_powerup()
 
     def powerup_collision(self):
@@ -216,11 +225,12 @@ class Player(pygame.sprite.Sprite):
                 if self.lives < 3:
                     self.lives += 1
                 continue
-            self.powerup_activation_time = pygame.time.get_ticks()
+            self.powerup_activated_at = pygame.time.get_ticks()
             self.powerup_activated = powerup.type
             if powerup.type == "superspeed":
                 self.speed = PLAYER_SPEED * 3
-                self.animation_speed = ANIMATION_SPEED * 3
+                self.animation_speed = ANIMATION_SPEED * 2
+                self.set_animation_state("fly")
                 continue
             if powerup.type == "shield":
                 return
@@ -289,5 +299,4 @@ class Player(pygame.sprite.Sprite):
         self.mine_timer()
         self.update_animation_state()
         self.animate(dt)
-        # self.hurt_timer()
-        # self.dead_timer()
+

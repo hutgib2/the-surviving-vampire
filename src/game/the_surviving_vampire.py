@@ -33,7 +33,7 @@ class Game:
         #events
         # TODO: need to stop enemy event when time_stop powerup activated ??
         self.enemy_event_timer = Timer(400, lambda: Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(enemy_frames.items())), self.player, self.collision_sprites, self), repeat=True, autostart=True)
-        self.powerup_event_timer = Timer(15 * 1000, lambda: self.powerup_event(), repeat=True, autostart=True)
+        self.powerup_event_timer = Timer(1 * 1000, lambda: self.powerup_event(), repeat=True, autostart=True)
         self.boss_event_timer = Timer(60 * 1000, lambda: Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self), repeat=True, autostart=True)
         self.enemy_spawn_positions = []
         self.powerup_spawn_positions = []

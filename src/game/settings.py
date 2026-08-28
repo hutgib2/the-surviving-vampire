@@ -55,19 +55,20 @@ explosion_frames = load_images("assets", "images", "explosion")
 # --------------------------------- POWERUPS --------------------------------- #
 
 POWERUP_SURFS = {
-    'rifle': rifle_static,
-    'machinegun': machinegun_static,
-    'laser': lasergun_static,
-    'shotgun': shotgun_static,
-    'sideshot': pistol_static,
-    'sword': sword_surf,
+    # 'rifle': rifle_static,
+    # 'machinegun': machinegun_static,
+    # 'laser': lasergun_static,
+    # 'shotgun': shotgun_static,
+    # 'sideshot': pistol_static,
+    # 'sword': sword_surf,
     'life':load_image("assets", "images", "powerups", "life.png", scale=1/4),
-    'superspeed': load_image("assets", "images", "powerups", "superspeed.png", scale=1/4),
-    'shield': load_image("assets", "images", "powerups", "shield.png", scale=1/32),
+    # 'superspeed': load_image("assets", "images", "powerups", "superspeed.png", scale=1/4),
+    # 'shield': load_image("assets", "images", "powerups", "shield.png", scale=1/32),
     'slowaura': load_image("assets", "images", "powerups", "snail.png", scale=1/5),
-    'timestop': load_image("assets", "images", "powerups", "clock.png", scale=1/12),
-    "flamegun": flamegun_static,
-    'mine': load_image("assets", "images", "powerups", "mine.png", scale=3/4)
+    # 'timestop': load_image("assets", "images", "powerups", "clock.png", scale=1/12),
+    # "flamegun": flamegun_static,
+    # 'mine': load_image("assets", "images", "powerups", "mine.png", scale=3/4)
 }
 
-aura_surf = load_image("assets", "images", "powerups", "aura.png", scale=1)
+aura_surf = load_image("assets", "images", "powerups", "aura.png", scale=2)
+aura_surf.set_alpha(80)
