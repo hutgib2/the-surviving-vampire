@@ -31,7 +31,7 @@ class Game:
         #events
         self.enemy_spawn_timer = Timer(400, lambda: self.spawn_enemy(), repeat=True, autostart=True)
         self.powerup_spawn_timer = Timer(15 * 1000, lambda: self.spawn_powerup(), repeat=True, autostart=True)
-        self.boss_spawn_timer = Timer(60 * 1000, lambda: Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self), repeat=True, autostart=True)
+        self.boss_spawn_timer = Timer(60 * 1000, lambda: self.spawn_boss(), repeat=True, autostart=True)
         self.enemy_spawn_positions = []
         self.powerup_spawn_positions = []
         
@@ -87,26 +87,33 @@ class Game:
             screen.blit(powerup_surf, powerup_rect)
 
     def spawn_enemy(self):
-        if self.player.powerup_activated != "timestop":
-            Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(enemy_frames.items())), self.player, self.collision_sprites, self)
+        if self.player.powerup_activated == "timestop" or self.player.lives <= 0:
+            return
+        Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(enemy_frames.items())), self.player, self.collision_sprites, self)
+
+    def spawn_boss(self):
+        if self.player.powerup_activated == "timestop" or self.player.lives <= 0:
+            return
+        Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self)
 
     def spawn_powerup(self):
+        if self.player.lives <= 0 or len(self.powerup_spawn_positions) <= 0:
+            return
         # create a powerup if there is space left in the powerup_spawn_positions
-        if len(self.powerup_spawn_positions) > 0:
-            pos = self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1))
-            powerup = choice(list(POWERUP_SURFS.items()))
-            Powerup(pos, powerup, (self.all_sprites, self.powerup_sprites), self.player)
+        pos = self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1))
+        powerup = choice(list(POWERUP_SURFS.items()))
+        Powerup(pos, powerup, (self.all_sprites, self.powerup_sprites), self.player)
 
     async def run(self):
         while self.running:
             dt = await self.clock.tick() / 1000
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return False
+                    self.running = False
             self.all_sprites.update(dt)
-            if self.player.is_dead:
+            # if self.player.is_dead:
                 # self.music.stop()
-                return True
+                # return True
             
             self.all_sprites.draw(self.player.rect.center)
             self.display_score()
