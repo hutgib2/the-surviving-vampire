@@ -6,9 +6,28 @@ from game.settings import *  # import everything from settings.py
 from game.player import Player
 from game.sprites import *
 from game.groups import AllSprites
+from game.textSprite import TextSprite
 from game.enemies import Enemy, Boss
 from game.homescreen import *
 from pytmx.util_pygame import load_pygame
+
+# Task:
+# We want to add a popup at the end of the game
+# We can use what we did yesterday to help us
+
+# The popup should say something like "Game over!"
+# It should display the players score
+# "Press ESC to return to main menu"
+
+# And give them a textbox to put their name in to save their score
+
+# STEP 1: trigger something on game end (print statement)
+# STEP 2: create empty popup
+# STEP 3: show the empty popup on game end
+# STEP 4: add text sprites to popup
+
+# STEP 5: add textbox to popup
+# STEP 6: connect text input to saving game score
 
 class Game:
     def __init__(self):
@@ -27,6 +46,14 @@ class Game:
         self.laser_sprites = pygame.sprite.Group()
         self.orb_sprites = pygame.sprite.Group()
         self.explosion_sprites = pygame.sprite.Group()
+        self.gameover_sprites = pygame.sprite.Group()
+
+        # Gameover Popup
+        self.gameover_popup_surf = pygame.transform.smoothscale(button_surf, (WINDOW_WIDTH / 2, 5*WINDOW_HEIGHT / 6))
+        self.gameover_popup_rect = self.gameover_popup_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
+        line_spacing = self.gameover_popup_surf.get_height() / 10
+        TextSprite('Game Over!', self.gameover_popup_rect.move(0, 2.2 * line_spacing).midtop, "#FF8080", 1.3 * line_spacing, self.gameover_sprites)
+        TextSprite(f'You killed {self.kill_count} enemies!', self.gameover_popup_rect.move(0, 3.2 * line_spacing).midtop, "#FF8080", 1.3 * line_spacing, self.gameover_sprites)
         
         #events
         self.enemy_spawn_timer = Timer(400, lambda: self.spawn_enemy(), repeat=True, autostart=True)
@@ -108,17 +135,18 @@ class Game:
         while self.running:
             dt = await self.clock.tick() / 1000
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.running = False
+
             self.all_sprites.update(dt)
-            # if self.player.is_dead:
-                # self.music.stop()
-                # return True
-            
             self.all_sprites.draw(self.player.rect.center)
+            if self.player.lives <= 0:
+                # print("display popup")
+                screen.blit(self.gameover_popup_surf, self.gameover_popup_rect)
+                self.gameover_sprites.update()
             self.display_score()
             self.display_lives()
-            # self.enemy_spawn_timer.update()
-            # self.powerup_spawn_timer.update()
-            # self.boss_spawn_timer.update()
+            self.enemy_spawn_timer.update()
+            self.powerup_spawn_timer.update()
+            self.boss_spawn_timer.update()
             pygame.display.update()

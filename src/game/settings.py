@@ -73,6 +73,6 @@ POWERUP_SURFS = {
 aura_surf = load_image("assets", "images", "powerups", "aura.png", scale=2)
 aura_surf.set_alpha(80)
 
-
 # ----------------------------------- MENU ----------------------------------- #
+
 button_surf = load_image("assets", "images", "menu", "button.png")
