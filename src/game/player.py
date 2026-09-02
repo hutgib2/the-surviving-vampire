@@ -53,7 +53,8 @@ class Player(pygame.sprite.Sprite):
         self.move_direction = pygame.math.Vector2()
         self.speed = PLAYER_SPEED
         self.collision_sprites = collision_sprites
-        self.hitbox_rect = self.rect.inflate(-60, -90)
+        self.hitbox_rect = self.rect.inflate(-self.rect.width * 0.2, -self.rect.height * 0.9)
+        self.hitbox_rect.midbottom = self.rect.midbottom
         self.lives = 3
         self.is_dead = False
         # self.death_time = 0

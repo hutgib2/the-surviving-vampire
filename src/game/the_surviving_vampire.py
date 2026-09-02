@@ -50,8 +50,8 @@ class Game:
         map = load_pygame(join('assets', 'data', 'maps', 'hell_map.tmx'))
         for x, y, image in map.get_layer_by_name('Ground').tiles():
             Sprite((x * TILE_SIZE, y * TILE_SIZE), image, self.all_sprites)
-        for obj in map.get_layer_by_name('Objects'):
-            CollisionSprite((obj.x, obj.y), obj.image, (self.all_sprites, self.collision_sprites))
+        for x, y, image in map.get_layer_by_name('Objects').tiles():
+            CollisionSprite((x * TILE_SIZE, y * TILE_SIZE), image, (self.all_sprites))
         for collision in map.get_layer_by_name('Collisions'):
             CollisionSprite((collision.x, collision.y), pygame.Surface((collision.width, collision.height)), self.collision_sprites)
         for marker in map.get_layer_by_name('Entities'):
@@ -118,7 +118,7 @@ class Game:
             self.all_sprites.draw(self.player.rect.center)
             self.display_score()
             self.display_lives()
-            self.enemy_spawn_timer.update()
-            self.powerup_spawn_timer.update()
-            self.boss_spawn_timer.update()
+            # self.enemy_spawn_timer.update()
+            # self.powerup_spawn_timer.update()
+            # self.boss_spawn_timer.update()
             pygame.display.update()
