@@ -6,7 +6,7 @@ class Button(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = pygame.transform.smoothscale(surf, size)
         self.image_disabled = pygame.transform.smoothscale(surf, size)
-        self.image_disabled.set_alpha(180)
+        self.image_disabled.set_alpha(80)
         self.rect = self.image.get_frect(center=pos)
         self.is_active = True
         self.text_sprite = TextSprite(text, self.rect.center, text_color, self.rect.width / 6, ())
@@ -43,7 +43,7 @@ class InteractiveButton(Button):
             if self.rect.collidepoint(event.pos):
                 self.is_clicked()
     
-    def set_image(self, image):
+    def set_image(self, image): 
         self.image = pygame.transform.smoothscale(image, self.size)
         self.image_hover = pygame.transform.smoothscale(image, self.size)
         self.image_hover.set_alpha(180)

@@ -2,15 +2,11 @@ from pathlib import Path
 
 import pygame
 
-def _files(folder):
-    """All files in a folder, in whatever order the filesystem gives them."""
-    return [p for p in Path(folder).iterdir()
-            if p.is_file() and not p.name.startswith(".")]
 
-
-def _files_numeric(folder, *, numeric=False):
+def _files(folder, *, numeric=False):
     paths = [p for p in Path(folder).iterdir() if p.is_file()]
     return sorted(paths, key=lambda p: int(p.stem) if numeric else p.stem)
+
 
 def load_image(*path, scale=1):
     surf = pygame.image.load(Path(*path)).convert_alpha()
@@ -22,12 +18,12 @@ def load_image(*path, scale=1):
 
 def load_images(*path, scale=1):
     """Folder of numbered frames -> ordered list."""
-    return [load_image(p, scale=scale) for p in _files_numeric(Path(*path), numeric=True)]
+    return [load_image(p, scale=scale) for p in _files(Path(*path), numeric=True)]
 
 
 def load_images_named(*path, scale=1):
     """Folder of images -> {stem: surface}."""
-    return {p.stem: load_image(p, scale=scale) for p in _files_numeric(Path(*path))}
+    return {p.stem: load_image(p, scale=scale) for p in _files(Path(*path))}
 
 
 def load_image_states(*path, scale=1):
@@ -40,4 +36,4 @@ def load_image_states(*path, scale=1):
 
 
 def load_audio(*path):
-    return {p.stem: pygame.mixer.Sound(p) for p in _files_numeric(Path(*path))}
+    return {p.stem: pygame.mixer.Sound(p) for p in _files(Path(*path))}
