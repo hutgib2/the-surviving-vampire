@@ -7,27 +7,11 @@ from game.player import Player
 from game.sprites import *
 from game.groups import AllSprites
 from game.textSprite import TextSprite
+from game.textBox import TextBox
+from game.button import InteractiveButton
 from game.enemies import Enemy, Boss
 from game.homescreen import *
 from pytmx.util_pygame import load_pygame
-
-# Task:
-# We want to add a popup at the end of the game
-# We can use what we did yesterday to help us
-
-# The popup should say something like "Game over!"
-# It should display the players score
-# "Press ESC to return to main menu"
-
-# And give them a textbox to put their name in to save their score
-
-# STEP 1: trigger something on game end (print statement)
-# STEP 2: create empty popup
-# STEP 3: show the empty popup on game end
-# STEP 4: add text sprites to popup
-
-# STEP 5: add textbox to popup
-# STEP 6: connect text input to saving game score
 
 class Game:
     def __init__(self):
@@ -47,13 +31,6 @@ class Game:
         self.orb_sprites = pygame.sprite.Group()
         self.explosion_sprites = pygame.sprite.Group()
         self.gameover_sprites = pygame.sprite.Group()
-
-        # Gameover Popup
-        self.gameover_popup_surf = pygame.transform.smoothscale(button_surf, (WINDOW_WIDTH / 2, 5*WINDOW_HEIGHT / 6))
-        self.gameover_popup_rect = self.gameover_popup_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
-        line_spacing = self.gameover_popup_surf.get_height() / 10
-        TextSprite('Game Over!', self.gameover_popup_rect.move(0, 2.2 * line_spacing).midtop, "#FF8080", 1.3 * line_spacing, self.gameover_sprites)
-        TextSprite(f'You killed {self.kill_count} enemies!', self.gameover_popup_rect.move(0, 3.2 * line_spacing).midtop, "#FF8080", 1.3 * line_spacing, self.gameover_sprites)
         
         #events
         self.enemy_spawn_timer = Timer(400, lambda: self.spawn_enemy(), repeat=True, autostart=True)
@@ -126,10 +103,48 @@ class Game:
     def spawn_powerup(self):
         if self.player.lives <= 0 or len(self.powerup_spawn_positions) <= 0:
             return
+            
         # create a powerup if there is space left in the powerup_spawn_positions
         pos = self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1))
         powerup = choice(list(POWERUP_SURFS.items()))
         Powerup(pos, powerup, (self.all_sprites, self.powerup_sprites), self.player)
+
+    def save_score(self):
+        # Im going to create a function that will save to the database
+        # this is temp
+        
+        if self.text_box.text == ''  or self.text_box.text.strip() == '':
+            return
+        
+        name = self.text_box.text.strip().lower()
+        print(f"score saved for {name}: {self.kill_count}")
+        self.save_button.deactivate()
+
+    async def display_gameover_popup(self):
+        # create the popup + text + textbox
+        self.gameover_popup_surf = pygame.transform.smoothscale(button_surf, (2*WINDOW_WIDTH / 3, 5*WINDOW_HEIGHT / 6))
+        self.gameover_popup_rect = self.gameover_popup_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
+        line_spacing = self.gameover_popup_surf.get_height() / 8
+
+        TextSprite('Game Over!', self.gameover_popup_rect.move(0, 2 * line_spacing).midtop, "#FF8080", 1.3 * line_spacing, self.gameover_sprites)
+        TextSprite(f'You killed {self.kill_count} enemies!', self.gameover_popup_rect.move(0, 3 * line_spacing).midtop, "#FF8080",  0.8 * line_spacing, self.gameover_sprites)
+        
+        self.text_box = TextBox(self.gameover_popup_rect.move(0, 5 * line_spacing).midtop, (self.gameover_popup_rect.width / 2, line_spacing * 0.7), self.font, self.gameover_sprites)
+        TextSprite('Enter your name to save your score: ', self.text_box.rect.move(0, -0.3 * line_spacing).midtop, "#FF8080",  0.4 * line_spacing, self.gameover_sprites)
+        self.save_button = InteractiveButton(button_surf, self.text_box.rect.move(0, 0.7 * line_spacing).midbottom, (WINDOW_WIDTH / 8, line_spacing), "#FF8080", self.gameover_sprites, lambda: self.save_score(), 'Save')
+
+        while True:
+            dt = await self.clock.tick() / 1000
+            for event in pygame.event.get():
+                self.text_box.handle_event(event)
+                self.save_button.handle_event(event)
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    return
+                
+            screen.blit(self.gameover_popup_surf, self.gameover_popup_rect)
+            self.gameover_sprites.update()
+            pygame.display.update()
+        
 
     async def run(self):
         while self.running:
@@ -137,16 +152,17 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.running = False
+            
+            if self.player.lives <= 0:
+                self.running = False
 
             self.all_sprites.update(dt)
             self.all_sprites.draw(self.player.rect.center)
-            if self.player.lives <= 0:
-                # print("display popup")
-                screen.blit(self.gameover_popup_surf, self.gameover_popup_rect)
-                self.gameover_sprites.update()
             self.display_score()
             self.display_lives()
             self.enemy_spawn_timer.update()
             self.powerup_spawn_timer.update()
             self.boss_spawn_timer.update()
             pygame.display.update()
+        
+        await self.display_gameover_popup()

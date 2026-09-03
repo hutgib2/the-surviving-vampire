@@ -285,7 +285,8 @@ class Player(pygame.sprite.Sprite):
     def kill(self):
         self.speed = 0
         # self.animation_direction = 'down'
-        self.weapon.kill()
+        if self.weapon:
+            self.weapon.kill()
         self.weapon = None
 
     def update(self, dt):
