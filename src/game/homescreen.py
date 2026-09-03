@@ -33,17 +33,17 @@ class HomeScreen:
         self.hs_sprites = pygame.sprite.Group()
         self.show_highscores = False
         self.high_scores = None
+        self.hs_popup_surf = pygame.transform.smoothscale(button_surf, (WINDOW_WIDTH / 3, 5*WINDOW_HEIGHT / 6))
+        self.hs_popup_rect = self.hs_popup_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
         
         self.fetch_task = asyncio.create_task(fetch_scores('the-surviving-vampire'))
         self.build_hs_sprites()
 
     def build_hs_sprites(self):
         self.hs_sprites.empty()
-        self.hs_popup_surf = pygame.transform.smoothscale(button_surf, (WINDOW_WIDTH / 3, 5*WINDOW_HEIGHT / 6))
-        self.hs_popup_rect = self.hs_popup_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
 
-        line_spacing = self.hs_popup_rect.height / 10
         font_color = "#FF8080"
+        line_spacing = self.hs_popup_rect.height / 10
         title_font_size = 1.3 * line_spacing
         regular_font_size = line_spacing
 
