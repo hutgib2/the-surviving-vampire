@@ -4,7 +4,7 @@ from os.path import join
 from utils.file_importer import load_images, load_image_states, load_image
 
 pygame.init()
-screen = pygame.display.set_mode((2560, 1280))
+screen = pygame.display.set_mode((1280 * 1.8, 720 * 1.8))
 pygame.display.set_caption("Vampire Survivor")
 
 WINDOW_WIDTH, WINDOW_HEIGHT = screen.get_size()

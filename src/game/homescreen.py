@@ -5,22 +5,9 @@ from game.textSprite import TextSprite
 from game.the_surviving_vampire import Game
 from utils.scores_api import fetch_scores
 
-
-def load_high_score():
-    with open(join('assets', 'data', 'high_score.txt'), 'r') as file:
-        content = file.read()
-        highscore = int(content.split("=")[1])
-        return highscore
-
-def save_high_score(current_score):
-    with open(join('assets', 'data', 'high_score.txt'), 'w') as file:
-        file.write('highscore=' + str(current_score))
-
 class HomeScreen:
     def __init__(self):
         self.home_screen_image = pygame.transform.smoothscale(pygame.image.load(join('assets', 'images', 'menu', 'home_screen.png')), (WINDOW_WIDTH, WINDOW_HEIGHT))
-        # self.game_over_screen = pygame.transform.scale(pygame.image.load(join('assets', 'images', 'menu', 'game_over.png')), (WINDOW_WIDTH, WINDOW_HEIGHT))
-        # self.high_score = load_high_score()
         self.background = self.home_screen_image
         self.font = pygame.font.Font(join('assets', 'fonts', 'Oxanium-Bold.ttf'), 40)
         self.pending_game = None
@@ -50,7 +37,7 @@ class HomeScreen:
         TextSprite('High Scores: ', self.hs_popup_rect.move(0, 2.2 * line_spacing).midtop, font_color, title_font_size, self.hs_sprites)
        
         if self.high_scores == None:
-            TextSprite('Loading...', self.hs_popup_rect.move(0, 3.5 * line_spacing).midtop, font_color, title_font_size, self.hs_sprites)
+            TextSprite('Loading...', self.hs_popup_rect.move(0, 3.5 * line_spacing).midtop, font_color, regular_font_size, self.hs_sprites)
         elif len(self.high_scores) == 0:
             TextSprite('No scores yet!', self.hs_popup_rect.move(0, 3.5 * line_spacing).midtop, font_color, regular_font_size, self.hs_sprites)
         else:
@@ -96,4 +83,4 @@ class HomeScreen:
             if self.pending_game:
                 await self.pending_game.run()
                 self.pending_game = None
-                # self.background = self.game_over_screen
+                self.fetch_task = asyncio.create_task(fetch_scores('the-surviving-vampire'))
