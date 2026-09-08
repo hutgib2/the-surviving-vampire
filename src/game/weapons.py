@@ -7,7 +7,7 @@ class Pistol(pygame.sprite.Sprite):
     def __init__(self, surf, player, groups, game):
         super().__init__(groups)
         self.player = player
-        self.distance = 120
+        self.distance = 80
         self.game = game
         self.player_direction = pygame.Vector2(1, -1)
         
@@ -180,7 +180,7 @@ class Lasergun(Pistol):
 class Sword(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
-        self.distance = 250
+        self.distance = 200
 
     def Sword_collision(self):
         collision_sprites = pygame.sprite.spritecollide(self, self.game.enemy_sprites, False, pygame.sprite.collide_mask)

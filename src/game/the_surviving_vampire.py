@@ -158,8 +158,10 @@ class Game:
 
             self.all_sprites.update(dt)
             self.all_sprites.draw(self.player.rect.center)
+            
             self.display_score()
             self.display_lives()
+            # self.display_all_powerups()
             self.enemy_spawn_timer.update()
             self.powerup_spawn_timer.update()
             self.boss_spawn_timer.update()

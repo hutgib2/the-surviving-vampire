@@ -13,8 +13,8 @@ TILE_SIZE = 48
 # -------------------------------- ENEMIES -------------------------------- #
 
 enemy_frames = {
-    "bat": load_image_states("assets", "images", "enemies", "bat", scale=3),
-    "skeleton": load_image_states("assets", "images", "enemies", "skeleton", scale=2)
+    "bat": load_image_states("assets", "images", "enemies", "bat", scale=2.5),
+    "skeleton": load_image_states("assets", "images", "enemies", "skeleton", scale=1.5)
 }
 
 boss_frames = {
@@ -24,20 +24,20 @@ boss_frames = {
 
 # ---------------------------------- WEAPONS --------------------------------- #
 
-pistol_frames = load_images("assets", "images", "weapons", "pistol", "shoot", scale=2.5)
-machinegun_frames = load_images("assets", "images", "weapons", "machinegun", scale=3)
-shotgun_frames = load_images("assets", "images", "weapons", "shotgun", scale=3)
-rifle_frames = load_images("assets", "images", "weapons", "rifle", scale=3)
-lasergun_frames = load_images("assets", "images", "weapons", "lasergun", "shoot", scale=1/6)
+pistol_frames = load_images("assets", "images", "weapons", "pistol", "shoot", scale=2)
+machinegun_frames = load_images("assets", "images", "weapons", "machinegun", scale=2.5)
+shotgun_frames = load_images("assets", "images", "weapons", "shotgun", scale=2.5)
+rifle_frames = load_images("assets", "images", "weapons", "rifle", scale=2.5)
+lasergun_frames = load_images("assets", "images", "weapons", "lasergun", "shoot", scale=1/8)
 flamegun_frames = load_images("assets", "images", "weapons", "flamegun", "shoot", scale=2)
 
-pistol_static = load_image("assets", "images", "weapons", "pistol", "pistol_static.png", scale=2.5)
+pistol_static = load_image("assets", "images", "weapons", "pistol", "pistol_static.png", scale=2)
 machinegun_static = machinegun_frames[0]
 shotgun_static = shotgun_frames[0]
 rifle_static = rifle_frames[0]
-lasergun_static = load_image("assets", "images", "weapons", "lasergun", "lasergun_static.png", scale=1/6)
+lasergun_static = load_image("assets", "images", "weapons", "lasergun", "lasergun_static.png", scale=1/8)
 flamegun_static = load_image("assets", "images", "weapons", "flamegun", "flamegun_static.png", scale=2)
-sword_surf = load_image("assets", "images", "weapons", "sword.png", scale=1/6)
+sword_surf = load_image("assets", "images", "weapons", "sword.png", scale=1/8)
 
 # ----------------------------------- PROJECTILES ---------------------------------- #
 
@@ -61,17 +61,17 @@ POWERUP_SURFS = {
     'shotgun': shotgun_static,
     'sideshot': pistol_static,
     'sword': sword_surf,
-    'life':load_image("assets", "images", "powerups", "life.png", scale=1/4),
-    'superspeed': load_image("assets", "images", "powerups", "superspeed.png", scale=1/4),
-    'shield': load_image("assets", "images", "powerups", "shield.png", scale=1/32),
-    'slowaura': load_image("assets", "images", "powerups", "snail.png", scale=1/5),
-    'timestop': load_image("assets", "images", "powerups", "clock.png", scale=1/12),
+    'life':load_image("assets", "images", "powerups", "life.png", scale=1/5),
+    'superspeed': load_image("assets", "images", "powerups", "superspeed.png", scale=1/5),
+    'shield': load_image("assets", "images", "powerups", "shield.png", scale=1/40),
+    'slowaura': load_image("assets", "images", "powerups", "snail.png", scale=1/7),
+    'timestop': load_image("assets", "images", "powerups", "clock.png", scale=1/16),
     "flamegun": flamegun_static,
-    'mine': load_image("assets", "images", "powerups", "mine.png", scale=3/4)
+    'mine': load_image("assets", "images", "powerups", "mine.png", scale=2/3)
 }
 
 aura_surf = load_image("assets", "images", "powerups", "aura.png", scale=2)
-aura_surf.set_alpha(80)
+aura_surf.set_alpha(50)
 
 # ----------------------------------- MENU ----------------------------------- #
 
