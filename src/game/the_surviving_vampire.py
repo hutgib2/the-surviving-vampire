@@ -14,6 +14,12 @@ from game.enemies import Enemy, Boss
 from game.homescreen import *
 from pytmx.util_pygame import load_pygame
 
+# TODO: add new audio for different weapons
+# TODO: add special move that kills all enemies on screen
+# TODO: Look into sideshot powerup
+# TODO: Fix enemies being drawn behind objects
+# TODO: see if possible to make enemies stop short of player when shield active
+
 class Game:
     def __init__(self):
         self.running = True
@@ -158,8 +164,10 @@ class Game:
 
             self.all_sprites.update(dt)
             self.all_sprites.draw(self.player.rect.center)
+            
             self.display_score()
             self.display_lives()
+            # self.display_all_powerups()
             self.enemy_spawn_timer.update()
             self.powerup_spawn_timer.update()
             self.boss_spawn_timer.update()

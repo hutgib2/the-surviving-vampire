@@ -32,11 +32,11 @@ class Aura(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, collision_sprites, pistol_static, game):
         super().__init__(groups)
-        self.idle_frames = load_image_states("assets", "images", "vampire", "idle", scale=4)
-        self.walk_frames = load_image_states("assets", "images", "vampire", "walk", scale=4)
-        self.hurt_frames = load_image_states("assets", "images", "vampire", "hurt", scale=4)
-        self.dead_frames = load_image_states("assets", "images", "vampire", "dead", scale=4)
-        self.fly_frames = load_image_states("assets", "images", "vampire", "fly", scale=4)
+        self.idle_frames = load_image_states("assets", "images", "vampire", "idle", scale=3)
+        self.walk_frames = load_image_states("assets", "images", "vampire", "walk", scale=3)
+        self.hurt_frames = load_image_states("assets", "images", "vampire", "hurt", scale=3)
+        self.dead_frames = load_image_states("assets", "images", "vampire", "dead", scale=3)
+        self.fly_frames = load_image_states("assets", "images", "vampire", "fly", scale=3)
         self.image = self.walk_frames["down"][0]
 
         self.animation_state = "idle" # "idle" | "walk" | "hurt" | "dead"
@@ -44,9 +44,6 @@ class Player(pygame.sprite.Sprite):
         self.animation_speed = ANIMATION_SPEED
         self.animation_finished = False
         self.frame_index = 0
-
-        # self.hurt_time = 0
-        # self.hurt_duration = 500
 
         self.game = game
         self.rect = self.image.get_frect(center=pos)
@@ -57,18 +54,12 @@ class Player(pygame.sprite.Sprite):
         self.hitbox_rect.midbottom = self.rect.midbottom
         self.lives = 3
         self.is_dead = False
-        # self.death_time = 0
         
         self.weapon = Pistol(pistol_static, self, self.game.all_sprites, self.game)
-        # self.weapon = Lasergun(lasergun_surf, self, self.game.all_sprites, self.game)
-        # self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
-        # self.weapon = Shotgun(shotgun_surf, self, self.game.all_sprites, self.game)
-        # self.weapon = Rifle(rifle_surf, self, self.game.all_sprites, self.game)
-        # self.weapon = Machinegun(machinegun_surf, self, self.game.all_sprites, self.game)
 
         # powerup
         self.powerup_activated = None
-        self.powerup_cooldown = 5000
+        self.powerup_cooldown = 7000
         self.powerup_activated_at = 0
         self.aura = None
         self.minedrop_time = 0
@@ -246,7 +237,7 @@ class Player(pygame.sprite.Sprite):
             elif powerup.type == "shotgun":
                 self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
             elif powerup.type == "sideshot":
-                self.weapon = Sideshotgun( pistol_static, self, self.game.all_sprites, self.game)
+                self.weapon = Sideshotgun(pistol_static, self, self.game.all_sprites, self.game)
             elif powerup.type == "sword":
                 self.weapon = Sword(sword_surf,self,self.game.all_sprites,self.game)
             elif powerup.type == "flamegun":
