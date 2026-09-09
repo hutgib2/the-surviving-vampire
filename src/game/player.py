@@ -60,7 +60,7 @@ class Player(pygame.sprite.Sprite):
         self.ultimate_move_frames = load_image_states("assets", "images", "vampire", "ultimate_move", scale=3)
         self.image = self.walk_frames["down"][0]
 
-        self.animation_state = "idle" # "idle" | "walk" | "hurt" | "dead"
+        self.animation_state = "idle" # "idle" | "walk" | "hurt" | "dead" | "ultimate_move"
         self.animation_direction = "down"
         self.animation_speed = ANIMATION_SPEED
         self.animation_finished = False
@@ -74,7 +74,7 @@ class Player(pygame.sprite.Sprite):
         self.hitbox_rect = self.rect.inflate(-self.rect.width * 0.2, -self.rect.height * 0.9)
         self.hitbox_rect.midbottom = self.rect.midbottom
         self.lives = 3
-        self.is_dead = False
+        # self.is_dead = False
         
         self.weapon = Pistol(pistol_static, self, self.game.all_sprites, self.game)
 
@@ -116,9 +116,9 @@ class Player(pygame.sprite.Sprite):
         if self.move_direction:
             self.move_direction = self.move_direction.normalize()
         if keys[pygame.K_SPACE]:
-            print("ultimate move")
+            self.set_animation_state('ultimate_move')
 
-    def run_animation(self, frames, dt, loop=True):
+    def run_animation(self, frames, dt, loop=False):
         if self.move_direction:
             statex = 'right' if self.move_direction.x > 0 else 'left'
             statey = 'down' if self.move_direction.y > 0 else 'up'
@@ -138,15 +138,17 @@ class Player(pygame.sprite.Sprite):
 
     def animate(self, dt):
         if self.animation_state == "dead":
-            self.run_animation(self.dead_frames, dt, loop=False)
+            self.run_animation(self.dead_frames, dt)
         elif self.animation_state == "hurt":
-            self.run_animation(self.hurt_frames, dt, loop=False)
+            self.run_animation(self.hurt_frames, dt)
         elif self.animation_state == "idle":
-            self.run_animation(self.idle_frames, dt)
+            self.run_animation(self.idle_frames, dt, loop=True)
         elif self.animation_state == "walk":
-            self.run_animation(self.walk_frames, dt)
+            self.run_animation(self.walk_frames, dt, loop=True)
         elif self.animation_state == "fly":
-            self.run_animation(self.fly_frames, dt)
+            self.run_animation(self.fly_frames, dt, loop=True)
+        elif self.animation_state == "ultimate_move":
+            self.run_animation(self.ultimate_move_frames)
 
         if self.powerup_activated == "shield":
             self.image.set_alpha(130)
@@ -162,8 +164,9 @@ class Player(pygame.sprite.Sprite):
 
     def update_animation_state(self):
         if self.animation_state == "dead":
-            if self.animation_finished:
-                self.is_dead = True
+            # TODO: fix the playing of dead animation
+            # if self.animation_finished:
+            #     self.is_dead = True
             return
 
         if self.animation_state == "hurt":
@@ -172,8 +175,8 @@ class Player(pygame.sprite.Sprite):
             if self.powerup_activated == "superspeed":
                 self.set_animation_state("fly")
 
-        if self.animation_state == "fly" and not self.animation_finished:
-            return 
+        if (self.animation_state == "fly" or self.animation_state == "ultimate_move") and not self.animation_finished:
+            return
         
         self.set_animation_state("walk" if self.move_direction else "idle")
 
