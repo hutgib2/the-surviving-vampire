@@ -10,6 +10,26 @@ from game.weapons import (
     Flamegun,
 )
 
+# TODO: Add special move that kills all enemies on screen
+# Special move:
+# - has its own special animation
+# - kills every player on the screen, does 1 damage to the boss
+# - 100s cooldown
+# - Press SPACE to activate
+# - player does NOT start with one in the bank
+# - Movement and weapon disabled during special move animation
+# - He can still take damage
+
+# STEPS:
+# 1. Import the files and get the animation working
+# 2. Detect SPACE press and print "ultimate move",
+#      -  then run animation
+# 3. Make the powerup kill the enemies
+# 4. Add cooldown
+# 5. Restrict movement and weapon during animation
+# 6. Add a visual timer to see when powerup is ready to use
+
+
 # from game.homescreen import save_high_score
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
@@ -37,6 +57,7 @@ class Player(pygame.sprite.Sprite):
         self.hurt_frames = load_image_states("assets", "images", "vampire", "hurt", scale=3)
         self.dead_frames = load_image_states("assets", "images", "vampire", "dead", scale=3)
         self.fly_frames = load_image_states("assets", "images", "vampire", "fly", scale=3)
+        self.ultimate_move_frames = load_image_states("assets", "images", "vampire", "ultimate_move", scale=3)
         self.image = self.walk_frames["down"][0]
 
         self.animation_state = "idle" # "idle" | "walk" | "hurt" | "dead"
@@ -90,14 +111,12 @@ class Player(pygame.sprite.Sprite):
     # TASK: figure out how to implement the idle state
     def user_input(self):
         keys = pygame.key.get_pressed()
-        self.move_direction.x = int(keys[pygame.K_RIGHT] or keys[pygame.K_d]) - int(
-            keys[pygame.K_LEFT] or keys[pygame.K_a]
-        )
-        self.move_direction.y = int(keys[pygame.K_DOWN] or keys[pygame.K_s]) - int(
-            keys[pygame.K_UP] or keys[pygame.K_w]
-        )
+        self.move_direction.x = int(keys[pygame.K_RIGHT] or keys[pygame.K_d]) - int(keys[pygame.K_LEFT] or keys[pygame.K_a])
+        self.move_direction.y = int(keys[pygame.K_DOWN] or keys[pygame.K_s]) - int(keys[pygame.K_UP] or keys[pygame.K_w])
         if self.move_direction:
             self.move_direction = self.move_direction.normalize()
+        if keys[pygame.K_SPACE]:
+            print("ultimate move")
 
     def run_animation(self, frames, dt, loop=True):
         if self.move_direction:
