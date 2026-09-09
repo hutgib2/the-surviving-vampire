@@ -27,6 +27,7 @@ from game.weapons import (
 #      -  then run animation
 # 3. Make the powerup kill the enemies
 # 4. Add cooldown
+
 # 5. Restrict movement and weapon during animation
 # 6. Add a visual timer to see when powerup is ready to use
 
@@ -112,7 +113,6 @@ class Player(pygame.sprite.Sprite):
                     if self.move_direction.y < 0:
                         self.hitbox_rect.top = sprite.rect.bottom
 
-    # TASK: figure out how to implement the idle state
     def user_input(self):
         keys = pygame.key.get_pressed()
         self.move_direction.x = int(keys[pygame.K_RIGHT] or keys[pygame.K_d]) - int(keys[pygame.K_LEFT] or keys[pygame.K_a])

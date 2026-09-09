@@ -13,8 +13,14 @@ TILE_SIZE = 48
 # -------------------------------- ENEMIES -------------------------------- #
 
 enemy_frames = {
-    "bat": load_image_states("assets", "images", "enemies", "bat", scale=2.5),
-    "skeleton": load_image_states("assets", "images", "enemies", "skeleton", scale=1.5)
+    "bat": {
+        'walk': load_image_states("assets", "images", "enemies", "bat", 'walk', scale=2.5),
+        'dead': load_image_states("assets", "images", "enemies", "bat", 'dead', scale=2.5),
+    },
+    "skeleton": {
+        'walk': load_image_states("assets", "images", "enemies", "skeleton", "walk", scale=1.5),
+        'dead': load_image_states("assets", "images", "enemies", "skeleton", "dead", scale=1.5),
+    } 
 }
 
 boss_frames = {

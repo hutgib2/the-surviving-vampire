@@ -1,15 +1,6 @@
 from game.settings import *
 from game.projectiles import Orb
 
-# 0: down
-# 1: right
-# 2: up
-# 3: left
-
-
-# TASK:
-# we want a function that will stop the enemy from moving
-
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, pos, framedata, player, collision_sprites, game):
         super().__init__(game.all_sprites, game.enemy_sprites)
@@ -17,9 +8,9 @@ class Enemy(pygame.sprite.Sprite):
         self.player = player
         self.type = framedata[0]
         self.frames = framedata[1]
-        self.state = 'down'
+        self.animation_direction = 'down'
         self.frame_index = 0
-        self.image = self.frames['down'][0]
+        self.image = self.frames['walk']['down'][0]
         self.animation_speed = 12
 
         self.rect = self.image.get_frect(center = pos)
@@ -33,10 +24,10 @@ class Enemy(pygame.sprite.Sprite):
     def animate(self, dt):
         statex = 'right' if self.direction.x > 0 else 'left'
         statey = 'down' if self.direction.y > 0 else 'up'
-        self.state = statex if abs(self.direction.x) > abs(self.direction.y) else statey
+        self.animation_direction = statex if abs(self.direction.x) > abs(self.direction.y) else statey
         
         self.frame_index = self.frame_index + self.animation_speed * dt if self.direction else 0
-        self.image = self.frames[self.state][int(self.frame_index) % len(self.frames[self.state])]
+        self.image = self.frames['walk'][self.animation_direction][int(self.frame_index) % len(self.frames['walk'][self.animation_direction])]
 
     def move(self, dt):
         player_pos = pygame.Vector2(self.player.rect.center)
@@ -81,14 +72,7 @@ class Enemy(pygame.sprite.Sprite):
     def destroy(self, hit_player=False):
         self.game.enemy_sprites.remove(self)
         self.death_time = pygame.time.get_ticks()
-        if self.state == 'down':
-            self.image = self.frames['dead'][0]
-        elif self.state == 'right':
-            self.image = self.frames['dead'][1]
-        elif self.state == 'up':
-            self.image = self.frames['dead'][2]
-        elif self.state == 'left':
-            self.image = self.frames['dead'][3]
+        self.image = self.frames['dead'][self.animation_direction][0]
 
     def death_timer(self):
         if pygame.time.get_ticks() - self.death_time >= self.death_duration:
