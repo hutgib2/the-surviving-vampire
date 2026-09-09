@@ -78,7 +78,7 @@ class Enemy(pygame.sprite.Sprite):
                if color == (255, 255, 255):
                     self.image.set_at((x, y), (175, 0, 0))
 
-    def destroy(self, hit_player):
+    def destroy(self, hit_player=False):
         self.game.enemy_sprites.remove(self)
         self.death_time = pygame.time.get_ticks()
         if self.state == 'down':
@@ -89,11 +89,6 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.frames['dead'][2]
         elif self.state == 'left':
             self.image = self.frames['dead'][3]
-
-        # self.image = pygame.mask.from_surface(self.image).to_surface()
-        # self.image.set_colorkey('black')
-        # if hit_player:
-        #     self.set_mask_to_red()
 
     def death_timer(self):
         if pygame.time.get_ticks() - self.death_time >= self.death_duration:
@@ -184,9 +179,10 @@ class Boss(pygame.sprite.Sprite):
             if current_time - self.shoot_time >= self.orb_cooldown:
                 self.can_shoot = True
 
-    def destroy(self, hit_player):
+    def destroy(self, hit_player=False):
         self.game.enemy_sprites.remove(self)
         self.death_time = pygame.time.get_ticks()
+        
         self.image = pygame.mask.from_surface(self.image).to_surface()
         self.image.set_colorkey('black')
         if hit_player:

@@ -116,7 +116,20 @@ class Player(pygame.sprite.Sprite):
         if self.move_direction:
             self.move_direction = self.move_direction.normalize()
         if keys[pygame.K_SPACE]:
-            self.set_animation_state('ultimate_move')
+            self.use_ultimate_move()
+
+    def use_ultimate_move(self):
+        self.set_animation_state('ultimate_move')
+        self.game.impact_sound.play()
+        for enemy in self.game.enemy_sprites:
+            if type(enemy) == Orb:
+                continue
+            if type(enemy) == Boss:
+                enemy.lives -= 1
+                if enemy.lives > 0:
+                    continue
+            enemy.destroy()
+            self.game.kill_count += 1
 
     def run_animation(self, frames, dt, loop=False):
         if self.move_direction:
@@ -148,7 +161,7 @@ class Player(pygame.sprite.Sprite):
         elif self.animation_state == "fly":
             self.run_animation(self.fly_frames, dt, loop=True)
         elif self.animation_state == "ultimate_move":
-            self.run_animation(self.ultimate_move_frames)
+            self.run_animation(self.ultimate_move_frames, dt)
 
         if self.powerup_activated == "shield":
             self.image.set_alpha(130)
@@ -191,7 +204,7 @@ class Player(pygame.sprite.Sprite):
                 elif type(enemy) == Boss:
                     pass
                 else:
-                    enemy.destroy(True)
+                    enemy.destroy(hit_player=True)
                 self.game.impact_sound.play()
                 self.lives -= 1
                 if self.lives <= 0:
@@ -216,7 +229,7 @@ class Player(pygame.sprite.Sprite):
                     enemy.lives -= 1
                     if enemy.lives > 0:
                         continue
-                enemy.destroy(False)
+                enemy.destroy()
                 self.game.kill_count += 1
 
     def powerup_collision(self):

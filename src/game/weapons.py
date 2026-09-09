@@ -88,7 +88,7 @@ class Pistol(pygame.sprite.Sprite):
                     enemy.lives -= 1
                     if enemy.lives > 0:
                         continue
-                enemy.destroy(False)
+                enemy.destroy()
                 self.game.kill_count += 1
 
     def update(self, dt):
@@ -118,7 +118,7 @@ class Rifle(Pistol):
                     bullet.kill()
                     if enemy.lives > 0:
                         continue
-                enemy.destroy(False)
+                enemy.destroy()
                 self.game.kill_count += 1
 
 class Shotgun(Pistol):
@@ -174,7 +174,7 @@ class Lasergun(Pistol):
                     enemy.lives -= 1
                     if enemy.lives > 0:
                         continue
-                enemy.destroy(False)
+                enemy.destroy()
                 self.game.kill_count += 1
 
 class Sword(Pistol):
@@ -191,7 +191,7 @@ class Sword(Pistol):
                     enemy.lives -= 1
                     if enemy.lives > 0:
                         continue
-                enemy.destroy(False)
+                enemy.destroy()
                 self.game.kill_count += 1
 
     def update(self, _):
@@ -225,5 +225,5 @@ class Flamegun(Pistol):
                     enemy.lives -= 1
                     if enemy.lives > 0:
                         continue
-                enemy.destroy(False)
+                enemy.destroy()
                 self.game.kill_count += 1
