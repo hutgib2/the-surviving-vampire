@@ -1,3 +1,4 @@
+from utils.timer import Timer
 from game.settings import *
 from game.weapons import (
     Pistol,
@@ -87,6 +88,9 @@ class Player(pygame.sprite.Sprite):
         self.minedrop_cooldown = 500
         self.can_drop_mine = False
 
+        self.ultimate_move_timer = Timer(5 * 1000, self.activate_ultimate_move, autostart=True)
+        self.can_use_ultimate = False
+    
     def move(self, dt):
         self.hitbox_rect.x += self.move_direction.x * self.speed * dt
         self.object_collision("horizontal")
@@ -118,7 +122,15 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_SPACE]:
             self.use_ultimate_move()
 
+    def activate_ultimate_move(self):
+        self.can_use_ultimate = True
+    
     def use_ultimate_move(self):
+        if not self.can_use_ultimate:
+            return
+            
+        self.can_use_ultimate = False
+        self.ultimate_move_timer.activate()
         self.set_animation_state('ultimate_move')
         self.game.impact_sound.play()
         for enemy in self.game.enemy_sprites:
@@ -323,6 +335,7 @@ class Player(pygame.sprite.Sprite):
         self.explosion_collisions()
         self.powerup_timer()
         self.mine_timer()
+        self.ultimate_move_timer.update()
         self.update_animation_state()
         self.animate(dt)
 
