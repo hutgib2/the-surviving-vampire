@@ -9,8 +9,8 @@ WEB = sys.platform == "emscripten"
 if WEB:
     import platform
 
-# wrangler dev uses 8787
-BASE_URL = 'http://localhost:8787' if WEB else 'http://localhost:4321' 
+# wrangler dev uses 8787, astro uses 4321
+BASE_URL = f'http://localhost:{8000}'
 
 # Sends a score to the database
 def post_score(game, username, score):
