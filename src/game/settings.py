@@ -14,12 +14,12 @@ TILE_SIZE = 48
 
 enemy_frames = {
     "bat": {
-        'walk': load_image_states("assets", "images", "enemies", "bat", 'walk', scale=2.5),
-        'dead': load_image_states("assets", "images", "enemies", "bat", 'dead', scale=2.5),
+        'walk': load_image_states("assets", "images", "enemies", "bat", 'walk', scale=5/2),
+        'dead': load_image_states("assets", "images", "enemies", "bat", 'dead', scale=5/2),
     },
     "skeleton": {
-        'walk': load_image_states("assets", "images", "enemies", "skeleton", "walk", scale=1.5),
-        'dead': load_image_states("assets", "images", "enemies", "skeleton", "dead", scale=1.5),
+        'walk': load_image_states("assets", "images", "enemies", "skeleton", "walk", scale=3/2),
+        'dead': load_image_states("assets", "images", "enemies", "skeleton", "dead", scale=3/2),
     } 
 }
 
@@ -47,18 +47,20 @@ sword_surf = load_image("assets", "images", "weapons", "sword.png", scale=1/8)
 
 # ----------------------------------- PROJECTILES ---------------------------------- #
 
-bullet_surf = load_image("assets", "images", "projectiles", "bullet.png", scale=1/4)
-laser_bullet_surf = load_image("assets", "images", "projectiles", "laser_bullet.png", scale=1/4)
-flame_bullet_surf = load_image("assets", "images", "projectiles", "flame_bullet.png", scale=1/4)
-orb_surf = load_image("assets", "images", "projectiles", "orb.png", scale=2)
-laser_surf = pygame.transform.scale(
-    pygame.image.load(join("assets", "images", "projectiles", "laserbeam.png")), (WINDOW_WIDTH, 2)
-).convert_alpha()
+bullet_surf = load_image("assets", "images", "projectiles", "bullet.png", scale=1/5)
+laser_bullet_surf = load_image("assets", "images", "projectiles", "laser_bullet.png", scale=1/5)
+flame_bullet_surf = load_image("assets", "images", "projectiles", "flame_bullet.png", scale=1/5)
+orb_surf = load_image("assets", "images", "projectiles", "orb.png", scale=1.5)
+laser_surf = pygame.transform.scale(pygame.image.load(join("assets", "images", "projectiles", "laserbeam.png")), (WINDOW_WIDTH, 3)).convert_alpha()
 
-flame_frames = load_images("assets", "images", "flame", scale=0.5)
+flame_frames = load_images("assets", "images", "flame", scale=1/3)
 explosion_frames = load_images("assets", "images", "explosion")
 
 # --------------------------------- POWERUPS --------------------------------- #
+
+life_surf = load_image("assets", "images", "powerups", "life.png", scale=1/5)
+aura_surf = load_image("assets", "images", "powerups", "aura.png", scale=2)
+aura_surf.set_alpha(50)
 
 POWERUP_SURFS = {
     'rifle': rifle_static,
@@ -67,7 +69,7 @@ POWERUP_SURFS = {
     'shotgun': shotgun_static,
     'sideshot': pistol_static,
     'sword': sword_surf,
-    'life':load_image("assets", "images", "powerups", "life.png", scale=1/5),
+    'life': life_surf,
     'superspeed': load_image("assets", "images", "powerups", "superspeed.png", scale=1/5),
     'shield': load_image("assets", "images", "powerups", "shield.png", scale=1/40),
     'slowaura': load_image("assets", "images", "powerups", "snail.png", scale=1/7),
@@ -75,9 +77,6 @@ POWERUP_SURFS = {
     "flamegun": flamegun_static,
     'mine': load_image("assets", "images", "powerups", "mine.png", scale=2/3)
 }
-
-aura_surf = load_image("assets", "images", "powerups", "aura.png", scale=2)
-aura_surf.set_alpha(50)
 
 # ----------------------------------- MENU ----------------------------------- #
 

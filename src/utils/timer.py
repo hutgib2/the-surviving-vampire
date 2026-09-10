@@ -23,6 +23,13 @@ class Timer:
         self.start_time = 0
         if self.repeat:
             self.activate()
+    
+    def stop(self): # Use to temporarily pause a repeating timer
+        if self.repeat:
+            self.repeat = False
+
+    def resume(self):
+        self.repeat = True
 
     def update(self):
         if pygame.time.get_ticks() - self.start_time >= self.duration:

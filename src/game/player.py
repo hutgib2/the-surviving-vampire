@@ -96,6 +96,8 @@ class Player(pygame.sprite.Sprite):
         self.can_use_ultimate = False
     
     def move(self, dt):
+        if self.animation_state == "ultimate_move":
+            return
         self.hitbox_rect.x += self.move_direction.x * self.speed * dt
         self.object_collision("horizontal")
         self.hitbox_rect.y += self.move_direction.y * self.speed * dt
@@ -132,6 +134,7 @@ class Player(pygame.sprite.Sprite):
         if not self.can_use_ultimate:
             return
             
+        self.weapon.shoot_timer.stop()
         self.can_use_ultimate = False
         self.ultimate_move_timer.activate()
         self.set_animation_state('ultimate_move')
@@ -203,8 +206,13 @@ class Player(pygame.sprite.Sprite):
             if self.powerup_activated == "superspeed":
                 self.set_animation_state("fly")
 
-        if (self.animation_state == "fly" or self.animation_state == "ultimate_move") and not self.animation_finished:
+        if self.animation_state == "fly" and not self.animation_finished:
             return
+        
+        if self.animation_state == "ultimate_move":
+            if not self.animation_finished:
+                return
+            self.weapon.shoot_timer.resume()
         
         self.set_animation_state("walk" if self.move_direction else "idle")
 

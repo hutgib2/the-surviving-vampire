@@ -1,6 +1,7 @@
 from game.settings import *
 from game.projectiles import Bullet, Laser, Orb, Flame
 from game.enemies import Enemy, Boss
+from utils.timer import Timer
 from math import atan2, degrees
 
 class Pistol(pygame.sprite.Sprite):
@@ -16,14 +17,17 @@ class Pistol(pygame.sprite.Sprite):
         self.current_image = self.image # what we set the image to be depending on whether animation is running
         self.rect = self.image.get_frect(center = self.player.rect.center + self.player_direction * self.distance)
         
-        self.can_shoot = True
-        self.shoot_time = 0
-        self.cooldown = 300
+        self.can_shoot = False
+        self.shoot_cooldown = 300
+        self.shoot_timer = Timer(self.shoot_cooldown, self.allow_shoot, repeat=True, autostart=True)
         
         self.frame_index = 0
         self.animation_frames = pistol_frames
-        self.animation_speed = self.cooldown / 7.5
+        self.animation_speed = self.shoot_cooldown / 7.5
         self.animation_running = False
+
+    def allow_shoot(self):
+        self.can_shoot = True
 
     def run_animation(self, frames, dt):
         self.frame_index += self.animation_speed * dt
@@ -68,13 +72,6 @@ class Pistol(pygame.sprite.Sprite):
             self.game.shoot_sound.play()
             self.create_bullet()
             self.can_shoot = False
-            self.shoot_time = pygame.time.get_ticks()
-    
-    def shoot_timer(self):
-        if not self.can_shoot:
-            current_time = pygame.time.get_ticks()
-            if current_time - self.shoot_time >= self.cooldown:
-                self.can_shoot = True
     
     def bullet_collision(self):
         collision_sprites = pygame.sprite.groupcollide(self.game.bullet_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
@@ -91,6 +88,7 @@ class Pistol(pygame.sprite.Sprite):
                 enemy.destroy()
                 self.game.kill_count += 1
 
+    # Used for Polymorphism to reduce duplication
     def bullet_impact(self, bullet, enemy):
         bullet.kill()
 
@@ -99,7 +97,7 @@ class Pistol(pygame.sprite.Sprite):
         self.get_direction()
         self.rotate()
         self.rect.center = self.player.rect.center + (self.player_direction + pygame.Vector2(0, -0.2)) * self.distance
-        self.shoot_timer()
+        self.shoot_timer.update()
         self.shoot()
         self.bullet_collision()
 

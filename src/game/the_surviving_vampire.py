@@ -87,7 +87,7 @@ class Game:
 
     def display_lives(self):
         for i in range(self.player.lives):
-            life_rect = POWERUP_SURFS['life'].get_frect(topleft = (10 + (i * 85), 10))
+            life_rect = life_surf.get_frect(topleft = (10 + (i * 85), 10))
             screen.blit(POWERUP_SURFS['life'], life_rect)
     
     # TEST O    NLY: Draw all powerup images statically on left of screen so we can see the sizes
