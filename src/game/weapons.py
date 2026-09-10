@@ -115,7 +115,8 @@ class Shotgun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
         self.animation_frames = shotgun_frames
-        self.cooldown = 500
+        self.shoot_cooldown = 500
+        self.shoot_timer = Timer(self.shoot_cooldown, self.allow_shoot, repeat=True, autostart=True)
 
     def create_bullet(self):
         pos = self.rect.center + self.player_direction * 64
@@ -136,7 +137,8 @@ class Sideshotgun(Pistol):
 class Machinegun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
-        self.cooldown = 100
+        self.shoot_cooldown = 100
+        self.shoot_timer = Timer(self.shoot_cooldown, self.allow_shoot, repeat=True, autostart=True)
         self.animation_frames = machinegun_frames
 
 class Lasergun(Pistol):

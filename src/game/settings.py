@@ -10,6 +10,17 @@ pygame.display.set_caption("Vampire Survivor")
 WINDOW_WIDTH, WINDOW_HEIGHT = screen.get_size()
 TILE_SIZE = 48
 
+# ---------------------------------- PLAYER ---------------------------------- #
+
+player_frames = {
+    "idle": load_image_states("assets", "images", "vampire", "idle", scale=3),
+    "walk": load_image_states("assets", "images", "vampire", "walk", scale=3),
+    "hurt": load_image_states("assets", "images", "vampire", "hurt", scale=3),
+    "dead": load_image_states("assets", "images", "vampire", "dead", scale=3),
+    "fly": load_image_states("assets", "images", "vampire", "fly", scale=3),
+    "ultimate_move": load_image_states("assets", "images", "vampire", "ultimate_move", scale=3)
+}
+
 # -------------------------------- ENEMIES -------------------------------- #
 
 enemy_frames = {

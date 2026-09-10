@@ -54,14 +54,7 @@ class Aura(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, collision_sprites, pistol_static, game):
         super().__init__(groups)
-        self.idle_frames = load_image_states("assets", "images", "vampire", "idle", scale=3)
-        self.walk_frames = load_image_states("assets", "images", "vampire", "walk", scale=3)
-        self.hurt_frames = load_image_states("assets", "images", "vampire", "hurt", scale=3)
-        self.dead_frames = load_image_states("assets", "images", "vampire", "dead", scale=3)
-        self.fly_frames = load_image_states("assets", "images", "vampire", "fly", scale=3)
-        self.ultimate_move_frames = load_image_states("assets", "images", "vampire", "ultimate_move", scale=3)
-        self.image = self.walk_frames["down"][0]
-
+        self.image = player_frames['idle']["down"][0]
         self.animation_state = "idle" # "idle" | "walk" | "hurt" | "dead" | "ultimate_move"
         self.animation_direction = "down"
         self.animation_speed = ANIMATION_SPEED
@@ -82,6 +75,8 @@ class Player(pygame.sprite.Sprite):
         # self.weapon = Rifle(rifle_static, self, self.game.all_sprites, self.game)
         # self.weapon = Lasergun(lasergun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
+        # self.weapon = Machinegun(machinegun_static, self, self.game.all_sprites, self.game)
+        # self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
         
         # powerup
         self.powerup_activated = None
@@ -169,17 +164,17 @@ class Player(pygame.sprite.Sprite):
 
     def animate(self, dt):
         if self.animation_state == "dead":
-            self.run_animation(self.dead_frames, dt)
+            self.run_animation(player_frames['dead'], dt)
         elif self.animation_state == "hurt":
-            self.run_animation(self.hurt_frames, dt)
+            self.run_animation(player_frames['hurt'], dt)
         elif self.animation_state == "idle":
-            self.run_animation(self.idle_frames, dt, loop=True)
+            self.run_animation(player_frames['idle'], dt, loop=True)
         elif self.animation_state == "walk":
-            self.run_animation(self.walk_frames, dt, loop=True)
+            self.run_animation(player_frames['walk'], dt, loop=True)
         elif self.animation_state == "fly":
-            self.run_animation(self.fly_frames, dt, loop=True)
+            self.run_animation(player_frames['fly'], dt, loop=True)
         elif self.animation_state == "ultimate_move":
-            self.run_animation(self.ultimate_move_frames, dt)
+            self.run_animation(player_frames['ultimate_move'], dt)
 
         if self.powerup_activated == "shield":
             self.image.set_alpha(130)
