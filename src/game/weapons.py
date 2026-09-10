@@ -83,13 +83,16 @@ class Pistol(pygame.sprite.Sprite):
                 if type(enemy) == Orb:
                     continue
                 self.game.impact_sound.play()
-                bullet.kill()
+                self.bullet_impact(bullet, enemy)
                 if type(enemy) == Boss:
                     enemy.lives -= 1
                     if enemy.lives > 0:
                         continue
                 enemy.destroy()
                 self.game.kill_count += 1
+
+    def bullet_impact(self, bullet, enemy):
+        bullet.kill()
 
     def update(self, dt):
         self.animate(dt)
@@ -106,20 +109,9 @@ class Rifle(Pistol):
         self.animation_frames = rifle_frames
         self.animation_speed = self.cooldown / 4
 
-    def bullet_collision(self):
-        collision_sprites = pygame.sprite.groupcollide(self.game.bullet_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
-        for bullet, enemies in collision_sprites.items():
-            for enemy in enemies:
-                if type(enemy) == Orb:
-                    continue
-                self.game.impact_sound.play()
-                if type(enemy) == Boss:
-                    enemy.lives -= 1
-                    bullet.kill()
-                    if enemy.lives > 0:
-                        continue
-                enemy.destroy()
-                self.game.kill_count += 1
+    def bullet_impact(self, bullet, enemy):
+        if type(enemy) == Boss:
+            bullet.kill()
 
 class Shotgun(Pistol):
     def __init__(self, surf, player, groups, game):
@@ -157,32 +149,20 @@ class Lasergun(Pistol):
     def create_bullet(self):
         pos = self.rect.center + self.player_direction * 50
         Bullet(laser_bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
-        
-    def bullet_collision(self):
-        collision_sprites = pygame.sprite.groupcollide(self.game.bullet_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
-        for bullet, enemies in collision_sprites.items():
-            for enemy in enemies:
-                if type(enemy) == Orb:
-                    continue
-                self.game.impact_sound.play()
-                if type(bullet) == Bullet:
-                    bullet.kill()
-                    Laser(laser_surf, enemy.rect.center, bullet.direction, (self.game.all_sprites, self.game.bullet_sprites))
-                if type(enemy) == Boss:
-                    if type(bullet) == Laser:
-                        bullet.kill()
-                    enemy.lives -= 1
-                    if enemy.lives > 0:
-                        continue
-                enemy.destroy()
-                self.game.kill_count += 1
+
+    def bullet_impact(self, bullet, enemy):
+        if type(bullet) == Bullet:
+            bullet.kill()
+            Laser(laser_surf, enemy.rect.center, bullet.direction, (self.game.all_sprites, self.game.bullet_sprites))
+        if type(enemy) == Boss and type(bullet) == Laser:
+            bullet.kill()
 
 class Sword(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
         self.distance = 200
 
-    def Sword_collision(self):
+    def sword_collision(self):
         collision_sprites = pygame.sprite.spritecollide(self, self.game.enemy_sprites, False, pygame.sprite.collide_mask)
         for enemy in collision_sprites:
             if type(enemy) != Orb and enemy.death_time == 0:
@@ -198,7 +178,7 @@ class Sword(Pistol):
         self.get_direction()
         self.rotate()
         self.rect = self.image.get_frect(center = self.player.rect.center + self.player_direction * self.distance)
-        self.Sword_collision()
+        self.sword_collision()
 
 class Flamegun(Pistol):
     def __init__(self, surf, player, groups, game):
@@ -208,22 +188,10 @@ class Flamegun(Pistol):
     def create_bullet(self):
         pos = self.rect.center + self.player_direction * 50
         Bullet(flame_bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
-        
-    def bullet_collision(self):
-        collision_sprites = pygame.sprite.groupcollide(self.game.bullet_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
-        for bullet, enemies in collision_sprites.items():
-            for enemy in enemies:
-                if type(enemy) == Orb:
-                    continue
-                self.game.impact_sound.play()
-                if type(bullet) == Bullet:
-                    bullet.kill()
-                    Flame(flame_frames, enemy.rect.center, (self.game.all_sprites, self.game.bullet_sprites))
-                if type(enemy) == Boss:
-                    if type(bullet) == Flame:
-                        bullet.kill()
-                    enemy.lives -= 1
-                    if enemy.lives > 0:
-                        continue
-                enemy.destroy()
-                self.game.kill_count += 1
+
+    def bullet_impact(self, bullet, enemy):
+        if type(bullet) == Bullet:
+            bullet.kill()
+            Flame(flame_frames, enemy.rect.center, (self.game.all_sprites, self.game.bullet_sprites))
+        if type(enemy) == Boss and type(bullet) == Flame:
+            bullet.kill()

@@ -79,7 +79,10 @@ class Player(pygame.sprite.Sprite):
         # self.is_dead = False
         
         self.weapon = Pistol(pistol_static, self, self.game.all_sprites, self.game)
-
+        # self.weapon = Rifle(rifle_static, self, self.game.all_sprites, self.game)
+        # self.weapon = Lasergun(lasergun_static, self, self.game.all_sprites, self.game)
+        # self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
+        
         # powerup
         self.powerup_activated = None
         self.powerup_cooldown = 7000
