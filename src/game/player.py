@@ -27,8 +27,8 @@ from game.weapons import (
 #      -  then run animation
 # 3. Make the powerup kill the enemies
 # 4. Add cooldown
-
 # 5. Restrict movement and weapon during animation
+
 # 6. Add a visual timer to see when powerup is ready to use
 
 
