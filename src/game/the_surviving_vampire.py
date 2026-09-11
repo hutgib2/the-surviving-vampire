@@ -24,7 +24,7 @@ class Game:
     def __init__(self):
         self.running = True
         self.clock = AsyncClock(fps=45)
-        self.font = pygame.font.Font(join('assets', 'fonts', 'Oxanium-Bold.ttf'), 40)
+        self.font = pygame.font.Font(join('assets', 'fonts', 'Oxanium-Bold.ttf'), 60)
         self.kill_count = 0
 
         # groups
@@ -79,24 +79,36 @@ class Game:
             distance_from_player = pygame.math.Vector2.magnitude(pygame.math.Vector2(pos) - pygame.math.Vector2(self.player.rect.center))
         return pos  
     
-    def display_score(self):
-        self.text_surf = self.font.render(str(self.kill_count), True, 'gray25')
-        self.text_rect = self.text_surf.get_frect(topleft = (300, 25))
-        screen.blit(self.text_surf, self.text_rect)
-        pygame.draw.rect(screen, 'gray25', self.text_rect.inflate(20, 10).move(0, -6), 5, 10)
+    # We want the 3 functions that display in the top left to use consistent spacing
+    # we can set variables for their spacing and use across all functions
+    # top_offset = 25
+    # spacing = 85
 
-    def display_lives(self):
+    def display_header(self):
+        top_offset = 60
+        left_offset = 60
+        spacing = 85
+        
+        # Drawing Lives
         for i in range(self.player.lives):
-            life_rect = life_surf.get_frect(topleft = (10 + (i * 85), 10))
+            life_rect = life_surf.get_frect(center = (left_offset + (i * spacing), top_offset))
             screen.blit(POWERUP_SURFS['life'], life_rect)
 
-    def display_ultimate_progress(self):        
+        # Drawing Ultimate Progress bar
         progress = self.player.ultimate_move_timer.get_progress()
         i = int(progress * (len(ultimate_progress_frames) - 1))
         image = ultimate_progress_frames[i]
-        ultimate_progress_rect = image.get_frect(topleft = (400, 25))
+        ultimate_progress_rect = image.get_frect(center = (left_offset + 3*spacing, top_offset))
         screen.blit(image, ultimate_progress_rect)
-    
+
+        # Drawing score
+        self.text_surf = self.font.render(str(self.kill_count), True, 'gray25')
+        self.text_rect = self.text_surf.get_frect(center = (left_offset + 4*spacing, top_offset))
+        screen.blit(self.text_surf, self.text_rect)
+        border_thickness = 7
+        border_radius = 10
+        pygame.draw.rect(screen, 'gray25', self.text_rect.inflate(20, 10).move(0, -6), border_thickness, border_radius)
+ 
     # TEST O    NLY: Draw all powerup images statically on left of screen so we can see the sizes
     def display_all_powerups(self):
         for i, powerup_surf in enumerate(POWERUP_SURFS.values()):
@@ -172,13 +184,11 @@ class Game:
             self.all_sprites.update(dt)
             self.all_sprites.draw(self.player.rect.center)
             
-            self.display_score()
-            self.display_lives()
+            self.display_header()
             # self.display_all_powerups()
             self.enemy_spawn_timer.update()
             self.powerup_spawn_timer.update()
             self.boss_spawn_timer.update()
-            self.display_ultimate_progress()
             pygame.display.update()
         
         await self.display_gameover_popup()
