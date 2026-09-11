@@ -69,6 +69,7 @@ explosion_frames = load_images("assets", "images", "explosion")
 
 # --------------------------------- POWERUPS --------------------------------- #
 
+ultimate_progress_frames = load_images("assets", "images", "ultimate_progress", scale=4)
 life_surf = load_image("assets", "images", "powerups", "life.png", scale=1/5)
 aura_surf = load_image("assets", "images", "powerups", "aura.png", scale=2)
 aura_surf.set_alpha(50)
@@ -90,5 +91,4 @@ POWERUP_SURFS = {
 }
 
 # ----------------------------------- MENU ----------------------------------- #
-
 button_surf = load_image("assets", "images", "menu", "button.png")

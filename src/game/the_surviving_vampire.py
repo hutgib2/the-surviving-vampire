@@ -89,6 +89,13 @@ class Game:
         for i in range(self.player.lives):
             life_rect = life_surf.get_frect(topleft = (10 + (i * 85), 10))
             screen.blit(POWERUP_SURFS['life'], life_rect)
+
+    def display_ultimate_progress(self):        
+        progress = self.player.ultimate_move_timer.get_progress()
+        i = int(progress * (len(ultimate_progress_frames) - 1))
+        image = ultimate_progress_frames[i]
+        ultimate_progress_rect = image.get_frect(topleft = (400, 25))
+        screen.blit(image, ultimate_progress_rect)
     
     # TEST O    NLY: Draw all powerup images statically on left of screen so we can see the sizes
     def display_all_powerups(self):
@@ -171,6 +178,7 @@ class Game:
             self.enemy_spawn_timer.update()
             self.powerup_spawn_timer.update()
             self.boss_spawn_timer.update()
+            self.display_ultimate_progress()
             pygame.display.update()
         
         await self.display_gameover_popup()

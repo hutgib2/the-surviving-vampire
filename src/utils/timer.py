@@ -1,5 +1,10 @@
 import pygame
 
+# TASK:
+# Create a function in Timer that return the current progress of the timer
+# i.e. how long its been since the last execution, proportional to the duration
+# e.g. if duration is 10s, and its been 5 seconds, it returns 0.5 == 5/10
+
 class Timer:
     def __init__(self, duration, func = None, repeat = None, autostart = False):
         self.duration = duration
@@ -30,6 +35,11 @@ class Timer:
 
     def resume(self):
         self.repeat = True
+
+    def get_progress(self):
+        elapsed_time = pygame.time.get_ticks() - self.start_time
+        progress = elapsed_time / self.duration
+        return min(progress, 1)
 
     def update(self):
         if pygame.time.get_ticks() - self.start_time >= self.duration:

@@ -31,6 +31,13 @@ from game.weapons import (
 
 # 6. Add a visual timer to see when powerup is ready to use
 
+# - we now have a way to get the timer progress as a decimal 0->1
+# now we need to correlate the numbers 0->1 with our progress images
+# We have 8 images, and we need an even interval of time to display each image
+
+# so when the progress is 0->1/8s --> 0.png (0-0.125)
+# then when its 1/8s->2/8s --> 1.png (0.126-0.25)
+
 
 # from game.homescreen import save_high_score
 from game.projectiles import Orb, Mine
