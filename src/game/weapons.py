@@ -174,7 +174,7 @@ class Sword(Pistol):
         collision_sprites = pygame.sprite.spritecollide(self, self.game.enemy_sprites, False, pygame.sprite.collide_mask)
         for enemy in collision_sprites:
             if type(enemy) != Orb and enemy.death_time == 0:
-                self.game.impact_sound.play()
+                self.impact_sound.play()
                 if type(enemy) == Boss:
                     enemy.lives -= 1
                     if enemy.lives > 0:

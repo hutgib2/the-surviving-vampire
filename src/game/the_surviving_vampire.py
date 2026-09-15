@@ -19,6 +19,7 @@ from game.surfs import life_surf, POWERUP_SURFS, button_surf, pistol_static, ult
 # TODO: Look into sideshot powerup
 # TODO: Fix enemies being drawn behind objects
 # TODO: see if possible to make enemies stop short of player when shield active
+# TODO: change progress bar to line bar 
 
 class Game:
     def __init__(self):
@@ -45,8 +46,6 @@ class Game:
         self.enemy_spawn_positions = []
         self.powerup_spawn_positions = []
         
-        # We need to replace all audio calls with our new imports
-        
         self.load_map()
 
     def load_map(self):
@@ -71,11 +70,6 @@ class Game:
             pos = choice(spawn_positions)
             distance_from_player = pygame.math.Vector2.magnitude(pygame.math.Vector2(pos) - pygame.math.Vector2(self.player.rect.center))
         return pos  
-    
-    # We want the 3 functions that display in the top left to use consistent spacing
-    # we can set variables for their spacing and use across all functions
-    # top_offset = 25
-    # spacing = 85
 
     def display_header(self):
         top_offset = 60
@@ -85,7 +79,7 @@ class Game:
         # Drawing Lives
         for i in range(self.player.lives):
             life_rect = life_surf.get_frect(center = (left_offset + (i * spacing), top_offset))
-            screen.blit(POWERUP_SURFS['life'], life_rect)
+            screen.blit(life_surf, life_rect)
 
         # Drawing Ultimate Progress bar
         progress = self.player.ultimate_move_timer.get_progress()
@@ -102,7 +96,7 @@ class Game:
         border_radius = 10
         pygame.draw.rect(screen, 'gray25', self.text_rect.inflate(20, 10).move(0, -6), border_thickness, border_radius)
  
-    # TEST O    NLY: Draw all powerup images statically on left of screen so we can see the sizes
+    # TEST ONLY: Draw all powerup images statically on left of screen so we can see the sizes
     def display_all_powerups(self):
         for i, powerup_surf in enumerate(POWERUP_SURFS.values()):
             powerup_rect = powerup_surf.get_frect(topleft = (10, 100 + (i * 85)))
@@ -171,7 +165,7 @@ class Game:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     self.running = False
             
-            if self.player.lives <= 0:
+            if self.player.is_dead:
                 self.running = False
 
             self.all_sprites.update(dt)

@@ -49,14 +49,14 @@ class Player(pygame.sprite.Sprite):
         self.hitbox_rect = self.rect.inflate(-self.rect.width * 0.2, -self.rect.height * 0.9)
         self.hitbox_rect.midbottom = self.rect.midbottom
         self.lives = 3
-        # self.is_dead = False
+        self.is_dead = False
         
-        # self.weapon = Pistol(pistol_static, self, self.game.all_sprites, self.game)
+        self.weapon = Pistol(pistol_static, self, self.game.all_sprites, self.game)
         # self.weapon = Rifle(rifle_static, self, self.game.all_sprites, self.game)
         # self.weapon = Lasergun(lasergun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Machinegun(machinegun_static, self, self.game.all_sprites, self.game)
-        self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
+        # self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
         
         # powerup
         self.powerup_activated = None
@@ -140,21 +140,11 @@ class Player(pygame.sprite.Sprite):
             if int(self.frame_index) > len(current) - 1:
                 self.animation_finished = True
 
-        self.image = frames[self.animation_direction][index] 
+        self.image = current[index] 
 
     def animate(self, dt):
-        if self.animation_state == "dead":
-            self.run_animation(player_frames['dead'], dt)
-        elif self.animation_state == "hurt":
-            self.run_animation(player_frames['hurt'], dt)
-        elif self.animation_state == "idle":
-            self.run_animation(player_frames['idle'], dt, loop=True)
-        elif self.animation_state == "walk":
-            self.run_animation(player_frames['walk'], dt, loop=True)
-        elif self.animation_state == "fly":
-            self.run_animation(player_frames['fly'], dt, loop=True)
-        elif self.animation_state == "ultimate_move":
-            self.run_animation(player_frames['ultimate_move'], dt)
+        loop = self.animation_state in ('idle', 'walk', 'fly')
+        self.run_animation(player_frames[self.animation_state], dt, loop=loop)
 
         if self.powerup_activated == "shield":
             self.image.set_alpha(130)
@@ -170,9 +160,8 @@ class Player(pygame.sprite.Sprite):
 
     def update_animation_state(self):
         if self.animation_state == "dead":
-            # TODO: fix the playing of dead animation
-            # if self.animation_finished:
-            #     self.is_dead = True
+            if self.animation_finished:
+                self.is_dead = True
             return
 
         if self.animation_state == "hurt":
@@ -247,7 +236,7 @@ class Player(pygame.sprite.Sprite):
                 self.set_animation_state("fly")
                 continue
             if powerup.type == "shield":
-                return
+                continue
             if powerup.type == "slowaura":
                 if self.aura != None:
                     self.aura.kill()
@@ -259,6 +248,7 @@ class Player(pygame.sprite.Sprite):
                 self.can_drop_mine = True
                 continue
 
+            # TODO: clean this up
             # Weapon change
             self.weapon.kill()
             if powerup.type == "rifle":
@@ -272,7 +262,7 @@ class Player(pygame.sprite.Sprite):
             elif powerup.type == "sideshot":
                 self.weapon = Sideshotgun(pistol_static, self, self.game.all_sprites, self.game)
             elif powerup.type == "sword":
-                self.weapon = Sword(sword_surf,self,self.game.all_sprites,self.game)
+                self.weapon = Sword(sword_surf, self,self.game.all_sprites,self.game)
             elif powerup.type == "flamegun":
                 self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
 
