@@ -1,9 +1,10 @@
 from game.settings import *
 from game.projectiles import Bullet, Laser, Orb, Flame
-from game.enemies import Enemy, Boss
+from game.enemies import Boss
 from utils.timer import Timer
 from math import atan2, degrees
 from game.surfs import pistol_frames, bullet_surf, rifle_frames, shotgun_frames, machinegun_frames, lasergun_frames, laser_bullet_surf, laser_surf, flamegun_frames, flame_bullet_surf, flame_frames
+from game.audio import SHOTGUN_SOUND, PISTOL_SOUND, MACHINEGUN_SOUND, LASER_SOUND, IMPACT_SOUND
 
 class Pistol(pygame.sprite.Sprite):
     def __init__(self, surf, player, groups, game):
@@ -21,6 +22,8 @@ class Pistol(pygame.sprite.Sprite):
         self.can_shoot = False
         self.shoot_cooldown = 300
         self.shoot_timer = Timer(self.shoot_cooldown, self.allow_shoot, repeat=True, autostart=True)
+        self.shoot_sound = PISTOL_SOUND
+        self.impact_sound = IMPACT_SOUND
         
         self.frame_index = 0
         self.animation_frames = pistol_frames
@@ -70,7 +73,7 @@ class Pistol(pygame.sprite.Sprite):
     def shoot(self):
         if pygame.mouse.get_pressed()[0] and self.can_shoot:
             self.animation_running = True
-            self.game.shoot_sound.play()
+            self.shoot_sound.play()
             self.create_bullet()
             self.can_shoot = False
     
@@ -80,7 +83,7 @@ class Pistol(pygame.sprite.Sprite):
             for enemy in enemies:
                 if type(enemy) == Orb:
                     continue
-                self.game.impact_sound.play()
+                self.impact_sound.play()
                 self.bullet_impact(bullet, enemy)
                 if type(enemy) == Boss:
                     enemy.lives -= 1
@@ -116,6 +119,7 @@ class Shotgun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
         self.animation_frames = shotgun_frames
+        self.shoot_sound = SHOTGUN_SOUND
         self.shoot_cooldown = 500
         self.shoot_timer = Timer(self.shoot_cooldown, self.allow_shoot, repeat=True, autostart=True)
 
@@ -138,14 +142,17 @@ class Sideshotgun(Pistol):
 class Machinegun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
+        self.animation_frames = machinegun_frames
+        self.shoot_sound = MACHINEGUN_SOUND
         self.shoot_cooldown = 100
         self.shoot_timer = Timer(self.shoot_cooldown, self.allow_shoot, repeat=True, autostart=True)
-        self.animation_frames = machinegun_frames
 
 class Lasergun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
         self.animation_frames = lasergun_frames
+        self.shoot_sound = LASER_SOUND
+        self.impact_sound = LASER_SOUND
 
     def create_bullet(self):
         pos = self.rect.center + self.player_direction * 50

@@ -1,5 +1,6 @@
 from utils.timer import Timer
 from game.settings import *
+from game.audio import IMPACT_SOUND
 from game.surfs import player_frames, rifle_static, flamegun_static, pistol_static, lasergun_static, shotgun_static, machinegun_static, aura_surf, sword_surf, POWERUP_SURFS
 from game.weapons import (
     Pistol,
@@ -50,12 +51,12 @@ class Player(pygame.sprite.Sprite):
         self.lives = 3
         # self.is_dead = False
         
-        self.weapon = Pistol(pistol_static, self, self.game.all_sprites, self.game)
+        # self.weapon = Pistol(pistol_static, self, self.game.all_sprites, self.game)
         # self.weapon = Rifle(rifle_static, self, self.game.all_sprites, self.game)
         # self.weapon = Lasergun(lasergun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Machinegun(machinegun_static, self, self.game.all_sprites, self.game)
-        # self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
+        self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
         
         # powerup
         self.powerup_activated = None
@@ -112,7 +113,7 @@ class Player(pygame.sprite.Sprite):
         self.can_use_ultimate = False
         self.ultimate_move_timer.activate()
         self.set_animation_state('ultimate_move')
-        self.game.impact_sound.play()
+        IMPACT_SOUND.play()
         for enemy in self.game.enemy_sprites:
             if type(enemy) == Orb:
                 continue
@@ -202,7 +203,7 @@ class Player(pygame.sprite.Sprite):
                     pass
                 else:
                     enemy.destroy(hit_player=True)
-                self.game.impact_sound.play()
+                IMPACT_SOUND.play()
                 self.lives -= 1
                 if self.lives <= 0:
                     self.kill()

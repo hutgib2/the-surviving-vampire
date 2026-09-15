@@ -1,6 +1,5 @@
 from utils.async_clock import AsyncClock
 from utils.timer import Timer
-from utils.audio_player import AudioPlayer
 from utils.scores_api import post_score
 from random import randint, choice
 from game.settings import *  # import everything from settings.py
@@ -20,7 +19,6 @@ from game.surfs import life_surf, POWERUP_SURFS, button_surf, pistol_static, ult
 # TODO: Look into sideshot powerup
 # TODO: Fix enemies being drawn behind objects
 # TODO: see if possible to make enemies stop short of player when shield active
-
 
 class Game:
     def __init__(self):
@@ -47,14 +45,7 @@ class Game:
         self.enemy_spawn_positions = []
         self.powerup_spawn_positions = []
         
-        #audio
-        self.shoot_sound = AudioPlayer('shoot.ogg')
-        self.shoot_sound.set_volume(0.25)
-        self.impact_sound = AudioPlayer('new_impact.ogg')
-        self.impact_sound.set_volume(0.2)
-        # self.music = pygame.mixer.Sound(join('assets', 'audio', 'my_first_mashup.ogg'))
-        # self.music.set_volume(0.55)
-        # self.music.play(loops = 0)
+        # We need to replace all audio calls with our new imports
         
         self.load_map()
 
