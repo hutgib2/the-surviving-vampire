@@ -1,5 +1,6 @@
 from utils.timer import Timer
 from game.settings import *
+from game.surfs import player_frames, rifle_static, flamegun_static, pistol_static, lasergun_static, shotgun_static, machinegun_static, aura_surf, sword_surf, POWERUP_SURFS
 from game.weapons import (
     Pistol,
     Rifle,
@@ -11,38 +12,9 @@ from game.weapons import (
     Flamegun,
 )
 
-# TODO: Add special move that kills all enemies on screen
-# Special move:
-# - has its own special animation
-# - kills every player on the screen, does 1 damage to the boss
-# - 100s cooldown
-# - Press SPACE to activate
-# - player does NOT start with one in the bank
-# - Movement and weapon disabled during special move animation
-# - He can still take damage
-
-# STEPS:
-# 1. Import the files and get the animation working
-# 2. Detect SPACE press and print "ultimate move",
-#      -  then run animation
-# 3. Make the powerup kill the enemies
-# 4. Add cooldown
-# 5. Restrict movement and weapon during animation
-
-# 6. Add a visual timer to see when powerup is ready to use
-
-# - we now have a way to get the timer progress as a decimal 0->1
-# now we need to correlate the numbers 0->1 with our progress images
-# We have 8 images, and we need an even interval of time to display each image
-
-# so when the progress is 0->1/8s --> 0.png (0-0.125)
-# then when its 1/8s->2/8s --> 1.png (0.126-0.25)
-
-
-# from game.homescreen import save_high_score
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
-from utils.file_importer import load_image_states
+# from utils.file_importer import load_image_states
 
 PLAYER_SPEED = 350
 ANIMATION_SPEED = 8

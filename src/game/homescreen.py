@@ -4,6 +4,8 @@ from game.sprites import Sprite
 from game.textSprite import TextSprite
 from game.the_surviving_vampire import Game
 from utils.scores_api import fetch_scores
+from game.surfs import button_surf
+from os.path import join
 
 class HomeScreen:
     def __init__(self):

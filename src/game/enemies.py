@@ -1,5 +1,6 @@
 from game.settings import *
 from game.projectiles import Orb
+from game.surfs import boss_frames, orb_surf
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, pos, framedata, player, collision_sprites, game):
@@ -33,20 +34,20 @@ class Enemy(pygame.sprite.Sprite):
         player_pos = pygame.Vector2(self.player.rect.center)
         enemy_pos = pygame.Vector2(self.rect.center)
         self.direction = (player_pos - enemy_pos).normalize()
-        if self.player.aura != None and (player_pos - enemy_pos).length() <= self.player.aura.radius:
+        if self.player.aura and (player_pos - enemy_pos).length() <= self.player.aura.radius:
             self.hitbox_rect.x += self.direction.x * self.speed * dt / 2
         else:
             self.hitbox_rect.x += self.direction.x * self.speed * dt
+
         if self.type != 'bat':
             self.collisions('horizontal')
-        if self.player.aura != None and (player_pos - enemy_pos).length() <= self.player.aura.radius:
+        if self.player.aura and (player_pos - enemy_pos).length() <= self.player.aura.radius:
             self.hitbox_rect.y += self.direction.y * self.speed * dt / 2
         else:
             self.hitbox_rect.y += self.direction.y * self.speed * dt
         if self.type != 'bat':
             self.collisions('vertical')
         self.rect.center = self.hitbox_rect.center
-
 
     def collisions(self, direction):
         for sprite in self.collision_sprites:

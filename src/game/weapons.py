@@ -3,6 +3,7 @@ from game.projectiles import Bullet, Laser, Orb, Flame
 from game.enemies import Enemy, Boss
 from utils.timer import Timer
 from math import atan2, degrees
+from game.surfs import pistol_frames, bullet_surf, rifle_frames, shotgun_frames, machinegun_frames, lasergun_frames, laser_bullet_surf, laser_surf, flamegun_frames, flame_bullet_surf, flame_frames
 
 class Pistol(pygame.sprite.Sprite):
     def __init__(self, surf, player, groups, game):

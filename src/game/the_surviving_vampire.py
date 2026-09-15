@@ -13,6 +13,8 @@ from game.button import InteractiveButton
 from game.enemies import Enemy, Boss
 from game.homescreen import *
 from pytmx.util_pygame import load_pygame
+from os.path import join
+from game.surfs import life_surf, POWERUP_SURFS, button_surf, pistol_static, ultimate_progress_frames, enemy_frames
 
 # TODO: add new audio for different weapons
 # TODO: Look into sideshot powerup

@@ -1,5 +1,6 @@
 from game.settings import *
 from math import atan2, degrees
+from game.surfs import explosion_frames
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, surf, pos, direction, groups):
