@@ -227,7 +227,7 @@ class Flamegun(Pistol):
 WEAPON_MAP = {
     "rifle": Rifle,
     "machinegun": Machinegun,
-    "laser": Lasergun,
+    "lasergun": Lasergun,
     "shotgun": Shotgun,
     "sideshot": Sideshotgun,
     "sword": Sword,

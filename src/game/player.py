@@ -11,6 +11,7 @@ from game.weapons import (
     Sideshotgun,
     Sword,
     Flamegun,
+    WEAPON_MAP
 )
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
@@ -198,13 +199,7 @@ class Player(pygame.sprite.Sprite):
                 self.set_animation_state("hurt" if self.lives > 0 else "dead")
 
     def explosion_collisions(self):
-        collision_sprites = pygame.sprite.groupcollide(
-            self.game.explosion_sprites,
-            self.game.enemy_sprites,
-            False,
-            False,
-            pygame.sprite.collide_mask,
-        )
+        collision_sprites = pygame.sprite.groupcollide(self.game.explosion_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
         for explosion, enemies in collision_sprites.items():
             for enemy in enemies:
                 if type(enemy) == Orb:
@@ -219,7 +214,6 @@ class Player(pygame.sprite.Sprite):
                 self.game.kill_count += 1
 
     def powerup_collision(self):
-        # TODO: clean this up, use a match statement, use WEAPON_MAP to clean up weapon assignment
         powerup_collisions = pygame.sprite.spritecollide(self, self.game.powerup_sprites, True, pygame.sprite.collide_mask)
         for powerup in powerup_collisions:
             self.deactivate_powerup()
@@ -228,57 +222,45 @@ class Player(pygame.sprite.Sprite):
                 if self.lives < 3:
                     self.lives += 1
                 continue
-            self.powerup_activated_at = pygame.time.get_ticks()
-            self.powerup_activated = powerup.type
-            if powerup.type == "superspeed":
+            self.activate_powerup(powerup.type)
+
+    def activate_powerup(self, powerup_type):
+        self.powerup_activated_at = pygame.time.get_ticks()
+        self.powerup_activated = powerup_type
+        
+        match powerup_type:
+            case "superspeed":
                 self.speed = PLAYER_SPEED * 3
                 self.animation_speed = ANIMATION_SPEED * 2
                 self.set_animation_state("fly")
-                continue
-            if powerup.type == "shield":
-                continue
-            if powerup.type == "slowaura":
+            case "slowaura":
                 if self.aura != None:
                     self.aura.kill()
                 self.aura = Aura(self.game.all_sprites, AURA_SURF, self)
-                return
-            if powerup.type == "timestop":
-                continue
-            if powerup.type == "mine":
+            case "mine":
                 self.can_drop_mine = True
-                continue
-
-            # Weapon change
-            self.weapon.kill()
-            if powerup.type == "rifle":
-                self.weapon = Rifle(WEAPON_SURFS['rifle'], self, self.game.all_sprites, self.game)
-            elif powerup.type == "machinegun":
-                self.weapon = Machinegun(WEAPON_SURFS['machinegun'], self, self.game.all_sprites, self.game)
-            elif powerup.type == "lasergun":
-                self.weapon = Lasergun(WEAPON_SURFS['lasergun'], self, self.game.all_sprites, self.game)
-            elif powerup.type == "shotgun":
-                self.weapon = Shotgun(WEAPON_SURFS['shotgun'], self, self.game.all_sprites, self.game)
-            elif powerup.type == "sideshot":
-                self.weapon = Sideshotgun(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
-            elif powerup.type == "sword":
-                self.weapon = Sword(WEAPON_SURFS['sword'], self,self.game.all_sprites,self.game)
-            elif powerup.type == "flamegun":
-                self.weapon = Flamegun(WEAPON_SURFS['flamegun'], self, self.game.all_sprites, self.game)
-
+            case "shield" | "timestop":
+                pass
+            case _: # Weapon change
+                self.weapon.kill()
+                WeaponClass = WEAPON_MAP[powerup_type]
+                self.weapon = WeaponClass(WEAPON_SURFS[powerup_type], self, self.game.all_sprites, self.game)
+                    
     def deactivate_powerup(self):
-        if self.powerup_activated == "superspeed":
-            self.speed = PLAYER_SPEED
-            self.animation_speed = ANIMATION_SPEED
-            self.set_animation_state("walk")
-        elif self.powerup_activated == "slowaura":
-            self.aura.kill()
-            self.aura = None
-        elif self.powerup_activated == "timestop" or self.powerup_activated == "mine":
-            pass
-        else:
-            self.weapon.kill()
-            self.weapon = Pistol(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
-
+        match self.powerup_activated:
+            case "superspeed":
+                self.speed = PLAYER_SPEED
+                self.animation_speed = ANIMATION_SPEED
+                self.set_animation_state("walk")
+            case "slowaura":
+                self.aura.kill()
+                self.aura = None
+            case "timestop" | "mine" | "shield":
+                pass
+            case _: # rest are weapon powerups
+                self.weapon.kill()
+                self.weapon = Pistol(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
+        
         self.powerup_activated = None
 
     def powerup_timer(self):
@@ -313,4 +295,3 @@ class Player(pygame.sprite.Sprite):
         self.ultimate_move_timer.update()
         self.update_animation_state()
         self.animate(dt)
-
