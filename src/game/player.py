@@ -12,10 +12,8 @@ from game.weapons import (
     Sword,
     Flamegun,
 )
-
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
-# from utils.file_importer import load_image_states
 
 PLAYER_SPEED = 350
 ANIMATION_SPEED = 8
@@ -57,6 +55,7 @@ class Player(pygame.sprite.Sprite):
         # self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Machinegun(machinegun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
+        # self.weapon = Sword(sword_surf, self, self.game.all_sprites, self.game)
         
         # powerup
         self.powerup_activated = None

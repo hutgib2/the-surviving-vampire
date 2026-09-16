@@ -9,6 +9,15 @@ SHOTGUN_SOUND.set_volume(0.5)
 MACHINEGUN_SOUND = AudioPlayer('machinegun.ogg').init()
 MACHINEGUN_SOUND.set_volume(0.75)
 
+RIFLE_SOUND = AudioPlayer('rifle.ogg').init()
+RIFLE_SOUND.set_volume(0.5)
+
+STAB_SOUND = AudioPlayer('stab.ogg').init()
+STAB_SOUND.set_volume(0.75)
+
+FLAMEGUN_SOUND = AudioPlayer('flamegun.ogg').init()
+# FLAMEGUN_SOUND.set_volume(1)
+
 LASER_SOUND = AudioPlayer('laser.ogg').init()
 # LASER_SOUND.set_volume(1)
 
@@ -17,14 +26,11 @@ IMPACT_SOUND.set_volume(0.4)
 
 """ 
 AUDIO to add:
-- flame gun
-- rifle
-- sword impact
 
 - burning flame ?
 - explosion
-
 - enemy death, bones rattling, bat death ?? boss death 
+
 - boss orb creation
 - collecting powerup ?
 - ultimate move

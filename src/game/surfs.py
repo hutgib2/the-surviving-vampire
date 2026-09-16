@@ -1,6 +1,7 @@
-from utils.file_importer import load_images, load_image_states, load_image
+from utils.file_importer import load_images, load_image_states, load_image, scale_image
 from game.settings import *
 from os.path import join
+
 # ---------------------------------- PLAYER ---------------------------------- #
 
 player_frames = {
@@ -45,7 +46,7 @@ shotgun_static = shotgun_frames[0]
 rifle_static = rifle_frames[0]
 lasergun_static = load_image("assets", "images", "weapons", "lasergun", "lasergun_static.png", scale=1/8)
 flamegun_static = load_image("assets", "images", "weapons", "flamegun", "flamegun_static.png", scale=2)
-sword_surf = load_image("assets", "images", "weapons", "sword.png", scale=1/8)
+sword_surf = load_image("assets", "images", "weapons", "sword.png", scale=1/6)
 
 # ----------------------------------- PROJECTILES ---------------------------------- #
 
@@ -71,7 +72,7 @@ POWERUP_SURFS = {
     'laser': lasergun_static,
     'shotgun': shotgun_static,
     'sideshot': pistol_static,
-    'sword': sword_surf,
+    'sword': scale_image(sword_surf, 0.7),
     'life': life_surf,
     'superspeed': load_image("assets", "images", "powerups", "superspeed.png", scale=1/5),
     'shield': load_image("assets", "images", "powerups", "shield.png", scale=1/40),

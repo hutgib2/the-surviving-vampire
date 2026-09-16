@@ -8,12 +8,16 @@ def _files(folder, *, numeric=False):
     return sorted(paths, key=lambda p: int(p.stem) if numeric else p.stem)
 
 
+def scale_image(surf, scale):
+    w, h = surf.get_size()
+    return pygame.transform.smoothscale(surf, (int(w * scale), int(h * scale)))
+
+
 def load_image(*path, scale=1):
     surf = pygame.image.load(Path(*path)).convert_alpha()
     if scale == 1:
         return surf
-    w, h = surf.get_size()
-    return pygame.transform.smoothscale(surf, (int(w * scale), int(h * scale)))
+    return scale_image(surf, scale)
 
 
 def load_images(*path, scale=1):

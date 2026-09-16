@@ -4,7 +4,12 @@ from game.enemies import Boss
 from utils.timer import Timer
 from math import atan2, degrees
 from game.surfs import pistol_frames, bullet_surf, rifle_frames, shotgun_frames, machinegun_frames, lasergun_frames, laser_bullet_surf, laser_surf, flamegun_frames, flame_bullet_surf, flame_frames
-from game.audio import SHOTGUN_SOUND, PISTOL_SOUND, MACHINEGUN_SOUND, LASER_SOUND, IMPACT_SOUND
+from game.audio import SHOTGUN_SOUND, PISTOL_SOUND, MACHINEGUN_SOUND, LASER_SOUND, IMPACT_SOUND, FLAMEGUN_SOUND, RIFLE_SOUND, STAB_SOUND
+
+'''
+    TASK:
+    - 
+'''
 
 class Pistol(pygame.sprite.Sprite):
     def __init__(self, surf, player, groups, game):
@@ -109,7 +114,8 @@ class Rifle(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
         self.animation_frames = rifle_frames
-        self.animation_speed = self.cooldown / 4
+        self.animation_speed = self.shoot_cooldown / 4
+        self.shoot_sound = RIFLE_SOUND
 
     def bullet_impact(self, bullet, enemy):
         if type(enemy) == Boss:
@@ -168,7 +174,8 @@ class Lasergun(Pistol):
 class Sword(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
-        self.distance = 200
+        self.distance = 150
+        self.impact_sound = STAB_SOUND
 
     def sword_collision(self):
         collision_sprites = pygame.sprite.spritecollide(self, self.game.enemy_sprites, False, pygame.sprite.collide_mask)
@@ -192,6 +199,7 @@ class Flamegun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
         self.animation_frames = flamegun_frames
+        self.shoot_sound = FLAMEGUN_SOUND
         
     def create_bullet(self):
         pos = self.rect.center + self.player_direction * 50
