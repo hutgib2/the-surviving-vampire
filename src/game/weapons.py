@@ -3,13 +3,24 @@ from game.projectiles import Bullet, Laser, Orb, Flame
 from game.enemies import Boss
 from utils.timer import Timer
 from math import atan2, degrees
-from game.surfs import pistol_frames, bullet_surf, rifle_frames, shotgun_frames, machinegun_frames, lasergun_frames, laser_bullet_surf, laser_surf, flamegun_frames, flame_bullet_surf, flame_frames
-from game.audio import SHOTGUN_SOUND, PISTOL_SOUND, MACHINEGUN_SOUND, LASER_SOUND, IMPACT_SOUND, FLAMEGUN_SOUND, RIFLE_SOUND, STAB_SOUND
-
-'''
-    TASK:
-    - 
-'''
+from game.surfs import (
+    WEAPON_FRAMES,
+    LASER_SURF, 
+    BULLET_SURF, 
+    FLAME_BULLET_SURF, 
+    LASER_BULLET_SURF, 
+    FLAME_FRAMES,
+)
+from game.audio import (
+    SHOTGUN_SOUND,
+    PISTOL_SOUND, 
+    MACHINEGUN_SOUND, 
+    LASER_SOUND, 
+    IMPACT_SOUND, 
+    FLAMEGUN_SOUND, 
+    RIFLE_SOUND, 
+    STAB_SOUND,
+)
 
 class Pistol(pygame.sprite.Sprite):
     def __init__(self, surf, player, groups, game):
@@ -31,7 +42,7 @@ class Pistol(pygame.sprite.Sprite):
         self.impact_sound = IMPACT_SOUND
         
         self.frame_index = 0
-        self.animation_frames = pistol_frames
+        self.animation_frames = WEAPON_FRAMES['pistol']
         self.animation_speed = self.shoot_cooldown / 7.5
         self.animation_running = False
 
@@ -73,7 +84,7 @@ class Pistol(pygame.sprite.Sprite):
 
     def create_bullet(self):
         pos = self.rect.center + self.player_direction * 50
-        Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(BULLET_SURF, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
 
     def shoot(self):
         if pygame.mouse.get_pressed()[0] and self.can_shoot:
@@ -113,7 +124,7 @@ class Pistol(pygame.sprite.Sprite):
 class Rifle(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
-        self.animation_frames = rifle_frames
+        self.animation_frames = WEAPON_FRAMES['rifle']
         self.animation_speed = self.shoot_cooldown / 4
         self.shoot_sound = RIFLE_SOUND
 
@@ -124,31 +135,31 @@ class Rifle(Pistol):
 class Shotgun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
-        self.animation_frames = shotgun_frames
+        self.animation_frames = WEAPON_FRAMES['shotgun']
         self.shoot_sound = SHOTGUN_SOUND
         self.shoot_cooldown = 500
         self.shoot_timer = Timer(self.shoot_cooldown, self.allow_shoot, repeat=True, autostart=True)
 
     def create_bullet(self):
         pos = self.rect.center + self.player_direction * 64
-        Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
-        Bullet(bullet_surf, pos, self.player_direction.rotate(15), (self.game.all_sprites, self.game.bullet_sprites))
-        Bullet(bullet_surf, pos, self.player_direction.rotate(-15), (self.game.all_sprites, self.game.bullet_sprites))
-        Bullet(bullet_surf, pos, self.player_direction.rotate(30), (self.game.all_sprites, self.game.bullet_sprites))
-        Bullet(bullet_surf, pos, self.player_direction.rotate(-30), (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(BULLET_SURF, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(BULLET_SURF, pos, self.player_direction.rotate(15), (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(BULLET_SURF, pos, self.player_direction.rotate(-15), (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(BULLET_SURF, pos, self.player_direction.rotate(30), (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(BULLET_SURF, pos, self.player_direction.rotate(-30), (self.game.all_sprites, self.game.bullet_sprites))
 
 class Sideshotgun(Pistol):
     def create_bullet(self):
         pos = self.rect.center + self.player_direction * 64
-        Bullet(bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
-        Bullet(bullet_surf, pos, self.player_direction.rotate(90), (self.game.all_sprites, self.game.bullet_sprites))
-        Bullet(bullet_surf, pos, self.player_direction.rotate(-90), (self.game.all_sprites, self.game.bullet_sprites))
-        Bullet(bullet_surf, pos, self.player_direction.rotate(180), (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(BULLET_SURF, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(BULLET_SURF, pos, self.player_direction.rotate(90), (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(BULLET_SURF, pos, self.player_direction.rotate(-90), (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(BULLET_SURF, pos, self.player_direction.rotate(180), (self.game.all_sprites, self.game.bullet_sprites))
 
 class Machinegun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
-        self.animation_frames = machinegun_frames
+        self.animation_frames = WEAPON_FRAMES['machinegun']
         self.shoot_sound = MACHINEGUN_SOUND
         self.shoot_cooldown = 100
         self.shoot_timer = Timer(self.shoot_cooldown, self.allow_shoot, repeat=True, autostart=True)
@@ -156,18 +167,18 @@ class Machinegun(Pistol):
 class Lasergun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
-        self.animation_frames = lasergun_frames
+        self.animation_frames = WEAPON_FRAMES['lasergun']
         self.shoot_sound = LASER_SOUND
         self.impact_sound = LASER_SOUND
 
     def create_bullet(self):
         pos = self.rect.center + self.player_direction * 50
-        Bullet(laser_bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(LASER_BULLET_SURF, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
 
     def bullet_impact(self, bullet, enemy):
         if type(bullet) == Bullet:
             bullet.kill()
-            Laser(laser_surf, enemy.rect.center, bullet.direction, (self.game.all_sprites, self.game.bullet_sprites))
+            Laser(LASER_SURF, enemy.rect.center, bullet.direction, (self.game.all_sprites, self.game.bullet_sprites))
         if type(enemy) == Boss and type(bullet) == Laser:
             bullet.kill()
 
@@ -198,16 +209,27 @@ class Sword(Pistol):
 class Flamegun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
-        self.animation_frames = flamegun_frames
+        self.animation_frames = WEAPON_FRAMES['flamegun']
         self.shoot_sound = FLAMEGUN_SOUND
         
     def create_bullet(self):
         pos = self.rect.center + self.player_direction * 50
-        Bullet(flame_bullet_surf, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
+        Bullet(FLAME_BULLET_SURF, pos, self.player_direction, (self.game.all_sprites, self.game.bullet_sprites))
 
     def bullet_impact(self, bullet, enemy):
         if type(bullet) == Bullet:
             bullet.kill()
-            Flame(flame_frames, enemy.rect.center, (self.game.all_sprites, self.game.bullet_sprites))
+            Flame(FLAME_FRAMES, enemy.rect.center, (self.game.all_sprites, self.game.bullet_sprites))
         if type(enemy) == Boss and type(bullet) == Flame:
             bullet.kill()
+
+# Maps strings to class name for easy indexing
+WEAPON_MAP = {
+    "rifle": Rifle,
+    "machinegun": Machinegun,
+    "laser": Lasergun,
+    "shotgun": Shotgun,
+    "sideshot": Sideshotgun,
+    "sword": Sword,
+    "flamegun": Flamegun,
+}

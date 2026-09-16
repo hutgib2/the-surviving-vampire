@@ -4,7 +4,7 @@ from os.path import join
 
 # ---------------------------------- PLAYER ---------------------------------- #
 
-player_frames = {
+PLAYER_FRAMES = {
     "idle": load_image_states("assets", "images", "vampire", "idle", scale=3),
     "walk": load_image_states("assets", "images", "vampire", "walk", scale=3),
     "hurt": load_image_states("assets", "images", "vampire", "hurt", scale=3),
@@ -15,7 +15,7 @@ player_frames = {
 
 # -------------------------------- ENEMIES -------------------------------- #
 
-enemy_frames = {
+ENEMY_FRAMES = {
     "bat": {
         'walk': load_image_states("assets", "images", "enemies", "bat", 'walk', scale=5/2),
         'dead': load_image_states("assets", "images", "enemies", "bat", 'dead', scale=5/2),
@@ -26,61 +26,67 @@ enemy_frames = {
     } 
 }
 
-boss_frames = {
+BOSS_FRAMES = {
     'walk': load_image_states("assets", "images", "enemies", "boss", "walk", scale=4),
     'attack': load_image_states("assets", "images", "enemies", "boss", "attack", scale=4)
 }
 
 # ---------------------------------- WEAPONS --------------------------------- #
 
-pistol_frames = load_images("assets", "images", "weapons", "pistol", "shoot", scale=2)
-machinegun_frames = load_images("assets", "images", "weapons", "machinegun", scale=2.5)
-shotgun_frames = load_images("assets", "images", "weapons", "shotgun", scale=2.5)
-rifle_frames = load_images("assets", "images", "weapons", "rifle", scale=2.5)
-lasergun_frames = load_images("assets", "images", "weapons", "lasergun", "shoot", scale=1/8)
-flamegun_frames = load_images("assets", "images", "weapons", "flamegun", "shoot", scale=2)
+WEAPON_FRAMES = {
+    'pistol': load_images("assets", "images", "weapons", "pistol", "shoot", scale=2),
+    'machinegun': load_images("assets", "images", "weapons", "machinegun", scale=2.5),
+    'shotgun': load_images("assets", "images", "weapons", "shotgun", scale=2.5),
+    'rifle': load_images("assets", "images", "weapons", "rifle", scale=2.5),
+    'lasergun': load_images("assets", "images", "weapons", "lasergun", "shoot", scale=1/8),
+    'flamegun': load_images("assets", "images", "weapons", "flamegun", "shoot", scale=2)
+}
 
-pistol_static = load_image("assets", "images", "weapons", "pistol", "pistol_static.png", scale=2)
-machinegun_static = machinegun_frames[0]
-shotgun_static = shotgun_frames[0]
-rifle_static = rifle_frames[0]
-lasergun_static = load_image("assets", "images", "weapons", "lasergun", "lasergun_static.png", scale=1/8)
-flamegun_static = load_image("assets", "images", "weapons", "flamegun", "flamegun_static.png", scale=2)
-sword_surf = load_image("assets", "images", "weapons", "sword.png", scale=1/6)
+WEAPON_SURFS = {
+    'pistol': load_image("assets", "images", "weapons", "pistol", "pistol_static.png", scale=2),
+    'machinegun': WEAPON_FRAMES['machinegun'][0],
+    'shotgun': WEAPON_FRAMES['shotgun'][0],
+    'rifle': WEAPON_FRAMES['rifle'][0],
+    'lasergun': load_image("assets", "images", "weapons", "lasergun", "lasergun_static.png", scale=1/8),
+    'flamegun': load_image("assets", "images", "weapons", "flamegun", "flamegun_static.png", scale=2),
+    'sword': load_image("assets", "images", "weapons", "sword.png", scale=1/6)
+}
 
 # ----------------------------------- PROJECTILES ---------------------------------- #
 
-bullet_surf = load_image("assets", "images", "projectiles", "bullet.png", scale=1/5)
-laser_bullet_surf = load_image("assets", "images", "projectiles", "laser_bullet.png", scale=1/5)
-flame_bullet_surf = load_image("assets", "images", "projectiles", "flame_bullet.png", scale=1/5)
-orb_surf = load_image("assets", "images", "projectiles", "orb.png", scale=1.5)
-laser_surf = pygame.transform.scale(pygame.image.load(join("assets", "images", "projectiles", "laserbeam.png")), (WINDOW_WIDTH, 3)).convert_alpha()
+BULLET_SURF = load_image("assets", "images", "projectiles", "bullet.png", scale=1/5)
+LASER_BULLET_SURF = load_image("assets", "images", "projectiles", "laser_bullet.png", scale=1/5)
+FLAME_BULLET_SURF = load_image("assets", "images", "projectiles", "flame_bullet.png", scale=1/5)
 
-flame_frames = load_images("assets", "images", "flame", scale=1/3)
-explosion_frames = load_images("assets", "images", "explosion")
+ORB_SURF = load_image("assets", "images", "projectiles", "orb.png", scale=1.5)
+LASER_SURF = pygame.transform.scale(pygame.image.load(join("assets", "images", "projectiles", "laserbeam.png")), (WINDOW_WIDTH, 3)).convert_alpha()
+
+FLAME_FRAMES = load_images("assets", "images", "flame", scale=1/3)
+EXPLOSION_FRAMES = load_images("assets", "images", "explosion")
 
 # --------------------------------- POWERUPS --------------------------------- #
 
-ultimate_progress_frames = load_images("assets", "images", "ultimate_progress", scale=4)
-life_surf = load_image("assets", "images", "powerups", "life.png", scale=1/5)
-aura_surf = load_image("assets", "images", "powerups", "aura.png", scale=2)
-aura_surf.set_alpha(50)
+LIFE_SURF = load_image("assets", "images", "powerups", "life.png", scale=1/5)
+AURA_SURF = load_image("assets", "images", "powerups", "aura.png", scale=2)
+AURA_SURF.set_alpha(50)
 
 POWERUP_SURFS = {
-    'rifle': rifle_static,
-    'machinegun': machinegun_static,
-    'laser': lasergun_static,
-    'shotgun': shotgun_static,
-    'sideshot': pistol_static,
-    'sword': scale_image(sword_surf, 0.7),
-    'life': life_surf,
+    'rifle': WEAPON_SURFS['rifle'],
+    'machinegun': WEAPON_SURFS['machinegun'],
+    'lasergun': WEAPON_SURFS['lasergun'],
+    'shotgun': WEAPON_SURFS['shotgun'],
+    'sideshot': WEAPON_SURFS['pistol'],
+    'sword': scale_image(WEAPON_SURFS['sword'], 0.5),
+    "flamegun": WEAPON_SURFS['flamegun'],
+    'life': LIFE_SURF,
     'superspeed': load_image("assets", "images", "powerups", "superspeed.png", scale=1/5),
     'shield': load_image("assets", "images", "powerups", "shield.png", scale=1/40),
     'slowaura': load_image("assets", "images", "powerups", "snail.png", scale=1/7),
     'timestop': load_image("assets", "images", "powerups", "clock.png", scale=1/16),
-    "flamegun": flamegun_static,
     'mine': load_image("assets", "images", "powerups", "mine.png", scale=2/3)
 }
 
 # ----------------------------------- MENU ----------------------------------- #
-button_surf = load_image("assets", "images", "menu", "button.png")
+
+BUTTON_SURF = load_image("assets", "images", "menu", "button.png")
+ULTIMATE_MOVE_PROGRESS_FRAMES = load_images("assets", "images", "ultimate_progress", scale=4)

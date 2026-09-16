@@ -13,7 +13,7 @@ from game.enemies import Enemy, Boss
 from game.homescreen import *
 from pytmx.util_pygame import load_pygame
 from os.path import join
-from game.surfs import life_surf, POWERUP_SURFS, button_surf, pistol_static, ultimate_progress_frames, enemy_frames
+from game.surfs import LIFE_SURF, POWERUP_SURFS, BUTTON_SURF, ULTIMATE_MOVE_PROGRESS_FRAMES, ENEMY_FRAMES
 
 # TODO: add new audio for different weapons
 # TODO: Look into sideshot powerup
@@ -58,7 +58,7 @@ class Game:
             CollisionSprite((collision.x, collision.y), pygame.Surface((collision.width, collision.height)), self.collision_sprites)
         for marker in map.get_layer_by_name('Entities'):
             if marker.name == 'Player':
-                self.player = Player((marker.x, marker.y), self.all_sprites, self.collision_sprites, pistol_static, self)
+                self.player = Player((marker.x, marker.y), self.all_sprites, self.collision_sprites, self)
             elif marker.name == 'Power up':
                 self.powerup_spawn_positions.append((marker.x, marker.y))
             else:
@@ -78,13 +78,13 @@ class Game:
         
         # Drawing Lives
         for i in range(self.player.lives):
-            life_rect = life_surf.get_frect(center = (left_offset + (i * spacing), top_offset))
-            screen.blit(life_surf, life_rect)
+            life_rect = LIFE_SURF.get_frect(center = (left_offset + (i * spacing), top_offset))
+            screen.blit(LIFE_SURF, life_rect)
 
         # Drawing Ultimate Progress bar
         progress = self.player.ultimate_move_timer.get_progress()
-        i = int(progress * (len(ultimate_progress_frames) - 1))
-        image = ultimate_progress_frames[i]
+        i = int(progress * (len(ULTIMATE_MOVE_PROGRESS_FRAMES) - 1))
+        image = ULTIMATE_MOVE_PROGRESS_FRAMES[i]
         ultimate_progress_rect = image.get_frect(center = (left_offset + 3*spacing, top_offset))
         screen.blit(image, ultimate_progress_rect)
 
@@ -105,7 +105,7 @@ class Game:
     def spawn_enemy(self):
         if self.player.powerup_activated == "timestop" or self.player.lives <= 0:
             return
-        Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(enemy_frames.items())), self.player, self.collision_sprites, self)
+        Enemy(self.get_spawn_position(self.enemy_spawn_positions), choice(list(ENEMY_FRAMES.items())), self.player, self.collision_sprites, self)
 
     def spawn_boss(self):
         if self.player.powerup_activated == "timestop" or self.player.lives <= 0:
@@ -133,7 +133,7 @@ class Game:
 
     async def display_gameover_popup(self):
         # create the popup + text + textbox
-        self.gameover_popup_surf = pygame.transform.smoothscale(button_surf, (2*WINDOW_WIDTH / 3, 5*WINDOW_HEIGHT / 6))
+        self.gameover_popup_surf = pygame.transform.smoothscale(BUTTON_SURF, (2*WINDOW_WIDTH / 3, 5*WINDOW_HEIGHT / 6))
         self.gameover_popup_rect = self.gameover_popup_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
         line_spacing = self.gameover_popup_surf.get_height() / 8
 
@@ -142,7 +142,7 @@ class Game:
         
         self.text_box = TextBox(self.gameover_popup_rect.move(0, 4.5 * line_spacing).midtop, (self.gameover_popup_rect.width / 2, line_spacing * 0.7), self.font, self.gameover_sprites)
         TextSprite('Enter your name to save your score: ', self.text_box.rect.move(0, -0.3 * line_spacing).midtop, "#FF8080",  0.4 * line_spacing, self.gameover_sprites)
-        self.save_button = InteractiveButton(button_surf, self.text_box.rect.move(0, 0.7 * line_spacing).midbottom, (WINDOW_WIDTH / 8, line_spacing), "#FF8080", self.gameover_sprites, lambda:  self.save_score(), 'Save')
+        self.save_button = InteractiveButton(BUTTON_SURF, self.text_box.rect.move(0, 0.7 * line_spacing).midbottom, (WINDOW_WIDTH / 8, line_spacing), "#FF8080", self.gameover_sprites, lambda:  self.save_score(), 'Save')
         TextSprite('Press ESC to return to main menu.', self.save_button.rect.move(0, 0.5 * line_spacing).midbottom, "#FF8080",  0.4 * line_spacing, self.gameover_sprites)
 
         while True:

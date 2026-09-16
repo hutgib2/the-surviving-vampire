@@ -1,6 +1,6 @@
 from game.settings import *
 from math import atan2, degrees
-from game.surfs import explosion_frames
+from game.surfs import EXPLOSION_FRAMES
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, surf, pos, direction, groups):
@@ -66,7 +66,7 @@ class Mine(pygame.sprite.Sprite):
         self.image = surf
         self.game = game
         self.rect = self.image.get_frect(center = pos)
-        self.explosion_frames = explosion_frames
+        self.explosion_frames = EXPLOSION_FRAMES
         self.spawn_time = pygame.time.get_ticks()
         self.lifetime = 10000
 

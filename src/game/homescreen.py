@@ -4,7 +4,7 @@ from game.sprites import Sprite
 from game.textSprite import TextSprite
 from game.the_surviving_vampire import Game
 from utils.scores_api import fetch_scores
-from game.surfs import button_surf
+from game.surfs import BUTTON_SURF
 from os.path import join
 
 class HomeScreen:
@@ -16,13 +16,13 @@ class HomeScreen:
         self.running = True
         
         self.menu_sprites = pygame.sprite.Group()
-        self.play_button = InteractiveButton(button_surf, (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 1.4), (WINDOW_WIDTH / 8, WINDOW_WIDTH / 16), "#FF8080", self.menu_sprites, lambda: self.play_game(), 'Play')
-        self.hs_button = InteractiveButton(button_surf, (WINDOW_WIDTH - 200, 100), (WINDOW_WIDTH / 8, WINDOW_WIDTH / 16), "#FF8080", self.menu_sprites, lambda: self.show_scores_popup(), 'High Scores')
+        self.play_button = InteractiveButton(BUTTON_SURF, (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 1.4), (WINDOW_WIDTH / 8, WINDOW_WIDTH / 16), "#FF8080", self.menu_sprites, lambda: self.play_game(), 'Play')
+        self.hs_button = InteractiveButton(BUTTON_SURF, (WINDOW_WIDTH - 200, 100), (WINDOW_WIDTH / 8, WINDOW_WIDTH / 16), "#FF8080", self.menu_sprites, lambda: self.show_scores_popup(), 'High Scores')
 
         self.hs_sprites = pygame.sprite.Group()
         self.show_highscores = False
         self.high_scores = None
-        self.hs_popup_surf = pygame.transform.smoothscale(button_surf, (WINDOW_WIDTH / 3, 5*WINDOW_HEIGHT / 6))
+        self.hs_popup_surf = pygame.transform.smoothscale(BUTTON_SURF, (WINDOW_WIDTH / 3, 5*WINDOW_HEIGHT / 6))
         self.hs_popup_rect = self.hs_popup_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
         
         self.fetch_task = asyncio.create_task(fetch_scores('the-surviving-vampire'))

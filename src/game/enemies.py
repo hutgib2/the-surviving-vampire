@@ -1,6 +1,6 @@
 from game.settings import *
 from game.projectiles import Orb
-from game.surfs import boss_frames, orb_surf
+from game.surfs import BOSS_FRAMES, ORB_SURF
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, pos, framedata, player, collision_sprites, game):
@@ -98,8 +98,8 @@ class Boss(pygame.sprite.Sprite):
         self.position_offset = [0, 1, 0, -1] # TODO: not sure what this is ??
         
         self.animation_speed = 9
-        self.walk_frames = boss_frames['walk']
-        self.attack_frames = boss_frames['attack']
+        self.walk_frames = BOSS_FRAMES['walk']
+        self.attack_frames = BOSS_FRAMES['attack']
         self.image = self.walk_frames['down'][0]
         self.frame_index = 0
         self.state = 'right'
@@ -154,7 +154,7 @@ class Boss(pygame.sprite.Sprite):
     def shoot(self):
         if self.can_shoot and self.can_attack:
             self.game.shoot_sound.play()
-            Orb(orb_surf, self.rect.center, (pygame.math.Vector2(self.player.rect.center) - (pygame.math.Vector2(self.rect.center))).normalize(), (self.game.all_sprites, self.game.enemy_sprites))
+            Orb(ORB_SURF, self.rect.center, (pygame.math.Vector2(self.player.rect.center) - (pygame.math.Vector2(self.rect.center))).normalize(), (self.game.all_sprites, self.game.enemy_sprites))
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
     

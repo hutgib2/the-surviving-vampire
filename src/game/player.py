@@ -1,7 +1,7 @@
 from utils.timer import Timer
 from game.settings import *
 from game.audio import IMPACT_SOUND
-from game.surfs import player_frames, rifle_static, flamegun_static, pistol_static, lasergun_static, shotgun_static, machinegun_static, aura_surf, sword_surf, POWERUP_SURFS
+from game.surfs import PLAYER_FRAMES, WEAPON_SURFS, AURA_SURF, POWERUP_SURFS
 from game.weapons import (
     Pistol,
     Rifle,
@@ -30,9 +30,9 @@ class Aura(pygame.sprite.Sprite):
         self.rect.center = self.player.rect.center
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, collision_sprites, pistol_static, game):
+    def __init__(self, pos, groups, collision_sprites, game):
         super().__init__(groups)
-        self.image = player_frames['idle']["down"][0]
+        self.image = PLAYER_FRAMES['idle']["down"][0]
         self.animation_state = "idle" # "idle" | "walk" | "hurt" | "dead" | "ultimate_move"
         self.animation_direction = "down"
         self.animation_speed = ANIMATION_SPEED
@@ -49,7 +49,7 @@ class Player(pygame.sprite.Sprite):
         self.lives = 3
         self.is_dead = False
         
-        self.weapon = Pistol(pistol_static, self, self.game.all_sprites, self.game)
+        self.weapon = Pistol(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
         # self.weapon = Rifle(rifle_static, self, self.game.all_sprites, self.game)
         # self.weapon = Lasergun(lasergun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
@@ -143,7 +143,7 @@ class Player(pygame.sprite.Sprite):
 
     def animate(self, dt):
         loop = self.animation_state in ('idle', 'walk', 'fly')
-        self.run_animation(player_frames[self.animation_state], dt, loop=loop)
+        self.run_animation(PLAYER_FRAMES[self.animation_state], dt, loop=loop)
 
         if self.powerup_activated == "shield":
             self.image.set_alpha(130)
@@ -219,6 +219,7 @@ class Player(pygame.sprite.Sprite):
                 self.game.kill_count += 1
 
     def powerup_collision(self):
+        # TODO: clean this up, use a match statement, use WEAPON_MAP to clean up weapon assignment
         powerup_collisions = pygame.sprite.spritecollide(self, self.game.powerup_sprites, True, pygame.sprite.collide_mask)
         for powerup in powerup_collisions:
             self.deactivate_powerup()
@@ -239,7 +240,7 @@ class Player(pygame.sprite.Sprite):
             if powerup.type == "slowaura":
                 if self.aura != None:
                     self.aura.kill()
-                self.aura = Aura(self.game.all_sprites, aura_surf, self)
+                self.aura = Aura(self.game.all_sprites, AURA_SURF, self)
                 return
             if powerup.type == "timestop":
                 continue
@@ -247,23 +248,22 @@ class Player(pygame.sprite.Sprite):
                 self.can_drop_mine = True
                 continue
 
-            # TODO: clean this up
             # Weapon change
             self.weapon.kill()
             if powerup.type == "rifle":
-                self.weapon = Rifle(rifle_static, self, self.game.all_sprites, self.game)
+                self.weapon = Rifle(WEAPON_SURFS['rifle'], self, self.game.all_sprites, self.game)
             elif powerup.type == "machinegun":
-                self.weapon = Machinegun(machinegun_static, self, self.game.all_sprites, self.game)
-            elif powerup.type == "laser":
-                self.weapon = Lasergun(lasergun_static, self, self.game.all_sprites, self.game)
+                self.weapon = Machinegun(WEAPON_SURFS['machinegun'], self, self.game.all_sprites, self.game)
+            elif powerup.type == "lasergun":
+                self.weapon = Lasergun(WEAPON_SURFS['lasergun'], self, self.game.all_sprites, self.game)
             elif powerup.type == "shotgun":
-                self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
+                self.weapon = Shotgun(WEAPON_SURFS['shotgun'], self, self.game.all_sprites, self.game)
             elif powerup.type == "sideshot":
-                self.weapon = Sideshotgun(pistol_static, self, self.game.all_sprites, self.game)
+                self.weapon = Sideshotgun(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
             elif powerup.type == "sword":
-                self.weapon = Sword(sword_surf, self,self.game.all_sprites,self.game)
+                self.weapon = Sword(WEAPON_SURFS['sword'], self,self.game.all_sprites,self.game)
             elif powerup.type == "flamegun":
-                self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
+                self.weapon = Flamegun(WEAPON_SURFS['flamegun'], self, self.game.all_sprites, self.game)
 
     def deactivate_powerup(self):
         if self.powerup_activated == "superspeed":
@@ -277,7 +277,7 @@ class Player(pygame.sprite.Sprite):
             pass
         else:
             self.weapon.kill()
-            self.weapon = Pistol(pistol_static, self, self.game.all_sprites, self.game)
+            self.weapon = Pistol(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
 
         self.powerup_activated = None
 
