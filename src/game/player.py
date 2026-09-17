@@ -181,7 +181,7 @@ class Player(pygame.sprite.Sprite):
                     pass
                 else:
                     enemy.destroy(hit_player=True)
-                self.lives -= 1
+                # self.lives -= 1
                 if self.lives <= 0:
                     self.kill()
                 self.set_animation_state("hurt" if self.lives > 0 else "dead")
@@ -232,7 +232,7 @@ class Player(pygame.sprite.Sprite):
                 self.weapon.kill()
                 WeaponClass = WEAPON_MAP[powerup_type]
                 self.weapon = WeaponClass(WEAPON_SURFS[powerup_type], self, self.game.all_sprites, self.game)
-                    
+
     def deactivate_powerup(self):
         match self.powerup_activated:
             case "superspeed":

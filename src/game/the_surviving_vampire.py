@@ -16,7 +16,6 @@ from os.path import join
 from game.surfs import LIFE_SURF, POWERUP_SURFS, BUTTON_SURF, ULTIMATE_MOVE_PROGRESS_FRAMES, ENEMY_FRAMES
 
 # TODO: Look into sideshot powerup
-# TODO: Fix enemies being drawn behind objects
 # TODO: change progress bar to line bar 
 
 class Game:

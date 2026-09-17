@@ -42,14 +42,17 @@ WEAPON_FRAMES = {
     'flamegun': load_images("assets", "images", "weapons", "flamegun", "shoot", scale=2)
 }
 
+pistol_surf = load_image("assets", "images", "weapons", "pistol", "pistol_static.png", scale=2)
+
 WEAPON_SURFS = {
-    'pistol': load_image("assets", "images", "weapons", "pistol", "pistol_static.png", scale=2),
+    'pistol': pistol_surf,
+    'sideshot': pistol_surf,
     'machinegun': WEAPON_FRAMES['machinegun'][0],
     'shotgun': WEAPON_FRAMES['shotgun'][0],
     'rifle': WEAPON_FRAMES['rifle'][0],
     'lasergun': load_image("assets", "images", "weapons", "lasergun", "lasergun_static.png", scale=1/8),
     'flamegun': load_image("assets", "images", "weapons", "flamegun", "flamegun_static.png", scale=2),
-    'sword': load_image("assets", "images", "weapons", "sword.png", scale=1/6)
+    'sword': load_image("assets", "images", "weapons", "sword.png", scale=1/6),
 }
 
 # ----------------------------------- PROJECTILES ---------------------------------- #
