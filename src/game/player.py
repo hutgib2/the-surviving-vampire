@@ -1,7 +1,7 @@
 from utils.timer import Timer
 from game.settings import *
 from game.surfs import PLAYER_FRAMES, WEAPON_SURFS, AURA_SURF, POWERUP_SURFS
-from game.weapons import Pistol, WEAPON_MAP
+from game.weapons import Pistol, WEAPON_MAP, Sideshotgun
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
 
@@ -46,6 +46,7 @@ class Player(pygame.sprite.Sprite):
         # self.weapon = Machinegun(machinegun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Sword(sword_surf, self, self.game.all_sprites, self.game)
+        # self.weapon = Sideshotgun(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
         
         # powerup
         self.powerup_activated = None
@@ -57,7 +58,7 @@ class Player(pygame.sprite.Sprite):
         self.minedrop_cooldown = 500
         self.can_drop_mine = False
 
-        self.ultimate_move_timer = Timer(5 * 1000, self.activate_ultimate_move, autostart=True)
+        self.ultimate_move_timer = Timer(100 * 1000, self.activate_ultimate_move, autostart=True)
         self.can_use_ultimate = False
     
     def move(self, dt):
@@ -181,7 +182,7 @@ class Player(pygame.sprite.Sprite):
                     pass
                 else:
                     enemy.destroy(hit_player=True)
-                # self.lives -= 1
+                self.lives -= 1
                 if self.lives <= 0:
                     self.kill()
                 self.set_animation_state("hurt" if self.lives > 0 else "dead")

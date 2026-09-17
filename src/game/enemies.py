@@ -166,7 +166,7 @@ class Boss(pygame.sprite.Sprite):
 
     def shoot(self):
         if self.can_shoot and self.can_attack:
-            self.game.shoot_sound.play()
+            # self.shoot_sound.play()
             Orb(ORB_SURF, self.rect.center, (pygame.math.Vector2(self.player.rect.center) - (pygame.math.Vector2(self.rect.center))).normalize(), (self.game.all_sprites, self.game.enemy_sprites))
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
@@ -178,9 +178,9 @@ class Boss(pygame.sprite.Sprite):
                 self.can_shoot = True
 
     def destroy(self, hit_player=False):
+        self.game.boss_spawn_timer.activate()
         self.game.enemy_sprites.remove(self)
         self.death_time = pygame.time.get_ticks()
-        
         self.image = pygame.mask.from_surface(self.image).to_surface()
         self.image.set_colorkey('black')
         if hit_player:

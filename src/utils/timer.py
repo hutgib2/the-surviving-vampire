@@ -33,7 +33,7 @@ class Timer:
         if self.repeat:
             self.repeat = False
 
-    def resume(self):
+    def resume(self): # Use to resume a repeating timer
         self.repeat = True
 
     def get_progress(self):

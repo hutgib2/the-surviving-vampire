@@ -15,8 +15,7 @@ from pytmx.util_pygame import load_pygame
 from os.path import join
 from game.surfs import LIFE_SURF, POWERUP_SURFS, BUTTON_SURF, ULTIMATE_MOVE_PROGRESS_FRAMES, ENEMY_FRAMES
 
-# TODO: Look into sideshot powerup
-# TODO: change progress bar to line bar 
+# TODO: Add new weapon image for sideshot
 
 class Game:
     def __init__(self):
@@ -38,8 +37,8 @@ class Game:
         
         #events
         self.enemy_spawn_timer = Timer(400, lambda: self.spawn_enemy(), repeat=True, autostart=True)
-        self.powerup_spawn_timer = Timer(1 * 1000, lambda: self.spawn_powerup(), repeat=True, autostart=True)
-        self.boss_spawn_timer = Timer(60 * 1000, lambda: self.spawn_boss(), repeat=True, autostart=True)
+        self.powerup_spawn_timer = Timer(10 * 1000, lambda: self.spawn_powerup(), repeat=True, autostart=True)
+        self.boss_spawn_timer = Timer(60 * 1000, lambda: self.spawn_boss(), autostart=True)
         self.enemy_spawn_positions = []
         self.powerup_spawn_positions = []
         
@@ -82,15 +81,15 @@ class Game:
         progress = self.player.ultimate_move_timer.get_progress()
         i = int(progress * (len(ULTIMATE_MOVE_PROGRESS_FRAMES) - 1))
         image = ULTIMATE_MOVE_PROGRESS_FRAMES[i]
-        ultimate_progress_rect = image.get_frect(center = (left_offset + 3*spacing, top_offset))
+        ultimate_progress_rect = image.get_frect(center = (left_offset + 3.5 * spacing, top_offset))
         screen.blit(image, ultimate_progress_rect)
 
         # Drawing score
-        self.text_surf = self.font.render(str(self.kill_count), True, 'gray25')
-        self.text_rect = self.text_surf.get_frect(center = (left_offset + 4*spacing, top_offset))
-        screen.blit(self.text_surf, self.text_rect)
         border_thickness = 7
         border_radius = 10
+        self.text_surf = self.font.render(str(self.kill_count), True, 'gray25')
+        self.text_rect = self.text_surf.get_frect(center = (WINDOW_WIDTH / 2, top_offset))
+        screen.blit(self.text_surf, self.text_rect)
         pygame.draw.rect(screen, 'gray25', self.text_rect.inflate(20, 10).move(0, -6), border_thickness, border_radius)
  
     # TEST ONLY: Draw all powerup images statically on left of screen so we can see the sizes
@@ -159,7 +158,7 @@ class Game:
         while self.running:
             dt = await self.clock.tick() / 1000
             for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                     self.running = False
             
             if self.player.is_dead:
