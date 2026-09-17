@@ -1,6 +1,8 @@
 from game.settings import *
 from game.projectiles import Orb
 from game.surfs import BOSS_FRAMES, ORB_SURF
+from game.audio import BONES_SOUND
+from game.audio import IMPACT_SOUND
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, pos, framedata, player, collision_sprites, game):
@@ -21,6 +23,10 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = 250
         self.death_time = 0
         self.death_duration = 500
+        if self.type == 'skeleton':
+            self.death_sound = BONES_SOUND
+        else:
+            self.death_sound = IMPACT_SOUND
 
     def animate(self, dt):
         statex = 'right' if self.direction.x > 0 else 'left'
@@ -34,19 +40,25 @@ class Enemy(pygame.sprite.Sprite):
         player_pos = pygame.Vector2(self.player.rect.center)
         enemy_pos = pygame.Vector2(self.rect.center)
         self.direction = (player_pos - enemy_pos).normalize()
-        if self.player.aura and (player_pos - enemy_pos).length() <= self.player.aura.radius:
-            self.hitbox_rect.x += self.direction.x * self.speed * dt / 2
-        else:
-            self.hitbox_rect.x += self.direction.x * self.speed * dt
 
+        # Stop enemies getting close to player when shield active
+        if self.player.powerup_activated == 'shield' and (player_pos - enemy_pos).length() <= self.player.shield_range:
+            return
+        
+        speed = self.speed
+        
+        # Half enemy speed when inside aura
+        if self.player.aura and (player_pos - enemy_pos).length() <= self.player.aura.radius:
+            speed = self.speed / 2
+
+        self.hitbox_rect.x += self.direction.x * speed * dt
         if self.type != 'bat':
             self.collisions('horizontal')
-        if self.player.aura and (player_pos - enemy_pos).length() <= self.player.aura.radius:
-            self.hitbox_rect.y += self.direction.y * self.speed * dt / 2
-        else:
-            self.hitbox_rect.y += self.direction.y * self.speed * dt
+        
+        self.hitbox_rect.y += self.direction.y * speed * dt
         if self.type != 'bat':
             self.collisions('vertical')
+
         self.rect.center = self.hitbox_rect.center
 
     def collisions(self, direction):
@@ -71,6 +83,7 @@ class Enemy(pygame.sprite.Sprite):
                     self.image.set_at((x, y), (175, 0, 0))
 
     def destroy(self, hit_player=False):
+        self.death_sound.play()
         self.game.enemy_sprites.remove(self)
         self.death_time = pygame.time.get_ticks()
         self.image = self.frames['dead'][self.animation_direction][0]

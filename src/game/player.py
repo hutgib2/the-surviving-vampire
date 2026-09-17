@@ -1,18 +1,7 @@
 from utils.timer import Timer
 from game.settings import *
-from game.audio import IMPACT_SOUND
 from game.surfs import PLAYER_FRAMES, WEAPON_SURFS, AURA_SURF, POWERUP_SURFS
-from game.weapons import (
-    Pistol,
-    Rifle,
-    Shotgun,
-    Machinegun,
-    Lasergun,
-    Sideshotgun,
-    Sword,
-    Flamegun,
-    WEAPON_MAP
-)
+from game.weapons import Pistol, WEAPON_MAP
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
 
@@ -62,6 +51,7 @@ class Player(pygame.sprite.Sprite):
         self.powerup_activated = None
         self.powerup_cooldown = 7000
         self.powerup_activated_at = 0
+        self.shield_range = 100
         self.aura = None
         self.minedrop_time = 0
         self.minedrop_cooldown = 500
@@ -113,7 +103,6 @@ class Player(pygame.sprite.Sprite):
         self.can_use_ultimate = False
         self.ultimate_move_timer.activate()
         self.set_animation_state('ultimate_move')
-        IMPACT_SOUND.play()
         for enemy in self.game.enemy_sprites:
             if type(enemy) == Orb:
                 continue
@@ -192,7 +181,6 @@ class Player(pygame.sprite.Sprite):
                     pass
                 else:
                     enemy.destroy(hit_player=True)
-                IMPACT_SOUND.play()
                 self.lives -= 1
                 if self.lives <= 0:
                     self.kill()
@@ -204,7 +192,6 @@ class Player(pygame.sprite.Sprite):
             for enemy in enemies:
                 if type(enemy) == Orb:
                     continue
-                self.game.impact_sound.play()
                 if type(enemy) == Boss:
                     explosion.kill()
                     enemy.lives -= 1
@@ -257,7 +244,7 @@ class Player(pygame.sprite.Sprite):
                 self.aura = None
             case "timestop" | "mine" | "shield":
                 pass
-            case _: # rest are weapon powerups
+            case _: # Weapon change
                 self.weapon.kill()
                 self.weapon = Pistol(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
         

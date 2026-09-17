@@ -15,10 +15,8 @@ from pytmx.util_pygame import load_pygame
 from os.path import join
 from game.surfs import LIFE_SURF, POWERUP_SURFS, BUTTON_SURF, ULTIMATE_MOVE_PROGRESS_FRAMES, ENEMY_FRAMES
 
-# TODO: add new audio for different weapons
 # TODO: Look into sideshot powerup
 # TODO: Fix enemies being drawn behind objects
-# TODO: see if possible to make enemies stop short of player when shield active
 # TODO: change progress bar to line bar 
 
 class Game:

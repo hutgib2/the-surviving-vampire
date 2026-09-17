@@ -24,14 +24,18 @@ LASER_SOUND = AudioPlayer('laser.ogg').init()
 IMPACT_SOUND = AudioPlayer('impact.ogg').init()
 IMPACT_SOUND.set_volume(0.4)
 
+EXPLOSION_SOUND = AudioPlayer('explosion.ogg').init()
+EXPLOSION_SOUND.set_volume(0.5)
+
+BONES_SOUND = AudioPlayer('bones.ogg').init()
+BONES_SOUND.set_volume(0.3)
+
 """ 
 AUDIO to add:
-
 - burning flame ?
-- explosion
-- enemy death, bones rattling, bat death ?? boss death 
-
-- boss orb creation
 - collecting powerup ?
+
+- boss death 
+- boss orb creation
 - ultimate move
 """
