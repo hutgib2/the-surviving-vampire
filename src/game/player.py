@@ -59,7 +59,7 @@ class Player(pygame.sprite.Sprite):
         self.minedrop_cooldown = 500
         self.can_drop_mine = False
 
-        self.ultimate_move_timer = Timer(5 * 1000, self.activate_ultimate_move, autostart=True)
+        self.ultimate_move_timer = Timer(100 * 1000, self.activate_ultimate_move, autostart=True)
         self.can_use_ultimate = False
         self.ultimate_move_attack_used = False
     
@@ -98,12 +98,6 @@ class Player(pygame.sprite.Sprite):
     def activate_ultimate_move(self):
         self.can_use_ultimate = True
     
-
-    # TASK: we want the ultimate move to be interruptible
-    # but we also need to ensure we resume the weapon timer if its interrupted
-    # Look at how we set the animation back to fly in update_animation_state()
-    # We will do something similar for resuming the weapon timer
-
     # This code starts the animation
     def use_ultimate_move(self):
         if not self.can_use_ultimate:
@@ -206,7 +200,7 @@ class Player(pygame.sprite.Sprite):
                     pass
                 else:
                     enemy.destroy(hit_player=True)
-                # self.lives -= 1
+                self.lives -= 1
                 if self.lives <= 0:
                     self.kill()
                 self.set_animation_state("hurt" if self.lives > 0 else "dead")

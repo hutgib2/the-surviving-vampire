@@ -38,7 +38,7 @@ class Game:
         
         #events
         self.enemy_spawn_timer = Timer(400, lambda: self.spawn_enemy(), repeat=True, autostart=True)
-        self.powerup_spawn_timer = Timer(10 * 1000, lambda: self.spawn_powerup(), repeat=True, autostart=True)
+        self.powerup_spawn_timer = Timer(15 * 1000, lambda: self.spawn_powerup(), repeat=True, autostart=True)
         self.boss_spawn_timer = Timer(60 * 1000, lambda: self.spawn_boss(), autostart=True)
         self.enemy_spawn_positions = []
         self.powerup_spawn_positions = []
