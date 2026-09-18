@@ -14,6 +14,7 @@ from game.homescreen import *
 from pytmx.util_pygame import load_pygame
 from os.path import join
 from game.surfs import LIFE_SURF, POWERUP_SURFS, BUTTON_SURF, ULTIMATE_MOVE_PROGRESS_FRAMES, ENEMY_FRAMES
+from game.audio import DEMON_SPAWN_SOUND
 
 # TODO: Add new weapon image for sideshot
 
@@ -107,6 +108,7 @@ class Game:
         if self.player.powerup_activated == "timestop" or self.player.lives <= 0:
             return
         Boss(self.get_spawn_position(self.enemy_spawn_positions), self.player, self)
+        DEMON_SPAWN_SOUND.play()
 
     def spawn_powerup(self):
         if self.player.lives <= 0 or len(self.powerup_spawn_positions) <= 0:
@@ -116,7 +118,6 @@ class Game:
         pos = self.powerup_spawn_positions.pop(randint(0, len(self.powerup_spawn_positions) - 1))
         powerup = choice(list(POWERUP_SURFS.items()))
         Powerup(pos, powerup, (self.all_sprites, self.powerup_sprites), self.player)
-
 
     # Now i want you to use the function i created to save the score to the database
     def save_score(self):

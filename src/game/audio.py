@@ -30,12 +30,22 @@ EXPLOSION_SOUND.set_volume(0.5)
 BONES_SOUND = AudioPlayer('bones.ogg').init()
 BONES_SOUND.set_volume(0.3)
 
-""" 
-AUDIO to add:
-- burning flame ?
-- collecting powerup ?
+# For each of these sounds, play them in the correct spot in the game
 
-- boss death 
-- boss orb creation
-- ultimate move
-"""
+POWERUP_SOUND = AudioPlayer('powerup_equip.ogg').init()
+POWERUP_SOUND.set_volume(0.75)
+
+ORB_SOUND = AudioPlayer('orb_fire.ogg').init()
+ORB_SOUND.set_volume(0.4)
+
+DEMON_SLAYED_SOUND = AudioPlayer('demon_die.ogg').init()
+DEMON_SLAYED_SOUND.set_volume(0.75)
+
+DEMON_SPAWN_SOUND = AudioPlayer('demon_spawn.ogg').init()
+# DEMON_SPAWN_SOUND.set_volume(1)
+
+ULTIMATE_CHARGE_SOUND = AudioPlayer('ultimate_charge.ogg').init()
+# ULTIMATE_CHARGE_SOUND.set_volume(1)
+
+ULTIMATE_ATTACK_SOUND = AudioPlayer('ultimate_attack.ogg').init()
+ULTIMATE_ATTACK_SOUND.set_volume(0.75)	

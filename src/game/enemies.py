@@ -2,7 +2,7 @@ from game.settings import *
 from game.projectiles import Orb
 from game.surfs import BOSS_FRAMES, ORB_SURF
 from game.audio import BONES_SOUND
-from game.audio import IMPACT_SOUND
+from game.audio import IMPACT_SOUND, DEMON_SLAYED_SOUND, ORB_SOUND
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, pos, framedata, player, collision_sprites, game):
@@ -118,14 +118,16 @@ class Boss(pygame.sprite.Sprite):
         self.state = 'right'
         self.rect = self.image.get_frect(center = pos)
         self.direction = pygame.Vector2()
+        self.speed = BOSS_SPEED
         
         self.can_shoot = True
         self.shoot_time = 0
         self.orb_cooldown = 400
-        self.attack_cooldown = 3000
-        self.attack_time = 0
+        
         self.can_attack = False
-        self.speed = BOSS_SPEED
+        self.attack_time = pygame.time.get_ticks()
+        self.attack_cooldown = 3000
+        
         self.death_time = 0
         self.death_duration = 250
     
@@ -166,7 +168,7 @@ class Boss(pygame.sprite.Sprite):
 
     def shoot(self):
         if self.can_shoot and self.can_attack:
-            # self.shoot_sound.play()
+            ORB_SOUND.play()
             Orb(ORB_SURF, self.rect.center, (pygame.math.Vector2(self.player.rect.center) - (pygame.math.Vector2(self.rect.center))).normalize(), (self.game.all_sprites, self.game.enemy_sprites))
             self.can_shoot = False
             self.shoot_time = pygame.time.get_ticks()
@@ -183,6 +185,7 @@ class Boss(pygame.sprite.Sprite):
         self.death_time = pygame.time.get_ticks()
         self.image = pygame.mask.from_surface(self.image).to_surface()
         self.image.set_colorkey('black')
+        DEMON_SLAYED_SOUND.play()
         if hit_player:
             self.set_mask_to_red()
 

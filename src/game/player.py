@@ -4,6 +4,7 @@ from game.surfs import PLAYER_FRAMES, WEAPON_SURFS, AURA_SURF, POWERUP_SURFS
 from game.weapons import Pistol, WEAPON_MAP, Sideshotgun
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
+from game.audio import POWERUP_SOUND, ULTIMATE_CHARGE_SOUND, ULTIMATE_ATTACK_SOUND
 
 PLAYER_SPEED = 350
 ANIMATION_SPEED = 8
@@ -58,8 +59,9 @@ class Player(pygame.sprite.Sprite):
         self.minedrop_cooldown = 500
         self.can_drop_mine = False
 
-        self.ultimate_move_timer = Timer(100 * 1000, self.activate_ultimate_move, autostart=True)
+        self.ultimate_move_timer = Timer(5 * 1000, self.activate_ultimate_move, autostart=True)
         self.can_use_ultimate = False
+        self.ultimate_move_attack_used = False
     
     def move(self, dt):
         if self.animation_state == "ultimate_move":
@@ -96,24 +98,40 @@ class Player(pygame.sprite.Sprite):
     def activate_ultimate_move(self):
         self.can_use_ultimate = True
     
+
+    # TASK: we want the ultimate move to be interruptible
+    # but we also need to ensure we resume the weapon timer if its interrupted
+    # Look at how we set the animation back to fly in update_animation_state()
+    # We will do something similar for resuming the weapon timer
+
+    # This code starts the animation
     def use_ultimate_move(self):
         if not self.can_use_ultimate:
-            return
-            
+            return   
         self.weapon.shoot_timer.stop()
         self.can_use_ultimate = False
         self.ultimate_move_timer.activate()
+        ULTIMATE_CHARGE_SOUND.play()
+        self.ultimate_move_attack_used = False
+        self.animation_speed = ANIMATION_SPEED - 3
         self.set_animation_state('ultimate_move')
+
+    # This code executes at the end of the animation
+    def ultimate_move_attack(self):
+        self.ultimate_move_attack_used = True
+        ULTIMATE_ATTACK_SOUND.play()
+        self.weapon.shoot_timer.resume()
+        self.animation_speed = ANIMATION_SPEED
         for enemy in self.game.enemy_sprites:
             if type(enemy) == Orb:
-                continue
+                continue    
             if type(enemy) == Boss:
                 enemy.lives -= 1
                 if enemy.lives > 0:
                     continue
             enemy.destroy()
             self.game.kill_count += 1
-
+        
     def run_animation(self, frames, dt, loop=False):
         if self.move_direction:
             statex = 'right' if self.move_direction.x > 0 else 'left'
@@ -148,6 +166,7 @@ class Player(pygame.sprite.Sprite):
         self.frame_index = 0
         self.animation_finished = False
 
+
     def update_animation_state(self):
         if self.animation_state == "dead":
             if self.animation_finished:
@@ -159,14 +178,19 @@ class Player(pygame.sprite.Sprite):
                 return
             if self.powerup_activated == "superspeed":
                 self.set_animation_state("fly")
+            
+            # reset for when ultimate_move is interrupted
+            self.weapon.shoot_timer.resume()
+            self.animation_speed = ANIMATION_SPEED
 
         if self.animation_state == "fly" and not self.animation_finished:
             return
         
         if self.animation_state == "ultimate_move":
             if not self.animation_finished:
+                if not self.ultimate_move_attack_used and self.frame_index >= 7:
+                    self.ultimate_move_attack()
                 return
-            self.weapon.shoot_timer.resume()
         
         self.set_animation_state("walk" if self.move_direction else "idle")
 
@@ -182,7 +206,7 @@ class Player(pygame.sprite.Sprite):
                     pass
                 else:
                     enemy.destroy(hit_player=True)
-                self.lives -= 1
+                # self.lives -= 1
                 if self.lives <= 0:
                     self.kill()
                 self.set_animation_state("hurt" if self.lives > 0 else "dead")
@@ -204,6 +228,7 @@ class Player(pygame.sprite.Sprite):
     def powerup_collision(self):
         powerup_collisions = pygame.sprite.spritecollide(self, self.game.powerup_sprites, True, pygame.sprite.collide_mask)
         for powerup in powerup_collisions:
+            POWERUP_SOUND.play()
             self.deactivate_powerup()
             self.game.powerup_spawn_positions.append(powerup.rect.center)
             if powerup.type == "life":

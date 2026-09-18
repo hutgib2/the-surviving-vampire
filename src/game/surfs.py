@@ -52,7 +52,7 @@ WEAPON_SURFS = {
     'rifle': WEAPON_FRAMES['rifle'][0],
     'lasergun': load_image("assets", "images", "weapons", "lasergun", "lasergun_static.png", scale=1/8),
     'flamegun': load_image("assets", "images", "weapons", "flamegun", "flamegun_static.png", scale=2),
-    'sword': load_image("assets", "images", "weapons", "sword.png", scale=1/3),
+    'sword': load_image("assets", "images", "weapons", "sword.png", scale=1/5),
 }
 
 # ----------------------------------- PROJECTILES ---------------------------------- #
