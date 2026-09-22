@@ -41,7 +41,7 @@ class AudioPlayer:
 		return self
 
 	def play(self, loops=0): # loops=0 plays once
-		if self.audio is None:
+		if self.audio is None: # lazy loading
 			self.init()
 
 		if WEB:
