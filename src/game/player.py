@@ -40,7 +40,7 @@ class Player(pygame.sprite.Sprite):
         self.lives = 3
         self.is_dead = False
 
-        # Use this variable to ensure the smoke sound plays only once
+        # Used to ensure the smoke sound plays only once
         self.death_sound_played = False
         
         self.weapon = Pistol(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
@@ -145,7 +145,8 @@ class Player(pygame.sprite.Sprite):
             if int(self.frame_index) > len(current) - 1:
                 self.animation_finished = True
 
-        self.image = current[index] 
+        self.image = current[index]
+        self.rect = self.image.get_frect(center=self.rect.center)
 
     def animate(self, dt):
         loop = self.animation_state in ('idle', 'walk', 'fly')
