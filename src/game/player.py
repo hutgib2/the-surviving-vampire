@@ -4,7 +4,7 @@ from game.surfs import PLAYER_FRAMES, WEAPON_SURFS, AURA_SURF, POWERUP_SURFS
 from game.weapons import Pistol, WEAPON_MAP, Sideshotgun
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
-from game.audio import POWERUP_SOUND, ULTIMATE_CHARGE_SOUND, ULTIMATE_ATTACK_SOUND
+from game.audio import POWERUP_SOUND, ULTIMATE_CHARGE_SOUND, ULTIMATE_ATTACK_SOUND, SMOKE_SOUND
 
 PLAYER_SPEED = 350
 ANIMATION_SPEED = 8
@@ -39,6 +39,9 @@ class Player(pygame.sprite.Sprite):
         self.hitbox_rect.midbottom = self.rect.midbottom
         self.lives = 3
         self.is_dead = False
+
+        # Use this variable to ensure the smoke sound plays only once
+        self.death_sound_played = False
         
         self.weapon = Pistol(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
         # self.weapon = Rifle(rifle_static, self, self.game.all_sprites, self.game)
@@ -165,6 +168,9 @@ class Player(pygame.sprite.Sprite):
         if self.animation_state == "dead":
             if self.animation_finished:
                 self.is_dead = True
+            elif self.frame_index >= 4 and self.death_sound_played == False:
+                SMOKE_SOUND.play()
+                self.death_sound_played = True
             return
 
         if self.animation_state == "hurt":
@@ -204,6 +210,7 @@ class Player(pygame.sprite.Sprite):
                 if self.lives <= 0:
                     self.kill()
                 self.set_animation_state("hurt" if self.lives > 0 else "dead")
+                
 
     def explosion_collisions(self):
         collision_sprites = pygame.sprite.groupcollide(self.game.explosion_sprites, self.game.enemy_sprites, False, False, pygame.sprite.collide_mask)
@@ -286,7 +293,6 @@ class Player(pygame.sprite.Sprite):
 
     def kill(self):
         self.speed = 0
-        # self.animation_direction = 'down'
         if self.weapon:
             self.weapon.kill()
         self.weapon = None

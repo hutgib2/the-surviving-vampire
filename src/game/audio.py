@@ -49,3 +49,6 @@ ULTIMATE_CHARGE_SOUND = AudioPlayer('ultimate_charge.ogg').init()
 
 ULTIMATE_ATTACK_SOUND = AudioPlayer('ultimate_attack.ogg').init()
 ULTIMATE_ATTACK_SOUND.set_volume(0.75)	
+
+SMOKE_SOUND = AudioPlayer('smoke.ogg').init()
+# SMOKE_SOUND.set_volume(1)
