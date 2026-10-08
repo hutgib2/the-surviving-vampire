@@ -38,7 +38,7 @@ WEAPON_FRAMES = {
     'machinegun': load_images("assets", "images", "weapons", "machinegun", scale=2.5),
     'shotgun': load_images("assets", "images", "weapons", "shotgun", scale=2.5),
     'rifle': load_images("assets", "images", "weapons", "rifle", scale=2.5),
-    'lasergun': load_images("assets", "images", "weapons", "lasergun", "shoot", scale=1/8),
+    'lasergun': load_images("assets", "images", "weapons", "lasergun", "shoot", scale=2/3),
     'flamegun': load_images("assets", "images", "weapons", "flamegun", "shoot", scale=2)
 }
 
@@ -50,7 +50,7 @@ WEAPON_SURFS = {
     'machinegun': WEAPON_FRAMES['machinegun'][0],
     'shotgun': WEAPON_FRAMES['shotgun'][0],
     'rifle': WEAPON_FRAMES['rifle'][0],
-    'lasergun': load_image("assets", "images", "weapons", "lasergun", "lasergun_static.png", scale=1/8),
+    'lasergun': load_image("assets", "images", "weapons", "lasergun", "lasergun_static.png", scale=2/3),
     'flamegun': load_image("assets", "images", "weapons", "flamegun", "flamegun_static.png", scale=2),
     'sword': load_image("assets", "images", "weapons", "sword.png", scale=1/5),
 }
@@ -83,8 +83,8 @@ POWERUP_SURFS = {
     "flamegun": WEAPON_SURFS['flamegun'],
     'life': LIFE_SURF,
     'superspeed': load_image("assets", "images", "powerups", "superspeed.png", scale=1/5),
-    'shield': load_image("assets", "images", "powerups", "shield.png", scale=1/40),
-    'slowaura': load_image("assets", "images", "powerups", "snail.png", scale=1/7),
+    'shield': load_image("assets", "images", "powerups", "shield.png", scale=1/64),
+    'slowaura': load_image("assets", "images", "powerups", "snail.png", scale=3),
     'timestop': load_image("assets", "images", "powerups", "clock.png", scale=1/16),
     'mine': load_image("assets", "images", "powerups", "mine.png", scale=2/3)
 }

@@ -168,6 +168,7 @@ class Lasergun(Pistol):
     def __init__(self, surf, player, groups, game):
         super().__init__(surf, player, groups, game)
         self.animation_frames = WEAPON_FRAMES['lasergun']
+        self.animation_speed = self.shoot_cooldown / 7
         self.shoot_sound = LASER_SOUND
         self.impact_sound = LASER_SOUND
 

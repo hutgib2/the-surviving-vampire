@@ -1,7 +1,7 @@
 from utils.timer import Timer
 from game.settings import *
 from game.surfs import PLAYER_FRAMES, WEAPON_SURFS, AURA_SURF, POWERUP_SURFS
-from game.weapons import Pistol, WEAPON_MAP, Sideshotgun
+from game.weapons import Pistol, WEAPON_MAP, Sideshotgun, Machinegun, Lasergun
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
 from game.audio import POWERUP_SOUND, ULTIMATE_CHARGE_SOUND, ULTIMATE_ATTACK_SOUND, SMOKE_SOUND
@@ -45,9 +45,9 @@ class Player(pygame.sprite.Sprite):
         
         self.weapon = Pistol(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
         # self.weapon = Rifle(rifle_static, self, self.game.all_sprites, self.game)
-        # self.weapon = Lasergun(lasergun_static, self, self.game.all_sprites, self.game)
+        # self.weapon = Lasergun(WEAPON_SURFS['lasergun'], self, self.game.all_sprites, self.game)
         # self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
-        # self.weapon = Machinegun(machinegun_static, self, self.game.all_sprites, self.game)
+        # self.weapon = Machinegun(WEAPON_SURFS['machinegun'], self, self.game.all_sprites, self.game)
         # self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Sword(sword_surf, self, self.game.all_sprites, self.game)
         # self.weapon = Sideshotgun(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
