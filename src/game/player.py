@@ -1,7 +1,7 @@
 from utils.timer import Timer
 from game.settings import *
 from game.surfs import PLAYER_FRAMES, WEAPON_SURFS, AURA_SURF, POWERUP_SURFS
-from game.weapons import Pistol, WEAPON_MAP, Sideshotgun, Machinegun, Lasergun
+from game.weapons import Pistol, WEAPON_MAP, Sideshotgun, Machinegun, Lasergun, Flamegun
 from game.projectiles import Orb, Mine
 from game.enemies import Boss
 from game.audio import POWERUP_SOUND, ULTIMATE_CHARGE_SOUND, ULTIMATE_ATTACK_SOUND, SMOKE_SOUND
@@ -46,7 +46,7 @@ class Player(pygame.sprite.Sprite):
         self.weapon = Pistol(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
         # self.weapon = Rifle(rifle_static, self, self.game.all_sprites, self.game)
         # self.weapon = Lasergun(WEAPON_SURFS['lasergun'], self, self.game.all_sprites, self.game)
-        # self.weapon = Flamegun(flamegun_static, self, self.game.all_sprites, self.game)
+        # self.weapon = Flamegun(WEAPON_SURFS['flamegun'], self, self.game.all_sprites, self.game)
         # self.weapon = Machinegun(WEAPON_SURFS['machinegun'], self, self.game.all_sprites, self.game)
         # self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Sword(sword_surf, self, self.game.all_sprites, self.game)
@@ -54,6 +54,7 @@ class Player(pygame.sprite.Sprite):
         
         # powerup
         self.powerup_activated = None
+        # self.powerup_activated = 'mine'
         self.powerup_cooldown = 7000
         self.powerup_activated_at = 0
         self.shield_range = 100
@@ -61,6 +62,8 @@ class Player(pygame.sprite.Sprite):
         self.minedrop_time = 0
         self.minedrop_cooldown = 500
         self.can_drop_mine = False
+        # self.can_drop_mine = True
+        
 
         self.ultimate_move_timer = Timer(100 * 1000, self.activate_ultimate_move, autostart=True)
         self.can_use_ultimate = False

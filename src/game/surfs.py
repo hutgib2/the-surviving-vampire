@@ -61,11 +61,11 @@ BULLET_SURF = load_image("assets", "images", "projectiles", "bullet.png", scale=
 LASER_BULLET_SURF = load_image("assets", "images", "projectiles", "laser_bullet.png", scale=1/5)
 FLAME_BULLET_SURF = load_image("assets", "images", "projectiles", "flame_bullet.png", scale=1/5)
 
-ORB_SURF = load_image("assets", "images", "projectiles", "orb.png", scale=1.5)
+ORB_SURF = load_image("assets", "images", "projectiles", "orb.png", scale=1/2)
 LASER_SURF = pygame.transform.scale(pygame.image.load(join("assets", "images", "projectiles", "laserbeam.png")), (WINDOW_WIDTH, 3)).convert_alpha()
 
-FLAME_FRAMES = load_images("assets", "images", "flame", scale=1/3)
-EXPLOSION_FRAMES = load_images("assets", "images", "explosion")
+FLAME_FRAMES = load_images("assets", "images", "flame", scale=6)
+EXPLOSION_FRAMES = load_images("assets", "images", "explosion", scale=1/8)
 
 # --------------------------------- POWERUPS --------------------------------- #
 
@@ -86,7 +86,7 @@ POWERUP_SURFS = {
     'shield': load_image("assets", "images", "powerups", "shield.png", scale=1/64),
     'slowaura': load_image("assets", "images", "powerups", "snail.png", scale=3),
     'timestop': load_image("assets", "images", "powerups", "clock.png", scale=1/16),
-    'mine': load_image("assets", "images", "powerups", "mine.png", scale=2/3)
+    'mine': load_image("assets", "images", "powerups", "mine.png", scale=1/8)
 }
 
 # ----------------------------------- MENU ----------------------------------- #

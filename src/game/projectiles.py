@@ -50,7 +50,7 @@ class Flame(pygame.sprite.Sprite):
         self.lifetime = 2500
         self.frames = frames
         self.frame_index = 0
-        self.animation_speed = 15
+        self.animation_speed = 12
 
     def animate(self, dt):
         self.frame_index += self.animation_speed * dt

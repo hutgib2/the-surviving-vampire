@@ -12,6 +12,11 @@ class Button(pygame.sprite.Sprite):
         self.text_sprite = TextSprite(text, self.rect.center, text_color, self.rect.width / 6, ())
         self.size = size
 
+    def update_text(self, text):
+        self.text_sprite.kill()
+        self.text = text
+        self.text_sprite = TextSprite(text, self.rect.center, "darkcyan", self.rect.width, self.rect.width / 8, ())
+
     def deactivate(self):
         self.is_active = False
 
