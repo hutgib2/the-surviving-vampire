@@ -11,7 +11,7 @@ class HomeScreen:
     def __init__(self):
         self.home_screen_image = pygame.transform.smoothscale(pygame.image.load(join('assets', 'images', 'menu', 'home_screen.png')), (WINDOW_WIDTH, WINDOW_HEIGHT))
         self.background = self.home_screen_image
-        self.font = pygame.font.Font(join('assets', 'fonts', 'Oxanium-Bold.ttf'), 40)
+        self.font = pygame.font.Font(join('assets', 'fonts', 'Oswald-SemiBold.ttf'), 40)
         self.pending_game = None
         self.running = True
         
@@ -33,8 +33,8 @@ class HomeScreen:
 
         font_color = "#FF8080"
         line_spacing = self.hs_popup_rect.height / 10
-        title_font_size = 1.3 * line_spacing
-        regular_font_size = line_spacing
+        title_font_size = 1 * line_spacing
+        regular_font_size = 0.8 * line_spacing
 
         TextSprite('High Scores: ', self.hs_popup_rect.move(0, 2.2 * line_spacing).midtop, font_color, title_font_size, self.hs_sprites)
        

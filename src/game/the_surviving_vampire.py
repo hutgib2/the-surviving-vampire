@@ -22,7 +22,7 @@ class Game:
     def __init__(self):
         self.running = True
         self.clock = AsyncClock(fps=45)
-        self.font = pygame.font.Font(join('assets', 'fonts', 'Oxanium-Bold.ttf'), 60)
+        self.font = pygame.font.Font(join('assets', 'fonts', 'Oswald-SemiBold.ttf'), 60)
         self.kill_count = 0
 
         # groups
