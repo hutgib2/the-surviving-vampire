@@ -43,10 +43,10 @@ class Player(pygame.sprite.Sprite):
         # Used to ensure the smoke sound plays only once
         self.death_sound_played = False
         
-        self.weapon = Pistol(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
+        # self.weapon = Pistol(WEAPON_SURFS['pistol'], self, self.game.all_sprites, self.game)
         # self.weapon = Rifle(rifle_static, self, self.game.all_sprites, self.game)
         # self.weapon = Lasergun(WEAPON_SURFS['lasergun'], self, self.game.all_sprites, self.game)
-        # self.weapon = Flamegun(WEAPON_SURFS['flamegun'], self, self.game.all_sprites, self.game)
+        self.weapon = Flamegun(WEAPON_SURFS['flamegun'], self, self.game.all_sprites, self.game)
         # self.weapon = Machinegun(WEAPON_SURFS['machinegun'], self, self.game.all_sprites, self.game)
         # self.weapon = Shotgun(shotgun_static, self, self.game.all_sprites, self.game)
         # self.weapon = Sword(sword_surf, self, self.game.all_sprites, self.game)
