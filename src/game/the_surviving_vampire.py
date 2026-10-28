@@ -18,9 +18,18 @@ from game.audio import DEMON_SPAWN_SOUND
 
 # TODO: Add new weapon image for sideshot
 
+# TASK: add a pause menu 
+# 1: when esc is pressed, pause game, when pressed again, resume (done)
+# 2: Add a pause menu,
+    # - "Game Paused"
+    # - button to return to main menu
+    # - press esc to resume
+# 3. make the exit button clickable
+
 class Game:
     def __init__(self):
         self.running = True
+        self.paused = False
         self.clock = AsyncClock(fps=45)
         self.font = pygame.font.Font(join('assets', 'fonts', 'Oswald-SemiBold.ttf'), 60)
         self.kill_count = 0
@@ -35,6 +44,9 @@ class Game:
         self.orb_sprites = pygame.sprite.Group()
         self.explosion_sprites = pygame.sprite.Group()
         self.gameover_sprites = pygame.sprite.Group()
+        self.pause_sprites = pygame.sprite.Group()
+        self.create_pause_menu()
+        self.create_gameover_popup()
         
         #events
         self.enemy_spawn_timer = Timer(400, lambda: self.spawn_enemy(), repeat=True, autostart=True)
@@ -128,7 +140,7 @@ class Game:
         post_score("the-surviving-vampire", username, self.kill_count)
         self.save_button.deactivate()
 
-    async def display_gameover_popup(self):
+    def create_gameover_popup(self):
         # create the popup + text + textbox
         self.gameover_popup_surf = pygame.transform.smoothscale(BUTTON_SURF, (2*WINDOW_WIDTH / 3, 5*WINDOW_HEIGHT / 6))
         self.gameover_popup_rect = self.gameover_popup_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
@@ -142,37 +154,59 @@ class Game:
         self.save_button = InteractiveButton(BUTTON_SURF, self.text_box.rect.move(0, 0.7 * line_spacing).midbottom, (WINDOW_WIDTH / 8, line_spacing), "#FF8080", self.gameover_sprites, lambda:  self.save_score(), 'Save')
         TextSprite('Press ESC to return to main menu.', self.save_button.rect.move(0, 0.5 * line_spacing).midbottom, "#FF8080",  0.4 * line_spacing, self.gameover_sprites)
 
-        while True:
-            dt = await self.clock.tick() / 1000
-            for event in pygame.event.get():
-                self.text_box.handle_event(event)
-                self.save_button.handle_event(event)
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    return
-                
-            screen.blit(self.gameover_popup_surf, self.gameover_popup_rect)
-            self.gameover_sprites.update()
-            pygame.display.update()
-        
+    def show_gameover_popup(self):
+        screen.blit(self.gameover_popup_surf, self.gameover_popup_rect)
+        self.gameover_sprites.update()
+        pygame.display.update()
+
+    def quit_game(self):
+        self.running = False
+    
+    def create_pause_menu(self):
+        self.pause_menu_surf = pygame.transform.smoothscale(BUTTON_SURF, (2*WINDOW_WIDTH / 3, 5*WINDOW_HEIGHT / 6))
+        self.pause_menu_rect = self.pause_menu_surf.get_frect(center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2))
+        line_spacing = self.pause_menu_surf.get_height() / 8
+
+        TextSprite('Game Paused', self.pause_menu_rect.move(0, 1.8 * line_spacing).midtop, "#FF8080", 1.3 * line_spacing, self.pause_sprites)
+        TextSprite('Press esc to resume', self.pause_menu_rect.move(0, 3 * line_spacing).midtop, "#FF8080", 0.5 * line_spacing, self.pause_sprites)
+        self.quit_button = InteractiveButton(BUTTON_SURF, self.pause_menu_rect.move(0, 5 * line_spacing).midtop, (WINDOW_WIDTH / 8, line_spacing), "#FF8080", self.pause_sprites, lambda: self.quit_game(), 'Quit')
+
+    def show_pause_menu(self):
+        screen.blit(self.pause_menu_surf, self.pause_menu_rect)
+        self.pause_sprites.update()
+        pygame.display.update()
 
     async def run(self):
         while self.running:
             dt = await self.clock.tick() / 1000
             for event in pygame.event.get():
-                if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                if event.type == pygame.QUIT:
                     self.running = False
-            
-            if self.player.is_dead:
-                self.running = False
+                if (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                    if self.player.is_dead:
+                        self.quit_game() 
+                    else: 
+                        self.paused = not self.paused
+                if self.paused:
+                    self.quit_button.handle_event(event)
+                if self.player.is_dead:
+                    self.text_box.handle_event(event)
+                    self.save_button.handle_event(event)
 
+            if self.player.is_dead:
+                self.show_gameover_popup()
+                continue
+            
+            if self.paused:
+                self.show_pause_menu()
+                continue
+            
+            # gameplay updates
             self.all_sprites.update(dt)
             self.all_sprites.draw(self.player.rect.center)
-            
             self.display_header()
             # self.display_all_powerups()
             self.enemy_spawn_timer.update()
             self.powerup_spawn_timer.update()
             self.boss_spawn_timer.update()
             pygame.display.update()
-        
-        await self.display_gameover_popup()
